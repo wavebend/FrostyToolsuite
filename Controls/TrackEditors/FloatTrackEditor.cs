@@ -38,6 +38,7 @@ namespace LevelEditorPlugin.Controls.TrackEditors
             FloatTrack trackData = DataContext as Entities.FloatTrack;
             CurveData curveData = trackData.Data.CurveData.GetObjectAs<FrostySdk.Ebx.CurveData>();
 
+#if !SWBF
             if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_One || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Zero)
             {
                 minValue = 0;
@@ -48,7 +49,8 @@ namespace LevelEditorPlugin.Controls.TrackEditors
                 minValue = curveData.Value[0] - (curveData.Value[0] * 0.5f);
                 maxValue = curveData.Value[0] + (curveData.Value[0] * 0.5f);
             }
-            else
+            else 
+#endif
             {
                 for (int i = 0; i < curveData.Value.Count; i++)
                 {
@@ -107,6 +109,7 @@ namespace LevelEditorPlugin.Controls.TrackEditors
             drawingContext.PushClip(new RectangleGeometry(new Rect(1, 1, width - 2, height - 2)));
 
             List<Point> points = new List<Point>();
+#if !SWBF
             if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Zero || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_One || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Constant)
             {
                 double y = height - 10;
@@ -129,7 +132,8 @@ namespace LevelEditorPlugin.Controls.TrackEditors
                 points.Add(new Point(a.X + 5, a.Y + 5));
                 points.Add(new Point(b.X + 5, b.Y + 5));
             }
-            else
+            else 
+#endif
             {
                 for (int i = 0; i < curveData.Time.Count; i++)
                 {
@@ -144,7 +148,11 @@ namespace LevelEditorPlugin.Controls.TrackEditors
                 }
             }
 
-            if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Basic_Linear || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_One || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Zero || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Constant)
+            if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Basic_Linear
+#if !SWBF
+                || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_One || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Zero || curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Constant
+#endif
+                )
             {
                 for (int i = 1; i < points.Count; i++)
                 {

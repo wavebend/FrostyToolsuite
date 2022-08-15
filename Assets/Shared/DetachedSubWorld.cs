@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LevelEditorPlugin.Assets
 {
+#if !SWBF
     [AssetBinding(DataType = typeof(FrostySdk.Ebx.DetachedSubWorldData))]
     public class DetachedSubWorld : SubWorld, IAssetData<FrostySdk.Ebx.DetachedSubWorldData>
     {
@@ -16,4 +17,5 @@ namespace LevelEditorPlugin.Assets
         {
         }
     }
+#endif
 }

@@ -490,7 +490,9 @@ namespace LevelEditorPlugin.Entities
         {
             base.SetDefaultValues();
 
-            Data.LightmapScaleWithSize = true;
+#if !SWBF
+            Data.LightmapScaleWithSize = true; 
+#endif
 #if MASS_EFFECT
             Data.OverrideSpawningRadius = -1;
 #endif

@@ -4,7 +4,11 @@ using CString = FrostySdk.Ebx.CString;
 namespace LevelEditorPlugin.Entities
 {
 	[EntityBinding(DataType = typeof(FrostySdk.Ebx.CompareStringEntityData))]
+#if GW2 || SWBF
+	public class CompareStringEntity : LogicEntity, IEntityData<FrostySdk.Ebx.CompareStringEntityData>
+#else
 	public class CompareStringEntity : CompareEntityBase, IEntityData<FrostySdk.Ebx.CompareStringEntityData>
+#endif
 	{
 		protected readonly int Property_A = Frosty.Hash.Fnv1.HashString("A");
 		protected readonly int Property_B = Frosty.Hash.Fnv1.HashString("B");

@@ -3,7 +3,11 @@ using System.Collections.Generic;
 namespace LevelEditorPlugin.Entities
 {
 	[EntityBinding(DataType = typeof(FrostySdk.Ebx.CompareIntRangeEntityData))]
+#if GW2 || SWBF
+	public class CompareIntRangeEntity : LogicEntity, IEntityData<FrostySdk.Ebx.CompareIntRangeEntityData>
+#else
 	public class CompareIntRangeEntity : CompareEntityBase, IEntityData<FrostySdk.Ebx.CompareIntRangeEntityData>
+#endif
 	{
 		public new FrostySdk.Ebx.CompareIntRangeEntityData Data => data as FrostySdk.Ebx.CompareIntRangeEntityData;
 		public override string DisplayName => "CompareIntRange";

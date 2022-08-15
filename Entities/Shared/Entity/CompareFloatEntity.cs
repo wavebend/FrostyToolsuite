@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace LevelEditorPlugin.Entities
 {
 	[EntityBinding(DataType = typeof(FrostySdk.Ebx.CompareFloatEntityData))]
-#if GW2
+#if GW2 || SWBF
 	public class CompareFloatEntity : LogicEntity, IEntityData<FrostySdk.Ebx.CompareFloatEntityData>
 #else
     public class CompareFloatEntity : CompareEntityBase, IEntityData<FrostySdk.Ebx.CompareFloatEntityData>

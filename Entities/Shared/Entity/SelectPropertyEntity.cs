@@ -2,15 +2,16 @@ using System.Collections.Generic;
 
 namespace LevelEditorPlugin.Entities
 {
-	[EntityBinding(DataType = typeof(FrostySdk.Ebx.SelectPropertyEntityData))]
-	public class SelectPropertyEntity : LogicEntity, IEntityData<FrostySdk.Ebx.SelectPropertyEntityData>
-	{
+#if !SWBF
+    [EntityBinding(DataType = typeof(FrostySdk.Ebx.SelectPropertyEntityData))]
+    public class SelectPropertyEntity : LogicEntity, IEntityData<FrostySdk.Ebx.SelectPropertyEntityData>
+    {
         protected readonly int Property_InputSelect = Frosty.Hash.Fnv1.HashString("InputSelect");
         protected readonly int Property_SelectedIndex = Frosty.Hash.Fnv1.HashString("SelectedIndex");
 
         public new FrostySdk.Ebx.SelectPropertyEntityData Data => data as FrostySdk.Ebx.SelectPropertyEntityData;
-		public override string DisplayName => "SelectProperty";
-		public override FrostySdk.Ebx.Realm Realm => Data.Realm;
+        public override string DisplayName => "SelectProperty";
+        public override FrostySdk.Ebx.Realm Realm => Data.Realm;
         public override IEnumerable<ConnectionDesc> Events
         {
             get
@@ -53,8 +54,8 @@ namespace LevelEditorPlugin.Entities
         protected Property<int> selectedIndexProperty;
 
         public SelectPropertyEntity(FrostySdk.Ebx.SelectPropertyEntityData inData, Entity inParent)
-			: base(inData, inParent)
-		{
+            : base(inData, inParent)
+        {
             inputSelectProperty = new Property<int>(this, Property_InputSelect, Data.InputSelect);
             selectedIndexProperty = new Property<int>(this, Property_SelectedIndex);
         }
@@ -79,6 +80,7 @@ namespace LevelEditorPlugin.Entities
 
             base.OnPropertyChanged(propertyHash);
         }
-    }
+    } 
+#endif
 }
 

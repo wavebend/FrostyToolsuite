@@ -3,14 +3,15 @@ using CString = FrostySdk.Ebx.CString;
 
 namespace LevelEditorPlugin.Entities
 {
-	[EntityBinding(DataType = typeof(FrostySdk.Ebx.SelectStringEntityData))]
-	public class SelectStringEntity : SelectPropertyEntity, IEntityData<FrostySdk.Ebx.SelectStringEntityData>
-	{
+#if !SWBF
+    [EntityBinding(DataType = typeof(FrostySdk.Ebx.SelectStringEntityData))]
+    public class SelectStringEntity : SelectPropertyEntity, IEntityData<FrostySdk.Ebx.SelectStringEntityData>
+    {
         protected readonly int Property_Out = Frosty.Hash.Fnv1.HashString("Out");
 
         public new FrostySdk.Ebx.SelectStringEntityData Data => data as FrostySdk.Ebx.SelectStringEntityData;
-		public override string DisplayName => "SelectString";
-		public override FrostySdk.Ebx.Realm Realm => Data.Realm;
+        public override string DisplayName => "SelectString";
+        public override FrostySdk.Ebx.Realm Realm => Data.Realm;
         public override IEnumerable<ConnectionDesc> Properties
         {
             get
@@ -28,8 +29,8 @@ namespace LevelEditorPlugin.Entities
         protected List<Event<InputEvent>> selectEvents = new List<Event<InputEvent>>();
 
         public SelectStringEntity(FrostySdk.Ebx.SelectStringEntityData inData, Entity inParent)
-			: base(inData, inParent)
-		{
+            : base(inData, inParent)
+        {
             SetFlags(EntityFlags.HasLogic);
             for (int i = 0; i < inData.Inputs.Count; i++)
             {
@@ -41,11 +42,11 @@ namespace LevelEditorPlugin.Entities
             }
 
             outProperty = new Property<CString>(this, Property_Out);
-		}
+        }
 
         public override void OnPropertyChanged(int propertyHash)
         {
-            
+
             if (propertyHash == inputProperties[inputSelectProperty.Value].NameHash)
             {
                 outProperty.Value = inputProperties[inputSelectProperty.Value].Value;
@@ -70,6 +71,7 @@ namespace LevelEditorPlugin.Entities
 
             base.OnEvent(eventHash);
         }
-    }
+    } 
+#endif
 }
 

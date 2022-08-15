@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace LevelEditorPlugin.Entities
 {
+#if !SWBF
 	[EntityBinding(DataType = typeof(FrostySdk.Ebx.EnumLogicEntityBaseData))]
 	public class EnumLogicEntityBase : LogicEntity, IEntityData<FrostySdk.Ebx.EnumLogicEntityBaseData>
 	{
@@ -19,5 +20,6 @@ namespace LevelEditorPlugin.Entities
 			enumType = TypeLibrary.GetType(Data.TypeNameHash);
 		}
 	}
+#endif
 }
 

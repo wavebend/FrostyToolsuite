@@ -37,23 +37,25 @@ namespace LevelEditorPlugin.Entities
         public override void Update(float elapsedTime)
         {
 			CurveData curveData = Data.CurveData.GetObjectAs<FrostySdk.Ebx.CurveData>();
-			if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Zero)
-			{
-				currentValue = 0.0f;
-				return;
-			}
-			else if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_One)
-			{
-				currentValue = 1.0f;
-				return;
-			}
-			else if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Constant)
-			{
-				currentValue = curveData.Value[0];
-				return;
-			}
-			else
-			{
+#if !SWBF
+            if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Zero)
+            {
+                currentValue = 0.0f;
+                return;
+            }
+            else if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_One)
+            {
+                currentValue = 1.0f;
+                return;
+            }
+            else if (curveData.CurveType == FrostySdk.Ebx.CurveType.CurveType_Constant)
+            {
+                currentValue = curveData.Value[0];
+                return;
+            }
+            else 
+#endif
+            {
 				int index = -1;
 				for (int i = 0; i < curveData.Time.Count; i++)
 				{

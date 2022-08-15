@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace LevelEditorPlugin.Entities
 {
+#if !SWBF
 	[EntityBinding(DataType = typeof(FrostySdk.Ebx.AxisAlignedBoxEntityData))]
 	public class AxisAlignedBoxEntity : LogicEntity, IEntityData<FrostySdk.Ebx.AxisAlignedBoxEntityData>
 	{
@@ -14,5 +15,6 @@ namespace LevelEditorPlugin.Entities
 		{
 		}
 	}
+#endif
 }
 

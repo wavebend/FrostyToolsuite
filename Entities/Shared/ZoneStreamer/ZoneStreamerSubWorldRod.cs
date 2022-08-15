@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LevelEditorPlugin.Entities
 {
+#if !SWBF
     [EntityBinding(DataType = typeof(FrostySdk.Ebx.ZoneStreamerSubWorldRod))]
     public class ZoneStreamerSubWorldRod : SubWorldReferenceObject, IEntityData<FrostySdk.Ebx.ZoneStreamerSubWorldRod>
     {
@@ -15,5 +16,6 @@ namespace LevelEditorPlugin.Entities
             : base(inData, inParent)
         {
         }
-    }
+    } 
+#endif
 }
