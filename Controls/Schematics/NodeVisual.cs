@@ -616,7 +616,9 @@ namespace LevelEditorPlugin.Controls
             state.DrawingContext.DrawRoundedRectangle(state.NodeTitleBackgroundBrush, null, new Rect(nodePosition.X, nodePosition.Y, Rect.Width * state.Scale, headerHeight * state.Scale), new CornerRadius(2 * state.Scale, 2 * state.Scale, 0, 0));
 
             if (state.InvScale >= 5)
+            {
                 return;
+            }
 
             // self connector
             Brush brush = (Self.IsHighlighted) ? state.NodeSelectedBrush : state.SchematicLinkBrush;
@@ -628,7 +630,6 @@ namespace LevelEditorPlugin.Controls
 
             // collapse button
             Brush collapseButtonBrush = IsCollapsed ? state.SchematicRealmDisabled : state.NodeCollapseButtonBackgroundBrush;
-            //state.DrawingContext.DrawRoundedRectangle(collapseButtonBrush, null, new Rect(nodePosition.X + ((nodeSize.Width - 16) * state.Scale), nodePosition.Y + (4 * state.Scale), 12 * state.Scale, 12 * state.Scale), 2, 2);
 
             Point p = new Point(nodeSize.Width - 16 + 3, 6);
             PathGeometry geometry;
@@ -744,7 +745,7 @@ namespace LevelEditorPlugin.Controls
                         if (value != "")
                         {
                             GlyphRun headerRowGlyphRun = state.ConvertTextLinesToGlyphRun(new Point(nodePosition.X + (5 * state.Scale), nodePosition.Y + ((offsetY - 0.5) * state.Scale)), false, rowValue);
-                            state.DrawingContext.DrawGlyphRun(Brushes.LightGray, headerRowGlyphRun);
+                            state.DrawingContext.DrawGlyphRun(Brushes.White, headerRowGlyphRun);
                         }
 
                         offsetY += 10.0;
@@ -956,7 +957,7 @@ namespace LevelEditorPlugin.Controls
 
         private double CalculateNodeWidth(out int linkCount, out int eventCount, out int propertyCount)
         {
-            double nodeWidth = 8 + (Entity.DisplayName.Length * GlyphWidth) + 60;
+            double nodeWidth = 8 + (Entity.DisplayName.Length * GlyphWidth) + 45;
             nodeWidth = nodeWidth - (nodeWidth % 10);
 
             double longestInput = 0.0;
@@ -967,6 +968,7 @@ namespace LevelEditorPlugin.Controls
             int tmpPropertyCount = propertyCount = 0;
             int tmpLinkCount = linkCount = 0;
 
+            // links
             foreach (Port port in InputLinks)
             {
                 if ((!IsCollapsed || port.IsConnected) || port.ShowWhileCollapsed)
@@ -984,6 +986,7 @@ namespace LevelEditorPlugin.Controls
                 }
             }
 
+            // events
             foreach (Port port in InputEvents)
             {
                 if ((!IsCollapsed || port.IsConnected) || port.ShowWhileCollapsed)
@@ -1001,6 +1004,7 @@ namespace LevelEditorPlugin.Controls
                 }
             }
 
+            // properties
             foreach (Port port in InputProperties)
             {
                 if ((!IsCollapsed || port.IsConnected) || port.ShowWhileCollapsed)
@@ -1017,6 +1021,8 @@ namespace LevelEditorPlugin.Controls
                     longestOutput = (strLength > longestOutput) ? strLength : longestOutput; tmpPropertyCount++;
                 }
             }
+            
+            // header row
             foreach (string row in Entity.HeaderRows)
             {
                 int strLen = (row.Length > 44) ? strLen = 47 : row.Length;
