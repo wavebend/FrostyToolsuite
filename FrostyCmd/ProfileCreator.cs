@@ -1187,6 +1187,34 @@ namespace FrostyCmd
                 blobs.Add(key, writer.ToByteArray());
             }
         }
+
+        private void CreateDragonAgeTheVeilguardProfile()
+        {
+            string key = "Dragon Age The Veilguard";
+            using (NativeWriter writer = new NativeWriter(new MemoryStream()))
+            {
+                writer.WriteObfuscatedString("Dragon Age The Veilguard");
+                writer.Write((int)ProfileVersion.DragonAgeTheVeilguard);
+                writer.WriteObfuscatedString("DragonAgeTheVeilguard");
+                writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
+                writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
+                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.WriteObfuscatedString("DragonAgeTheVeilguardSDK");
+                writer.Write(CreateBanner("dragonagetheveilguard"));
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_N");
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_Black_BC");
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");
+                writer.Write(0); // shared bundle names
+                writer.Write(0); // ignored res types
+
+                // Flags (MustAddChunks, EbxVersion, RequiresKey)
+                ProfileFlags pf = new ProfileFlags(0, 6, 1, 1);
+                pf.Write(writer);
+
+                blobs.Add(key, writer.ToByteArray());
+            }
+        }
         #endregion
 
         public ProfileCreator()
@@ -1231,6 +1259,7 @@ namespace FrostyCmd
             CreateMadden23Profile();
             CreateFifa23Profile();
             CreateDeadSpaceProfile();
+            CreateDragonAgeTheVeilguardProfile();
 
 #endif
 

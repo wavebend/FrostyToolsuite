@@ -391,6 +391,7 @@ namespace FrostySdk
                     case (int)ProfileVersion.Fifa23:
                     case (int)ProfileVersion.NeedForSpeedUnbound:
                     case (int)ProfileVersion.DeadSpace:
+                    case (int)ProfileVersion.DragonAgeTheVeilguard:
                         return 16;
                     default:
                         return 8;
@@ -943,7 +944,7 @@ namespace FrostySdk
             {
                 compressionType = CompressionType.LZ4;
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.Anthem, ProfileVersion.PlantsVsZombiesBattleforNeighborville,
-                    ProfileVersion.NeedForSpeedHeat, ProfileVersion.NeedForSpeedUnbound) ||
+                    ProfileVersion.NeedForSpeedHeat, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DragonAgeTheVeilguard) ||
                     (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19) && texture != null))
                 {
                     compressionType = CompressionType.Oodle;
