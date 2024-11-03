@@ -576,31 +576,7 @@ namespace FrostySdk.IO
 
                     int sizeOfStruct = 0;
 
-                    if (boxedValue.ClassRef != ushort.MaxValue)
-                    {
-                        EbxClass arrayType = GetClass(null, boxedValue.ClassRef);
-                        sizeOfStruct = arrayType.Size;
-
-                        EbxField arrayField = GetField(arrayType, arrayType.FieldIndex);
-                        value = Activator.CreateInstance(typeof(List<>).MakeGenericType(GetTypeFromEbxField(arrayField)));
-
-                        long startingPosition = Position;
-
-                        for (var i = 0; i < arrayCount; i++)
-                        {
-                            // If array of structs, align to the next struct size. Not all structs take up their size (because why would they??)
-                            if (sizeOfStruct > 0)
-                                Position = startingPosition + (sizeOfStruct * i);
-
-                            object subValue = ReadField(arrayType, arrayField.DebugType, arrayField.ClassRef, false);
-                            value.GetType().GetMethod("Add").Invoke(value, new object[] { subValue });
-                        }
-                        subType = arrayField.DebugType;
-                    }
-                    else
-                    {
-                        subType = boxedValuetype;
-                    }
+                    subType = boxedValuetype;
                 }
                 else
                 {

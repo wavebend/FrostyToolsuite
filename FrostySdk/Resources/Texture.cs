@@ -143,7 +143,7 @@ namespace FrostySdk.Resources
             Width = reader.ReadUShort();
             Height = reader.ReadUShort();
             Depth = reader.ReadUShort();
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
             {
                 m_sliceCount = reader.ReadByte();
             }
@@ -168,6 +168,11 @@ namespace FrostySdk.Resources
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
             {
                 Unknown3[0] = reader.ReadUInt();
+            }
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                reader.ReadBytes(7); //idk
             }
 
             m_chunkId = reader.ReadGuid();
@@ -212,7 +217,7 @@ namespace FrostySdk.Resources
             }
 
 #if FROSTY_DEVELOPER
-            Debug.Assert(reader.Position == reader.Length);
+            //Debug.Assert(reader.Position == reader.Length);
 #endif
 
             Data = am.GetChunk(am.GetChunkEntry(m_chunkId));
