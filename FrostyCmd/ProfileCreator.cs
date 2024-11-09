@@ -1248,6 +1248,7 @@ namespace FrostyCmd
             CreateBFHProfile();
             CreateSWSProfile();
             CreateNFSUnboundProfile();
+            CreateDragonAgeTheVeilguardProfile();
 
 #if FROSTY_DEVELOPER
 
@@ -1259,7 +1260,6 @@ namespace FrostyCmd
             CreateMadden23Profile();
             CreateFifa23Profile();
             CreateDeadSpaceProfile();
-            CreateDragonAgeTheVeilguardProfile();
 
 #endif
 
