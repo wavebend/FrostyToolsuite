@@ -231,10 +231,11 @@ namespace Frosty.Core
                 return;
             }
 
+            byte[] binaryData = File.ReadAllBytes(path);
             using (EbxReader reader = EbxReader.CreateReader(new FileStream(path, FileMode.Open, FileAccess.Read), App.FileSystemManager, true))
             {
                 var asset = reader.ReadAsset<EbxAsset>();
-                App.AssetManager.ModifyEbx(entry.Name, asset);
+                App.AssetManager.ModifyEbx(entry.Name, asset, binaryData);
             }
         }
     }

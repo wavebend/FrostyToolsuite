@@ -258,7 +258,7 @@ namespace FrostySdk.Resources
                 writer.Write(Height);
                 writer.Write(Depth);
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     writer.Write((byte)0);
                 }
@@ -275,12 +275,12 @@ namespace FrostySdk.Resources
                 writer.Write(MipCount);
                 writer.Write(FirstMip);
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     writer.Write(MipCount);
                 }
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     writer.Write(Unknown3[0]);
                 }
@@ -321,7 +321,7 @@ namespace FrostySdk.Resources
                     writer.Write(Unknown3[0]);
                 }
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     writer.Write(0);
                 }
