@@ -112,7 +112,7 @@ namespace FrostySdk.Resources
         public override void Read(NativeReader reader, AssetManager am, ResAssetEntry entry, ModifiedResource modifiedData)
         {
             base.Read(reader, am, entry, modifiedData);
-            
+
             //using (FileStream fileStream = new FileStream(@"E:/" + entry.Filename, FileMode.Create, FileAccess.Write))
             //{
             //    reader.BaseStream.CopyTo(fileStream);
