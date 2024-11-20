@@ -1,24 +1,45 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Frosty.Controls;
+using Frosty.Core.Controls;
 using FrostySdk;
 using Microsoft.Win32;
 
 namespace Frosty.Core.Windows
 {
-    public partial class FrostyProfileSelectWindow
+    public partial class FrostyProfileSelectWindow : INotifyPropertyChanged
     {
         private readonly List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
         private string selectedProfileName;
+        private bool scanSuccessful = true;
         
         public FrostyProfileSelectWindow()
         {
             InitializeComponent();
+        }
+
+        public bool ScanSuccessful {
+            get => scanSuccessful;
+            set {
+                if (scanSuccessful != value)
+                {
+                    scanSuccessful = value;
+                    OnPropertyChanged(nameof(ScanSuccessful));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void ProfileSelectWindow_Loaded(object sender, RoutedEventArgs e)
@@ -48,6 +69,7 @@ namespace Frosty.Core.Windows
                 }
             }
 
+            ConfigurationListView.ItemsSource = null;
             ConfigurationListView.ItemsSource = configurations;
         }
 
@@ -65,15 +87,22 @@ namespace Frosty.Core.Windows
         
         private async void ScanGames()
         {
-            await Task.Run((() =>
+            try
             {
-                using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                await Task.Run((() =>
                 {
-                    int totalCount = 0;
+                    using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                    {
+                        int totalCount = 0;
 
-                    IterateSubKeys(lmKey, ref totalCount);
-                }
-            }));
+                        IterateSubKeys(lmKey, ref totalCount);
+                    }
+                }));
+            }
+            catch
+            {
+                ScanSuccessful = false;
+            }
         }
         
         private void IterateSubKeys(RegistryKey subKey, ref int totalCount)
@@ -89,6 +118,7 @@ namespace Frosty.Core.Windows
                     // do nothing
                 }
             }
+
 
             foreach (string subKeyValue in subKey.GetValueNames())
             {

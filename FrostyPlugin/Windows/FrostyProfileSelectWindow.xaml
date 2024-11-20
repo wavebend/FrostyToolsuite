@@ -3,6 +3,7 @@
                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+                           xmlns:local="clr-namespace:Frosty.Core.Windows"
                            xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            mc:Ignorable="d"
@@ -14,6 +15,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="2"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="38"/>
         </Grid.RowDefinitions>
         
@@ -54,7 +56,20 @@
             </ListBox>
         </Grid>
 
-        <Grid Grid.Row="3" Background="{StaticResource ListBackground}" >
+        <TextBlock Grid.Row="3" Text="Notice: Game scan was unsuccessful." Foreground="White" Background="#292929" TextAlignment="Center" HorizontalAlignment="Stretch" Padding="5,3,5,3">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ScanSuccessful, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyProfileSelectWindow}}}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        
+        <Grid Grid.Row="4" Background="{StaticResource ListBackground}" >
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button Content="Refresh" Padding="12,0" Margin="6,6,0,6" Click="RefreshButton_OnClicked"/>
                 <Button x:Name="AddConfigurationButton" Content="Add" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
@@ -63,5 +78,6 @@
             
             <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Padding="12,0" Margin="6,6,0,6" Click="CancelButton_OnClick"/>
         </Grid>
+
     </Grid>
 </ctrl:FrostyDockableWindow>
