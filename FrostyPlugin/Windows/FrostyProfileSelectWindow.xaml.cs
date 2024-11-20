@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Frosty.Controls;
+using Frosty.Core.Controls;
 using FrostySdk;
 using Microsoft.Win32;
 
@@ -65,15 +66,22 @@ namespace Frosty.Core.Windows
         
         private async void ScanGames()
         {
-            await Task.Run((() =>
+            try
             {
-                using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                await Task.Run((() =>
                 {
-                    int totalCount = 0;
+                    using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                    {
+                        int totalCount = 0;
 
-                    IterateSubKeys(lmKey, ref totalCount);
-                }
-            }));
+                        IterateSubKeys(lmKey, ref totalCount);
+                    }
+                }));
+            }
+            catch
+            {
+                FrostyHandledExceptionBox.Show("An error occurred while scanning for games. \n\nPlease manually set the game executable(s).");
+            }
         }
         
         private void IterateSubKeys(RegistryKey subKey, ref int totalCount)
@@ -89,6 +97,7 @@ namespace Frosty.Core.Windows
                     // do nothing
                 }
             }
+
 
             foreach (string subKeyValue in subKey.GetValueNames())
             {

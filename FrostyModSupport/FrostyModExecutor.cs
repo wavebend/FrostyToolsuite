@@ -1426,6 +1426,16 @@ namespace Frosty.ModSupport
                     }
                 }
 
+                // if there is a gamedir/shader_cache folder, symlink it
+                if (Directory.Exists(Path.Combine(m_fs.BasePath, "shader_cache")))
+                {
+                    DirectoryInfo shaderCacheLink = new DirectoryInfo(Path.Combine(modDataPath, "shader_cache"));
+                    if (!shaderCacheLink.Exists)
+                    {
+                        cmdArgs.Add(new SymLinkStruct(Path.Combine(modDataPath, "shader_cache"), Path.Combine(m_fs.BasePath, "shader_cache"), true));
+                    }
+                }
+
                 // add cas files to link
                 foreach (string catalog in m_fs.Catalogs)
                 {
