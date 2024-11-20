@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Frosty.Controls;
+using Frosty.Core.Controls;
 using FrostySdk;
 using Microsoft.Win32;
 
@@ -26,8 +27,15 @@ namespace Frosty.Core.Windows
         {
             RefreshConfigurationList();
             
-            // TODO: @techdebt only call this once or when needed
-            await ScanGames();
+            try
+            {
+                // TODO: @techdebt only call this once or when needed
+                await ScanGames();
+            }
+            catch
+            {
+                FrostyHandledExceptionBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).");
+            }
 
             RefreshConfigurationList();
         }
