@@ -16,7 +16,7 @@ namespace Frosty.Core.Windows
 {
     public partial class FrostyProfileSelectWindow : INotifyPropertyChanged
     {
-        private readonly List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
+        private  List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
         private string selectedProfileName;
         private bool scanSuccessful = true;
 
@@ -56,7 +56,6 @@ namespace Frosty.Core.Windows
         private void RefreshConfigurationList()
         {
             Dispatcher.Invoke(() => {
-            
                 configurations.Clear();
 
                 foreach (string profile in Config.GameProfiles)
