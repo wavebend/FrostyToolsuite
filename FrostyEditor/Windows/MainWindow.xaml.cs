@@ -522,8 +522,7 @@ namespace FrostyEditor.Windows
 
             // clear all modifications
             App.AssetManager.Reset();
-            dataExplorer.RefreshAll();
-            legacyExplorer.RefreshAll();
+            UpdateUI(true);
 
             // create a new blank project
             m_project = new FrostyProject();
@@ -644,7 +643,7 @@ namespace FrostyEditor.Windows
                 
                 m_project = newProject;
 
-                UpdateUI();
+                UpdateUI(true);
 
                 legacyExplorer.ShowOnlyModified = false;
                 legacyExplorer.ShowOnlyModified = true;
@@ -967,8 +966,8 @@ namespace FrostyEditor.Windows
 
             FrostyTaskWindow.Show("Reverting Asset", "", (task) => { App.AssetManager.RevertAsset(entry, suppressOnModify: false); });
 
-            dataExplorer.RefreshAll();
-            legacyExplorer.RefreshAll();
+            dataExplorer.RefreshAll(true);
+            legacyExplorer.RefreshAll(true);
         }
 
         private void contextMenuImportAsset_Click(object sender, RoutedEventArgs e)

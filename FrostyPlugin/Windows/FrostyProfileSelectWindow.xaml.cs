@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,37 +14,48 @@ using Microsoft.Win32;
 
 namespace Frosty.Core.Windows
 {
-    public partial class FrostyProfileSelectWindow
+    public partial class FrostyProfileSelectWindow : INotifyPropertyChanged
     {
         private  List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
         private string selectedProfileName;
-        
+        private bool scanSuccessful = true;
+
         public FrostyProfileSelectWindow()
         {
             InitializeComponent();
         }
 
+        public bool ScanSuccessful {
+            get => scanSuccessful;
+            set {
+                if (scanSuccessful != value)
+                {
+                    scanSuccessful = value;
+                    OnPropertyChanged(nameof(ScanSuccessful));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private async void ProfileSelectWindow_Loaded(object sender, RoutedEventArgs e)
         {
             RefreshConfigurationList();
-            
-            try
-            {
-                // TODO: @techdebt only call this once or when needed
-                await ScanGames();
-            }
-            catch
-            {
-                FrostyHandledExceptionBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).");
-            }
+
+            // TODO: @techdebt only call this once or when needed
+            await ScanGames();
 
             RefreshConfigurationList();
         }
-        
+
         private void RefreshConfigurationList()
         {
-            Dispatcher.Invoke(() =>
-            {
+            Dispatcher.Invoke(() => {
                 configurations.Clear();
 
                 foreach (string profile in Config.GameProfiles)
@@ -59,6 +71,7 @@ namespace Frosty.Core.Windows
                     }
                 }
 
+                ConfigurationListView.ItemsSource = null;
                 ConfigurationListView.ItemsSource = configurations;
             });
         }
@@ -74,20 +87,27 @@ namespace Frosty.Core.Windows
                 Close();
             }
         }
-        
+
         private async Task ScanGames()
         {
-            await Task.Run((() =>
+            try
             {
-                using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                await Task.Run((() =>
                 {
-                    int totalCount = 0;
+                    using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                    {
+                        int totalCount = 0;
 
-                    IterateSubKeys(lmKey, ref totalCount);
-                }
-            }));
+                        IterateSubKeys(lmKey, ref totalCount);
+                    }
+                }));
+            }
+            catch
+            {
+                ScanSuccessful = false;
+            }
         }
-        
+
         private void IterateSubKeys(RegistryKey subKey, ref int totalCount)
         {
             foreach (string subKeyName in subKey.GetSubKeyNames())
@@ -101,6 +121,7 @@ namespace Frosty.Core.Windows
                     // do nothing
                 }
             }
+
 
             foreach (string subKeyValue in subKey.GetValueNames())
             {
@@ -141,7 +162,7 @@ namespace Frosty.Core.Windows
 
             FrostyProfileSelectWindow win = new FrostyProfileSelectWindow() { Owner = Application.Current.MainWindow };
             win.ShowDialog();
-            
+
             profileName = win.selectedProfileName;
 
             return profileName;
@@ -155,7 +176,7 @@ namespace Frosty.Core.Windows
                 RefreshConfigurationList();
             });
         }
-        
+
         private void AddConfigurationButton_OnClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog
@@ -218,7 +239,7 @@ namespace Frosty.Core.Windows
             {
                 SelectGameTextBlock.Visibility = Visibility.Collapsed;
             }
-            
+
             if (ConfigurationListView.SelectedItem is FrostyConfiguration configuration)
             {
                 ProfileNameTextBlock.Text = configuration.GameName;

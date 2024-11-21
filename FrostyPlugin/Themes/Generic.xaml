@@ -238,7 +238,7 @@
 
                         <GridSplitter x:Name="gs" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="3" Background="{StaticResource ControlBackground}" ResizeDirection="Rows"/>
 
-                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Single" />
+                        <ListView x:Name="PART_AssetListView" Grid.Row="4" HorizontalContentAlignment="Stretch" SelectionMode="Extended" ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" />
                         <Grid Grid.Row="2" Visibility="Hidden">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
@@ -1224,7 +1224,7 @@
                         <conv:AssetEntryToBitmapSourceConverter x:Key="AssetEntryToBitmapSourceConverter"/>
                     </ControlTemplate.Resources>
                     <Grid>
-                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Single" ItemsSource="{TemplateBinding ItemsSource}">
+                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Extended" ItemsSource="{TemplateBinding ItemsSource}" VirtualizingPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem" BasedOn="{StaticResource baseListViewItemStyle}">
                                     <Setter Property="ContextMenu" Value="{Binding Path=AssetContextMenu, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:FrostyAssetListView}}}"/>
@@ -1251,6 +1251,11 @@
                                     </Setter>
                                 </Style>
                             </ListView.ItemContainerStyle>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=gridHelper1}" HeaderTemplate="{StaticResource assetListViewAscendingSorting}">
@@ -1433,15 +1438,12 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="38"/>
                         </Grid.RowDefinitions>
-
                         <!-- Warning text -->
                         <TextBlock Grid.Row="0" Text="Warning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" FontSize="14" FontWeight="Bold"/>
-
                         <!-- Crash text -->
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="8,0,8,0" BorderThickness="1" Padding="4">
                             <TextBlock Text="{Binding WarningText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyHandledExceptionBox}}}" TextWrapping="Wrap" Foreground="White" FontFamily="Global User Interface" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </ScrollViewer>
-
                         <!-- Ok button -->
                         <StackPanel Grid.Row="2" Margin="8" FlowDirection="RightToLeft" Orientation="Horizontal">
                             <Button Content="Ok" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
