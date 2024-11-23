@@ -1427,12 +1427,28 @@ namespace Frosty.ModSupport
                 }
 
                 // if there is a gamedir/shader_cache folder, symlink it
-                if (Directory.Exists(Path.Combine(m_fs.BasePath, "shader_cache")))
+                string baseShaderCachePath = Path.Combine(m_fs.BasePath, "shader_cache");
+                string shaderCacheLinkPath = Path.Combine(modDataPath, "shader_cache");
+                if (Directory.Exists(baseShaderCachePath))
                 {
-                    DirectoryInfo shaderCacheLink = new DirectoryInfo(Path.Combine(modDataPath, "shader_cache"));
-                    if (!shaderCacheLink.Exists)
+                    DirectoryInfo shaderCacheLink = new DirectoryInfo(shaderCacheLinkPath);
+                    if (Config.Get<bool>("DisableShaderCacheSymLink", false))
                     {
-                        cmdArgs.Add(new SymLinkStruct(Path.Combine(modDataPath, "shader_cache"), Path.Combine(m_fs.BasePath, "shader_cache"), true));
+                        if (shaderCacheLink.Exists)
+                        {
+                            try
+                            {
+                                shaderCacheLink.Delete();
+                            }
+                            catch
+                            {
+                                App.Logger.Log("Error deleting shader cache symbolic link");
+                            }
+                        }
+                    }
+                    else if (!shaderCacheLink.Exists)
+                    {
+                        cmdArgs.Add(new SymLinkStruct(shaderCacheLinkPath, baseShaderCachePath, true));
                     }
                 }
 

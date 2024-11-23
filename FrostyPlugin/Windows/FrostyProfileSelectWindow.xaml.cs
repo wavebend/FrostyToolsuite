@@ -34,7 +34,7 @@ namespace Frosty.Core.Windows
             }
             catch
             {
-                FrostyHandledExceptionBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).");
+                FrostyMessageBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).", "Warning", MessageBoxButton.OK);
             }
 
             RefreshConfigurationList();

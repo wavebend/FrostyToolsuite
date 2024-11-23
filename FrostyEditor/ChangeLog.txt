@@ -1,4 +1,26 @@
-﻿v1.0.6
+﻿v1.0.7 alpha5
+Changes relative to v1.0.7
+----------------------------------
+New Features:
+- Added support for Localization modding & previewing (Revamped Bioware Localization Plugin)
+- Added support for Mesh previewing
+- Added support for Texture modding & previewing
+- Added minor support for Ebx modding
+
+Bug Fixes:
+- Improved Profile Launch asynchronous logic
+- Fixed shader compilation not triggering at launch
+- Fixed mod manager not exiting properly
+- Added crash prevention for registry scan errors
+
+Options:
+- Added an option in Tools -> Options to disable shader compilation at launch, for faster launching
+
+---------------
+Old Changelogs:
+
+
+v1.0.6
 --------
 - Added plugin support
 - Added Sound Import functionality
