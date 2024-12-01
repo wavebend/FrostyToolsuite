@@ -1,5 +1,4 @@
-﻿v1.0.7 alpha5
-Changes relative to v1.0.7
+﻿v1.0.7 alpha5v2
 ----------------------------------
 New Features:
 - Added support for Localization modding & previewing (Revamped Bioware Localization Plugin)
@@ -7,7 +6,11 @@ New Features:
 - Added support for Texture modding & previewing
 - Added minor support for Ebx modding
 
+Improvements:
+- Experimental: significantly improved data explorer responsiveness
+
 Bug Fixes:
+- Fixed some crashing issues due to missing assets when rewriting bundles
 - Improved Profile Launch asynchronous logic
 - Fixed shader compilation not triggering at launch
 - Fixed mod manager not exiting properly
@@ -16,6 +19,8 @@ Bug Fixes:
 Options:
 - Added an option in Tools -> Options to disable shader compilation at launch, for faster launching
 
+Misc:
+- When importing a ebx as .bin file, bypass the ebx writer entirely as a workaround to ebxwriter limitations
 ---------------
 Old Changelogs:
 
