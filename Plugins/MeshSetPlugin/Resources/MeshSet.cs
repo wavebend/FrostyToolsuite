@@ -475,6 +475,8 @@ namespace MeshSetPlugin.Resources
         public List<ushort> BoneList => m_boneList;
         public uint VertexStride => m_vertexStride;
         public PrimitiveType PrimitiveType => m_primitiveType;
+
+        private byte[] m_unknownBytesSection = new byte[0x10];
         public byte BonesPerVertex
         {
             get => m_bonesPerVertex;
@@ -531,6 +533,8 @@ namespace MeshSetPlugin.Resources
         private long m_unknownHash2;
         private uint m_unknownHash3;
 
+        private long m_unkLong;
+
         private List<ushort> m_boneList = new List<ushort>();
         private List<float> m_texCoordRatios = new List<float>();
         private byte[] m_unknownData = null;
@@ -583,7 +587,7 @@ namespace MeshSetPlugin.Resources
                 {
                     if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
                     {
-                        reader.ReadLong();
+                        m_unkLong = reader.ReadLong();
                     }
                     long unk = reader.ReadLong(); // probably some runtime ptr
                     Debug.Assert(unk == 0);
@@ -761,11 +765,11 @@ namespace MeshSetPlugin.Resources
             {
                 m_unknownHash1 = reader.ReadLong(); // some hash
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa22, ProfileVersion.Fifa23))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa22, ProfileVersion.Fifa23, ProfileVersion.DragonAgeTheVeilguard))
                 {
                     m_unknownHash2 = reader.ReadLong(); // some other hash
                 }
-                else if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                else if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     m_unknownHash3 = reader.ReadUInt(); // some other hash
                 }
@@ -773,7 +777,7 @@ namespace MeshSetPlugin.Resources
                 reader.Pad(16);
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
                 {
-                    reader.ReadBytes(16);
+                    m_unknownBytesSection = reader.ReadBytes(0x10);
                 }
                 m_boundingBox = reader.ReadAxisAlignedBox();
             }
@@ -922,6 +926,10 @@ namespace MeshSetPlugin.Resources
 
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
                 {
+                    if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                    {
+                        writer.Write(m_unkLong); // need to check what's here
+                    }
                     writer.Write(0L);
                 }
 
@@ -1083,18 +1091,24 @@ namespace MeshSetPlugin.Resources
                 // some hash
                 writer.Write(m_unknownHash1);
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa22, ProfileVersion.Fifa23))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa22, ProfileVersion.Fifa23, ProfileVersion.DragonAgeTheVeilguard))
                 {
                     // some other hash
                     writer.Write(m_unknownHash2);
                 }
-                else if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                else if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     // some other hash
                     writer.Write(m_unknownHash3);
                 }
 
                 writer.WritePadding(16);
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    writer.Write(m_unknownBytesSection); // need to check whats here
+                }
+
                 writer.Write(m_boundingBox);
             }
             else
@@ -1323,7 +1337,7 @@ namespace MeshSetPlugin.Resources
                 reader.ReadLong();
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
                 {
-                    reader.ReadUInt();
+                    m_unknownUInt = reader.ReadUInt();
                 }
             }
 
@@ -1722,6 +1736,11 @@ namespace MeshSetPlugin.Resources
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
             {
                 writer.Write(0L);
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    writer.Write(m_unknownUInt);
+                }
             }
 
             writer.Write(m_chunkId);
@@ -1737,6 +1756,10 @@ namespace MeshSetPlugin.Resources
                 {
                     writer.Write((long)0);
                 }
+            }
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                writer.Write(0xFFFFFFFF);
             }
             meshContainer.WriteRelocPtr("STR", m_shaderDebugName, writer);
             meshContainer.WriteRelocPtr("STR", m_name, writer);
@@ -1831,7 +1854,19 @@ namespace MeshSetPlugin.Resources
         }
         public uint NameHash { get => m_nameHash; set => m_nameHash = value; }
 
-        public int HeaderSize => BitConverter.ToUInt16(resMeta, 0x0c);
+        public int HeaderSize {
+            get
+            {
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    return BitConverter.ToUInt16(m_trimmedHeaderBytes, 0);
+                }
+                else
+                {
+                    return BitConverter.ToUInt16(resMeta, 0x0c);
+                }
+            }
+        }
 
         public const int MaxLodCount = 6;
 
@@ -1881,6 +1916,7 @@ namespace MeshSetPlugin.Resources
         private MeshSetLayoutFlags m_flags;
         private ushort[] m_lodFadeDistanceFactors = new ushort[MaxLodCount * 2];
         private uint[] m_unknownUInts = new uint[4];
+        private byte[] m_trimmedHeaderBytes;
         private short m_shaderDrawOrder;
         private short m_shaderDrawOrderUserSlot;
         private short m_shaderDrawOrderSubOrder;
@@ -1888,6 +1924,7 @@ namespace MeshSetPlugin.Resources
 
         private ushort m_unknownUShort;
         private ushort[] m_unknownUShorts = new ushort[6];
+        private ushort[] m_unknownUShorts2 = new ushort[17];
 
         private uint m_bonePartCount;
         private uint m_boneCount;
@@ -1904,7 +1941,7 @@ namespace MeshSetPlugin.Resources
 
         // Return a stream that excludes the first 0x10 bytes, so the offsets encountered during reading don't need
         // have 0x10 added to them to make sense
-        public static Stream TrimIfNeeded(Stream inputStream)
+        public static Stream TrimIfNeeded(Stream inputStream, out byte[] trimmedBytes)
         {
             int bytesToTrim;
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
@@ -1921,7 +1958,9 @@ namespace MeshSetPlugin.Resources
             {
                 throw new InvalidOperationException("Stream length is less than 16 bytes.");
             }
-            inputStream.Position = bytesToTrim;
+            trimmedBytes = new byte[bytesToTrim];
+            inputStream.Position = 0;
+            inputStream.Read(trimmedBytes, 0, bytesToTrim);
 
             byte[] remainingData = new byte[inputStream.Length - bytesToTrim];
             inputStream.Read(remainingData, 0, remainingData.Length);
@@ -1935,11 +1974,12 @@ namespace MeshSetPlugin.Resources
         {
             base.Read(reader, am, entry, modifiedData);
 
-            using (var trimmedStream = TrimIfNeeded(reader.BaseStream))
+            using (var trimmedStream = TrimIfNeeded(reader.BaseStream, out m_trimmedHeaderBytes))
             using (NativeReader innerReader = new NativeReader(trimmedStream))
             {
                 //using (FileStream fileStream = new FileStream(@"E:/" + entry.Filename, FileMode.Create, FileAccess.Write))
                 //{
+                //    fileStream.Write(m_trimmedHeaderBytes, 0, m_trimmedHeaderBytes.Length);
                 //    innerReader.BaseStream.CopyTo(fileStream);
                 //    innerReader.BaseStream.Position = 0;
                 //}
@@ -2045,7 +2085,10 @@ namespace MeshSetPlugin.Resources
 
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
                 {
-                    innerReader.ReadBytes(0x22);
+                    for (int i = 0; i < 17; i++)
+                    {
+                        m_unknownUShorts2[i] = innerReader.ReadUShort();
+                    }
                 }
 
                 // part/bone data not stored per lod
@@ -2249,18 +2292,45 @@ namespace MeshSetPlugin.Resources
 
                 relocTableSize = (uint)(writer.Position - startInlineRelocPos - inlineDataSize);
 
-                unsafe
+                byte[] combinedBytes;
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
                 {
-                    // update the res meta
-                    fixed (byte* ptr = &resMeta[0])
+                    writer.WritePadding(16); // unsure if necessary
+                    byte[] writerBytes = writer.ToByteArray();
+                    // reappend the extended resmeta for veilguard
+                    int totalLength = m_trimmedHeaderBytes.Length + writerBytes.Length;
+                    combinedBytes = new byte[totalLength];
+                    Buffer.BlockCopy(m_trimmedHeaderBytes, 0, combinedBytes, 0, m_trimmedHeaderBytes.Length);
+                    Buffer.BlockCopy(writerBytes, 0, combinedBytes, m_trimmedHeaderBytes.Length, writerBytes.Length);
+                    startInlineRelocPos += 0x10; // account for extended header
+                    unsafe
                     {
-                        *(uint*)(ptr + 0) = startInlineRelocPos;
-                        *(uint*)(ptr + 4) = inlineDataSize;
-                        *(uint*)(ptr + 8) = relocTableSize;
+                        // update the res meta
+                        fixed (byte* ptr = &resMeta[0])
+                        {
+                            *(uint*)(ptr + 0) = startInlineRelocPos;
+                            *(uint*)(ptr + 4) = relocTableSize; // for veilguard this one goes before
+                            *(uint*)(ptr + 8) = inlineDataSize; 
+                        }
                     }
                 }
-
-                return writer.ToByteArray();
+                else
+                {
+                    combinedBytes = writer.ToByteArray();
+                    unsafe
+                    {
+                        // update the res meta
+                        fixed (byte* ptr = &resMeta[0])
+                        {
+                            *(uint*)(ptr + 0) = startInlineRelocPos;
+                            *(uint*)(ptr + 4) = inlineDataSize;
+                            *(uint*)(ptr + 8) = relocTableSize;
+                        }
+                    }
+                }
+                //File.WriteAllBytes(@"E:\meshOutput.bin", combinedBytes);
+                return combinedBytes;
             }
         }
 
@@ -2422,7 +2492,7 @@ namespace MeshSetPlugin.Resources
                 writer.Write(m_shaderDrawOrderSubOrder);
             }
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedEdge, ProfileVersion.Madden20))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedEdge, ProfileVersion.Madden20, ProfileVersion.DragonAgeTheVeilguard))
             {
                 writer.Write(m_unknownUShort);
             }
@@ -2437,11 +2507,19 @@ namespace MeshSetPlugin.Resources
 
             writer.Write(sectionCount);
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
             {
                 for (int i = 0; i < 6; i++)
                 {
                     writer.Write(m_unknownUShorts[i]);
+                }
+            }
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                for (int i = 0; i < 17; i++)
+                {
+                    writer.Write(m_unknownUShorts2[i]);
                 }
             }
 
