@@ -1,6 +1,7 @@
-﻿v1.0.7 alpha5v2
+﻿v1.0.7 alpha5v3
 ----------------------------------
 New Features:
+- Added minor support for Mesh import
 - Added support for Localization modding & previewing (Revamped Bioware Localization Plugin)
 - Added support for Mesh previewing
 - Added support for Texture modding & previewing
@@ -15,6 +16,7 @@ Bug Fixes:
 - Fixed shader compilation not triggering at launch
 - Fixed mod manager not exiting properly
 - Added crash prevention for registry scan errors
+- Added some fallback parameters for the mesh preview
 
 Options:
 - Added an option in Tools -> Options to disable shader compilation at launch, for faster launching

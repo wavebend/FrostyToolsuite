@@ -533,7 +533,7 @@ namespace Frosty.Core.Viewport
             List<Vector4> AdditionalParams = new List<Vector4>();
             List<ShaderResourceView> AdditionalTextures = new List<ShaderResourceView>();
 
-            if (ProfilesLibrary.DataVersion == (int)ProfileVersion.StarWarsBattlefrontII || ProfilesLibrary.DataVersion == (int)ProfileVersion.StarWarsSquadrons)
+            if (ProfilesLibrary.DataVersion == (int)ProfileVersion.StarWarsBattlefrontII || ProfilesLibrary.DataVersion == (int)ProfileVersion.StarWarsSquadrons || ProfilesLibrary.DataVersion == (int)ProfileVersion.DragonAgeTheVeilguard)
             {
                 for (int i = 0; i < 4; i++)
                     AdditionalParams.Add(Vector4.Zero);
@@ -549,6 +549,29 @@ namespace Frosty.Core.Viewport
             foreach (dynamic vectorParam in material.VectorParameters)
             {
                 string paramName = vectorParam.ParameterName;
+
+                if (ProfilesLibrary.DataVersion == (int)ProfileVersion.DragonAgeTheVeilguard)
+                {
+                    string lower = paramName.ToLower();
+                    if (lower.Contains("tint") && lower.Contains("1"))
+                    {
+                        TintColorA.X = vectorParam.Value.x;
+                        TintColorA.Y = vectorParam.Value.y;
+                        TintColorA.Z = vectorParam.Value.z;
+                    }
+                    else if (lower.Contains("tint") && lower.Contains("2"))
+                    {
+                        TintColorB.X = vectorParam.Value.x;
+                        TintColorB.Y = vectorParam.Value.y;
+                        TintColorB.Z = vectorParam.Value.z;
+                    }
+                    else if (lower.Contains("tint") && lower.Contains("3"))
+                    {
+                        TintColorC.X = vectorParam.Value.x;
+                        TintColorC.Y = vectorParam.Value.y;
+                        TintColorC.Z = vectorParam.Value.z;
+                    }
+                }
 
                 // MEA / DAI
                 if (ProfilesLibrary.DataVersion == (int)ProfileVersion.MassEffectAndromeda || ProfilesLibrary.DataVersion == (int)ProfileVersion.DragonAgeInquisition)
@@ -590,7 +613,7 @@ namespace Frosty.Core.Viewport
 
                     // MEA Only
                     else if (ProfilesLibrary.DataVersion == (int)ProfileVersion.MassEffectAndromeda)
-                    { 
+                    {
                         if (paramName.Equals("MP_Light", StringComparison.OrdinalIgnoreCase))
                         {
                             Vector4 v = AdditionalParams[0];
@@ -689,8 +712,45 @@ namespace Frosty.Core.Viewport
                 string paramName = textureParam.ParameterName;
                 PointerRef value = textureParam.Value;
 
+                // Dragon Age The Veilguard
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    if (paramName.StartsWith("BaseColor")
+                        || paramName.Equals("Diffuse")
+                        || paramName.Equals("diffuseBase")
+                        || paramName.Equals("diff_mean"))
+                    {
+                        DiffuseTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    else if (paramName.StartsWith("Normal")
+                        || paramName.Equals("Norm")
+                        || paramName.Equals("normalBase")
+                        || paramName.Equals("norm_mean"))
+                    {
+                        NormTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    else if (paramName.StartsWith("ARTS_")
+                        || paramName.Contains("AMMS"))
+                    {
+                        MaskTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    else if (paramName.Equals("Mask"))
+                    {
+                        MaskTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    else if (paramName.Equals("Tint")
+                        || paramName.Equals("Tint_Mask"))
+                    {
+                        TintTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    if (shaderAsset.Filename.Contains("Skin"))
+                    {
+                        AdditionalParams[3] = new Vector4(1.0f, AdditionalParams[3].Y, 0, 0);
+                    }
+                }
+
                 // MEA
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.MassEffectAndromeda))
+                else if (ProfilesLibrary.IsLoaded(ProfileVersion.MassEffectAndromeda))
                 {
                     if (paramName.Equals("Diffuse") || paramName.Equals("BaseColor") || paramName.Equals("diff_mean")) { DiffuseTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid); }
                     else if (paramName.Equals("Norm") || paramName.Equals("Normal") || paramName.Equals("norm_mean"))
@@ -812,7 +872,7 @@ namespace Frosty.Core.Viewport
                 else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17, ProfileVersion.Fifa18,
                     ProfileVersion.Fifa19, ProfileVersion.Fifa20,
                     ProfileVersion.NeedForSpeedHeat, ProfileVersion.Fifa21,
-                    ProfileVersion.Fifa22, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                    ProfileVersion.Fifa22, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     paramName = paramName.ToLower();
                     if (paramName.StartsWith("colortexture") || paramName.StartsWith("diffuse") || paramName.Contains("basecolor"))
@@ -2073,6 +2133,7 @@ namespace Frosty.Core.Viewport
                 if (idx != -1)
                 {
                     if (ProfilesLibrary.DataVersion != (int)ProfileVersion.Battlefield1 && ProfilesLibrary.DataVersion != (int)ProfileVersion.Anthem && ProfilesLibrary.DataVersion != (int)ProfileVersion.Battlefield5 && ProfilesLibrary.DataVersion != (int)ProfileVersion.Fifa20
+                        && ProfilesLibrary.DataVersion != (int)ProfileVersion.DragonAgeTheVeilguard
 #if FROSTY_ALPHA || FROSTY_DEVELOPER
                         && ProfilesLibrary.DataVersion != (int)ProfileVersion.PlantsVsZombiesBattleforNeighborville
 #endif
