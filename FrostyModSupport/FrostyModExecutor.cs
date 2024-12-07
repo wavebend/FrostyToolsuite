@@ -2105,7 +2105,7 @@ namespace Frosty.ModSupport
             {
                 //KillEADesktop();
                 //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                LaunchGame(m_fs.BasePath, m_modDirName, modDataPath, additionalArgs);
                 //WaitForGame();
                 //CleanUpInstalledData();
             }
@@ -2118,6 +2118,48 @@ namespace Frosty.ModSupport
 
             GC.Collect();
             return 0;
+        }
+
+        public static void LaunchGame(string basePath, string modDirName, string modDataPath, string additionalArgs)
+        {
+            string gameExecutable = Path.Combine(basePath, $"{ProfilesLibrary.ProfileName}.exe");
+            string dataPathArgument = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
+
+            if (Config.Get<bool>("UseSteamProtocol", false))
+            {
+                string steamAppIdFilePath = Path.Combine(basePath, "steam_appid.txt");
+                string steamAppId = null;
+
+                if (File.Exists(steamAppIdFilePath))
+                {
+                    steamAppId = File.ReadLines(steamAppIdFilePath).First();
+                }
+
+                if (string.IsNullOrEmpty(steamAppId) && ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    steamAppId = "1845910";
+                }
+
+                if (!string.IsNullOrEmpty(steamAppId))
+                {
+                    string arguments = $"-dataPath \"{modDirName.Replace('\\', '/')}\" {additionalArgs}".Trim();
+                    string encodedArguments = Uri.EscapeDataString(arguments);
+
+                    App.Logger.Log($"Launch: {arguments}");
+                    App.Logger.Log($"Encoded: {encodedArguments}");
+
+                    Process.Start($"steam://run/{steamAppId}//{encodedArguments}/");
+                }
+                else
+                {
+                    // fallback
+                    ExecuteProcess(gameExecutable, dataPathArgument);
+                }
+            }
+            else
+            {
+                ExecuteProcess(gameExecutable, dataPathArgument);
+            }
         }
 
         private void KillEADesktop()

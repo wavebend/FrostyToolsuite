@@ -80,6 +80,12 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool DisableShaderCacheSymLink { get; set; } = false;
 
+        [Category("General")]
+        [DisplayName("Launch Game Using Steam Protocol")]
+        [Description("An alternate launch method that uses the Steam Protocol for launching the game with mods")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool UseSteamProtocol { get; set; } = false;
+
         public override void Load()
         {
             base.Load();
@@ -95,6 +101,7 @@ namespace Frosty.Core.Windows
 
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
             DisableShaderCacheSymLink = Config.Get<bool>("DisableShaderCacheSymLink", false);
+            UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", false);
         }
 
         public override void Save()
@@ -109,6 +116,7 @@ namespace Frosty.Core.Windows
 
             Config.Add("DisableLaunchProcessCheck", DisableLaunchProcessCheck);
             Config.Add("DisableShaderCacheSymLink", DisableShaderCacheSymLink);
+            Config.Add("UseSteamProtocol", UseSteamProtocol);
         }
     }
     
