@@ -2,6 +2,7 @@
 using FrostySdk.Ebx;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -17,6 +18,7 @@ namespace FrostySdk.IO
         private List<uint> typeInfoOffsets = new List<uint>();
 
         private long dataStartOffset;
+
 
         public EbxReaderRiff(Stream InStream, FileSystemManager fs, bool inPatched)
             : base(InStream, true)
@@ -245,8 +247,10 @@ namespace FrostySdk.IO
                     }
 
                     long classPos = Position;
-
+                    
                     obj.SetInstanceGuid(new AssetClassGuid(instanceGuid, index++));
+
+                    PushXmlOffset(obj.__InstanceGuid.ToString(), true);
 
                     try
                     {
@@ -357,6 +361,7 @@ namespace FrostySdk.IO
 
                     if (fieldType.DebugCategory == EbxFieldCategory.ArrayType)
                     {
+                        if (fieldProp != null) { PushXmlOffset($"_{fieldProp.Name}"); }
                         long arrayPos = Position;
                         int arrayOffset = ReadInt();
                         Position += arrayOffset - 8;
@@ -365,7 +370,9 @@ namespace FrostySdk.IO
 
                         for (int i = 0; i < count; i++)
                         {
+                            if (fieldProp != null) { PushXmlOffset($"_{i}"); }
                             object value = ReadField(classType, fieldType.DebugType, fieldType.ClassRef, (attr != null));
+                            if (fieldProp != null) { PopXmlOffset(); }
                             if (fieldProp != null)
                             {
                                 try { fieldProp.GetValue(obj).GetType().GetMethod("Add").Invoke(fieldProp.GetValue(obj), new object[] { value }); }
@@ -377,10 +384,13 @@ namespace FrostySdk.IO
                             }
                         }
                         Position = arrayPos;
+                        if (fieldProp != null) { PopXmlOffset(); }
                     }
                     else
                     {
+                        if (fieldProp != null) { PushXmlOffset($"_{fieldProp.Name}"); }
                         object value = ReadField(classType, fieldType.DebugType, fieldType.ClassRef, (attr != null));
+                        if (fieldProp != null) { PopXmlOffset(); }
                         if (fieldProp != null)
                         {
                             try { fieldProp.SetValue(obj, value); }

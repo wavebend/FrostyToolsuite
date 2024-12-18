@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Windows.Media;
 using FrostySdk.Managers.Entries;
+using EbxToXmlPlugin.Windows;
 
 namespace EbxToXmlPlugin
 {
@@ -23,6 +24,15 @@ namespace EbxToXmlPlugin
 
         public override RelayCommand MenuItemClicked => new RelayCommand((o) =>
         {
+            EbxToXmlWindow win = new EbxToXmlWindow();
+            if (win.ShowDialog() == false)
+                return;
+
+            bool exportAsYaml = win.exportAsYamlCheckBox.IsChecked ?? false;
+            bool skipConversationsFolder = win.skipConversationsCheckBox.IsChecked ?? false;
+            bool skipVirtualFolder = win.skipVirtualCheckBox.IsChecked ?? false;
+            int tabSize = Config.Get<int>("ExportTabSize", 2);
+
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
@@ -41,6 +51,10 @@ namespace EbxToXmlPlugin
                         string filename = entry.Filename + ".xml";
                         filename = string.Concat(filename.Split(Path.GetInvalidFileNameChars()));
 
+                        if ((skipConversationsFolder && entry.Path.ToLower().StartsWith("conversations"))
+                        || (skipVirtualFolder && entry.Path.StartsWith("virtual")))
+                            continue;
+
                         if (File.Exists(fullPath + filename))
                             continue;
 
@@ -51,8 +65,16 @@ namespace EbxToXmlPlugin
                                 Directory.CreateDirectory(di.FullName);
 
                             EbxAsset asset = App.AssetManager.GetEbx(entry);
-                            using (EbxXmlWriter writer = new EbxXmlWriter(new FileStream(fullPath + filename, FileMode.Create), App.AssetManager))
-                                writer.WriteObjects(asset.Objects);
+                            if (exportAsYaml)
+                            {
+                                using (EbxYamlWriter writer = new EbxYamlWriter(asset, new FileStream(fullPath + filename, FileMode.Create), App.AssetManager, tabSize, false))
+                                    writer.WriteObjects();
+                            }
+                            else
+                            {
+                                using (EbxXmlWriter writer = new EbxXmlWriter(asset, new FileStream(fullPath + filename, FileMode.Create), App.AssetManager, tabSize, false))
+                                    writer.WriteObjects();
+                            }
                         }
                         catch (Exception)
                         {
