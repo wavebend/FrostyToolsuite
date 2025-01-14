@@ -9,6 +9,8 @@ New Features:
 
 Improvements:
 - Experimental: significantly improved data explorer responsiveness
+- Ebx: Added YAML export option
+- Ebx: Added option to export debug offsets (Tools->Options)
 
 Bug Fixes:
 - Fixed some crashing issues due to missing assets when rewriting bundles

@@ -95,6 +95,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyCmd", "..\FrostyCmd\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationEditorPlugin", "..\Plugins\AnimationEditorPlugin\AnimationEditorPlugin.csproj", "{CE312C84-2677-433C-B4B1-352BD16E7590}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyStringGeneration", "..\FrostyStringGeneration\FrostyStringGeneration.csproj", "{56980B5A-1E2E-43F9-86BA-D670CF413F9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Developer - Debug|x64 = Developer - Debug|x64
@@ -524,6 +526,16 @@ Global
 		{CE312C84-2677-433C-B4B1-352BD16E7590}.Release - Final|x64.Build.0 = Release - Final|x64
 		{CE312C84-2677-433C-B4B1-352BD16E7590}.Release|x64.ActiveCfg = Developer - Debug|x64
 		{CE312C84-2677-433C-B4B1-352BD16E7590}.Release|x64.Build.0 = Developer - Debug|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Final|x64.Build.0 = Release - Final|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release|x64.ActiveCfg = Release - Final|x64
+		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release|x64.Build.0 = Release - Final|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
