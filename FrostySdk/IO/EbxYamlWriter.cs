@@ -40,6 +40,21 @@ namespace FrostySdk.IO
             tabSize = inTabSize;
             isDebugInformationEnabled = InIsDebugInformationEnabled;
         }
+        private string GetDebugOffset(string suffix)
+        {
+            if (!isDebugInformationEnabled || asset.DebugInformation == null)
+                return string.Empty;
+
+            long offset = asset.DebugInformation.GetDebugOffset(suffix);
+            return " [Offset=0x" + offset.ToString("X").PadLeft(8, '0') + "]";
+        }
+
+        private void PopDebugOffset()
+        {
+            if (!isDebugInformationEnabled) return;
+
+            asset.DebugInformation.PopDebugOffset();
+        }
 
         public void WriteObjects()
         {
@@ -67,12 +82,14 @@ namespace FrostySdk.IO
             PropertyInfo[] Properties = ObjType.GetProperties(PropertyBindingFlags);
             Array.Sort(Properties, new PropertyComparer());
 
-            string strGuid = "";
+            string StrGuid = "";
+            string InstanceGuid = "";
             FieldInfo FI = ObjType.GetField("__Guid", BindingFlags.NonPublic | BindingFlags.Instance);
             if (FI != null)
             {
                 AssetClassGuid Guid = (AssetClassGuid)FI.GetValue(Obj);
-                strGuid = " <" + Guid.ToString() + ">";
+                StrGuid = " <" + Guid.ToString() + ">";
+                InstanceGuid = Guid.ToString();
             }
 
             bool hasProperties = false;
@@ -86,26 +103,36 @@ namespace FrostySdk.IO
             }
 
             SB.AppendLine();
-            SB.Append("".PadLeft(TabCount) + ObjType.Name + strGuid + " :");
+            SB.Append("".PadLeft(TabCount) + ObjType.Name + StrGuid + GetDebugOffset(InstanceGuid) + " : ");
 
             if (hasProperties)
             {
-                int subTab = TabCount + tabSize;
+                TabCount += tabSize;
                 foreach (PropertyInfo PI in Properties)
                 {
                     if (PI.GetCustomAttribute<IsTransientAttribute>() != null)
                         continue;
 
-                    string AdditionalInfo = "";
-                    object Value = PI.GetValue(Obj);
+                    string propertyString = ("".PadLeft(TabCount) + PI.Name + "[AddInfo]" + GetDebugOffset($"_{PI.Name}") + " : ");
 
-                    string fieldValue = FieldToXml(Value, ref AdditionalInfo, subTab);
+                    object Value = PI.GetValue(Obj);
+                    string Tmp = "";
+
+                    string fieldValue = FieldToXml(Value, ref Tmp, TabCount);
 
                     SB.AppendLine();
-                    SB.Append("".PadLeft(subTab) + PI.Name + AdditionalInfo + " : ");
+                    SB.Append(propertyString);
+                    SB.Append(fieldValue);
 
-                   SB.Append(fieldValue);
+                    SB = SB.Replace("[AddInfo]", Tmp);
+                    PopDebugOffset();
                 }
+                TabCount -= tabSize;
+                PopDebugOffset();
+            }
+            else
+            {
+                PopDebugOffset();
             }
 
             return SB.ToString();
@@ -127,12 +154,14 @@ namespace FrostySdk.IO
                     for (int i = 0; i < Count; i++)
                     {
                         SB.AppendLine();
-                        SB.Append("".PadLeft(TabCount) + "- member [" + i.ToString() + "] : ");
+                        SB.Append("".PadLeft(TabCount) + "- member [" + i.ToString() + "]" + GetDebugOffset($"_{i}") + " : ");
 
                         object SubValue = FieldType.GetMethod("get_Item").Invoke(Value, new object[] { i });
                         string Tmp = "";
 
                         SB.Append(FieldToXml(SubValue, ref Tmp, TabCount));
+
+                        PopDebugOffset();
                     }
                     TabCount -= tabSize;
                 }
