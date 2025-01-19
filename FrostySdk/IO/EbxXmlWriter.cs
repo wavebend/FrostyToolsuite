@@ -30,14 +30,16 @@ namespace FrostySdk.IO
 
         private int tabSize = 2;
         private bool isDebugInformationEnabled;
+        private bool leaveStreamOpen;
 
-        public EbxXmlWriter(EbxAsset inAsset, Stream inStream, AssetManager inAm, int inTabSize, bool InIsDebugInformationEnabled)
+        public EbxXmlWriter(EbxAsset inAsset, Stream inStream, AssetManager inAm, int inTabSize, bool InIsDebugInformationEnabled, bool inLeaveStreamOpen = false)
         {
             asset = inAsset;
             am = inAm;
             stream = inStream;
             tabSize = inTabSize;
             isDebugInformationEnabled = InIsDebugInformationEnabled;
+            leaveStreamOpen = inLeaveStreamOpen;
         }
 
         public void WriteObjects()
@@ -261,7 +263,10 @@ namespace FrostySdk.IO
                 Stream copyOfStream = stream;
                 stream = null;
 
-                copyOfStream?.Close();
+                if (!leaveStreamOpen && copyOfStream != null)
+                {
+                    copyOfStream.Close();
+                }
             }
 
             stream = null;

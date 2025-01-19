@@ -31,14 +31,16 @@ namespace FrostySdk.IO
 
         private int tabSize = 2;
         private bool isDebugInformationEnabled;
+        private bool leaveStreamOpen;
 
-        public EbxYamlWriter(EbxAsset inAsset, Stream inStream, AssetManager inAm, int inTabSize, bool InIsDebugInformationEnabled)
+        public EbxYamlWriter(EbxAsset inAsset, Stream inStream, AssetManager inAm, int inTabSize, bool InIsDebugInformationEnabled, bool inLeaveStreamOpen = false)
         {
             asset = inAsset;
             am = inAm;
             stream = inStream;
             tabSize = inTabSize;
             isDebugInformationEnabled = InIsDebugInformationEnabled;
+            leaveStreamOpen = inLeaveStreamOpen;
         }
         private string GetDebugOffset(string suffix)
         {
@@ -256,7 +258,10 @@ namespace FrostySdk.IO
             {
                 Stream copyOfStream = stream;
                 stream = null;
-                copyOfStream?.Close();
+                if (!leaveStreamOpen && copyOfStream != null)
+                {
+                    copyOfStream.Close();
+                }
             }
             stream = null;
         }

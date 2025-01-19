@@ -7,7 +7,7 @@
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Update Profile SDK" Height="300" Width="450" WindowStartupLocation="CenterOwner">
+        Title="Update Profile SDK" Height="300" Width="500" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <x:Array x:Key="TestArray" Type="{x:Type local:SdkUpdateTask}">
             <local:SdkUpdateTask DisplayName="Waiting for process to become active" State="CompletedSuccessful"/>
