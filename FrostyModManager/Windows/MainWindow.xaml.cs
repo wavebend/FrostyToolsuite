@@ -1753,7 +1753,12 @@ namespace FrostyModManager
 
         private void availableModsFilter_LostFocus(object sender, RoutedEventArgs e)
         {
-            RefreshFilter();
+            //RefreshFilter();
+            // J-Lyt | RefreshFilter() is no longer applied on focus loss. If the textbox contains text when focus is lost, the textbox is cleared.
+            if (availableModsFilterTextBox.Text != "")
+            {
+                availableModsFilterTextBox.Text = string.Format("");
+            }
         }
 
         private void RefreshFilter()
@@ -1784,22 +1789,38 @@ namespace FrostyModManager
 
             availableModsList.Items.Filter = new Predicate<object>((object a) => appliedOrNotFilter((IFrostyMod)a) && nameFilter((IFrostyMod)a));
 
-            if (availableModsFilterTextBox.Text != "" || appliedModsFilterButton.IsChecked.GetValueOrDefault() || notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
+            // J-Lyt | Changed text based on applied filter.
+            if (availableModsFilterTextBox.Text != "")
             {
-                availableModsStatusBar.Text = string.Format("{0} mods pass filter.", availableModsList.Items.Count);
+                availableModsStatusBar.Text = string.Format("{0} Filtered Mod(s)", availableModsList.Items.Count);
+            }
+            else if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
+            {
+                availableModsStatusBar.Text = string.Format("{0} Applied Mod(s)", availableModsList.Items.Count);
+            }
+            else if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
+            {
+                availableModsStatusBar.Text = string.Format("{0} Mod(s) Not Applied", availableModsList.Items.Count);
             }
             else
             {
-                availableModsStatusBar.Text = string.Format("{0} mods available.", availableModsList.Items.Count);
+                availableModsStatusBar.Text = string.Format("{0} Available Mod(s)", availableModsList.Items.Count);
             }
         }
 
         private void appliedModsFilterButton_Click(object sender, RoutedEventArgs e)
         {
             // NotApplied + Applied both checked makes no sense, same as neither checked.
+            // J-Lyt | Changed text for tooltips and changed text based on checked.
             if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
             {
                 notAppliedModsFilterButton.IsChecked = false;
+                appliedModsFilterButton.ToolTip = "Show Available Mod(s)";
+                notAppliedModsFilterButton.ToolTip = "Hide Applied Mod(s)";
+            }
+            else 
+            {
+                appliedModsFilterButton.ToolTip = "Show Applied Mod(s)";
             }
 
             RefreshFilter();
@@ -1808,9 +1829,16 @@ namespace FrostyModManager
         private void notAppliedModsFilterButton_Click(object sender, RoutedEventArgs e)
         {
             // NotApplied + Applied both checked makes no sense, same as neither checked.
+            // J-Lyt | Changed text for tooltips and changed text based on checked.
             if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
             {
                 appliedModsFilterButton.IsChecked = false;
+                notAppliedModsFilterButton.ToolTip = "Show Available Mod(s)";
+                appliedModsFilterButton.ToolTip = "Show Applied Mod(s)";
+            }
+            else
+            {
+                notAppliedModsFilterButton.ToolTip = "Hide Applied Mod(s)";
             }
 
             RefreshFilter();
