@@ -77,6 +77,7 @@ namespace FrostySdk.Managers.Entries
         ShaderBlockDepotResource = 0x73312045,
         CompiledBytecode = 0xE2B02F7,
         ShaderBlockDepot = 0xD8F5DAAF,
+        EAClothColliderSetAssetData = 0x8EF3938D,
         Invalid = 0xFFFFFFFF
     }
     
