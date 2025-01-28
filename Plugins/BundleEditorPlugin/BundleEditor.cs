@@ -3,6 +3,7 @@ using Frosty.Core.Controls;
 using FrostySdk.IO;
 using FrostySdk.Managers;
 using FrostySdk.Resources;
+using MeshSetPlugin.Resources;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -16,6 +17,82 @@ using FrostySdk;
 namespace BundleEditPlugin
 {
     #region RemoveFromBundleExtension
+    public class RemoveMeshExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "MeshAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic meshAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(meshAsset.MeshSetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(resEntry);
+
+            MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
+
+            //Double check if there are any LODs the mesh, if there are, bundle and link them
+            if (meshSetRes.Lods.Count > 0)
+            {
+                foreach (MeshSetLod lod in meshSetRes.Lods)
+                {
+                    if (lod.ChunkId != Guid.Empty)
+                    {
+                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                        chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+                        resEntry.LinkAsset(chunkEntry);
+                    }
+                }
+            }
+
+            //SWBF2 has a fancy setup with ShaderBlockDepots, we need to bundle those too
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
+            {
+                ResAssetEntry block = App.AssetManager.GetResEntry(entry.Name.ToLower() + "_mesh/blocks");
+                block.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            }
+
+            base.RemoveFromBundle(entry, bentry);
+        }
+    }
+
+    // J-Lyt | Remove ClothWrappingAsset from Bundle
+    public class RemoveClothWrappingExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "ClothWrappingAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothWrappingAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothWrappingAsset.ClothWrappingAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(resEntry);
+
+            base.RemoveFromBundle(entry, bentry);
+        }
+    }
+
+    // J-Lyt | Remove ClothAsset from Bundle
+    public class RemoveClothExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "ClothAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothAsset.ClothAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(resEntry);
+
+            base.RemoveFromBundle(entry, bentry);
+        }
+    }
+
     public class RemoveSvgImageExtension : RemoveFromBundleExtension
     {
         public override string AssetType => "SvgImage";
@@ -112,6 +189,81 @@ namespace BundleEditPlugin
     #endregion
 
     #region AddToBundleExtension
+    public class MeshExtension : AddToBundleExtension
+    {
+        public override string AssetType => "MeshAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic meshAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(meshAsset.MeshSetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(resEntry);
+
+            MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
+            //Double check if there are any LODs in the Rigid Mesh, if there are, bundle and link them. Else, just bundle the EBX and move on.
+            if (meshSetRes.Lods.Count > 0)
+            {
+                foreach (MeshSetLod lod in meshSetRes.Lods)
+                {
+                    if (lod.ChunkId != Guid.Empty)
+                    {
+                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                        chunkEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+                        resEntry.LinkAsset(chunkEntry);
+                    }
+                }
+            }
+
+            //SWBF2 has a fancy setup with SBDs, we need to bundle those too
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
+            {
+                ResAssetEntry block = App.AssetManager.GetResEntry(entry.Name.ToLower() + "_mesh/blocks");
+                block.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            }
+
+            base.AddToBundle(entry, bentry);
+        }
+    }
+
+    // J-Lyt | Add ClothWrappingAsset to Bundle
+    public class ClothWrappingExtension : AddToBundleExtension
+    {
+        public override string AssetType => "ClothWrappingAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothWrappingAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothWrappingAsset.ClothWrappingAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(resEntry);
+
+            base.AddToBundle(entry, bentry);
+        }
+    }
+
+    // J-Lyt | Add ClothAsset to Bundle
+    public class ClothExtension : AddToBundleExtension
+    {
+        public override string AssetType => "ClothAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothAsset.ClothAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(resEntry);
+
+            base.AddToBundle(entry, bentry);
+        }
+    }
+
     public class SvgImageExtension : AddToBundleExtension
     {
         public override string AssetType => "SvgImage";
