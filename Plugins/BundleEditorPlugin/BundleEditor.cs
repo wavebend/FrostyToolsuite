@@ -22,38 +22,34 @@ namespace BundleEditPlugin
         public override string AssetType => "MeshAsset";
         public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
+            base.RemoveFromBundle(entry, bentry);
+
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             dynamic meshAsset = asset.RootObject;
 
             //Add res to BUNDLES AND LINK
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(meshAsset.MeshSetResource);
             resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            
             entry.LinkAsset(resEntry);
 
             MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
 
             //Double check if there are any LODs the mesh, if there are, bundle and link them
+            // J-Lyt | If chunk is in SuperBundle, do not add to bundle.
             if (meshSetRes.Lods.Count > 0)
             {
                 foreach (MeshSetLod lod in meshSetRes.Lods)
                 {
-                    if (lod.ChunkId != Guid.Empty)
+                    ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+
+                    if (lod.ChunkId != Guid.Empty && chunkEntry.SuperBundles.Count == 0)
                     {
-                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
                         chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
                         resEntry.LinkAsset(chunkEntry);
                     }
                 }
             }
-
-            //SWBF2 has a fancy setup with ShaderBlockDepots, we need to bundle those too
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
-            {
-                ResAssetEntry block = App.AssetManager.GetResEntry(entry.Name.ToLower() + "_mesh/blocks");
-                block.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
-            }
-
-            base.RemoveFromBundle(entry, bentry);
         }
     }
 
@@ -63,15 +59,15 @@ namespace BundleEditPlugin
         public override string AssetType => "ClothWrappingAsset";
         public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
+            base.RemoveFromBundle(entry, bentry);
+
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             dynamic clothWrappingAsset = asset.RootObject;
 
-            //Add res to BUNDLES AND LINK
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothWrappingAsset.ClothWrappingAssetResource);
             resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            
             entry.LinkAsset(resEntry);
-
-            base.RemoveFromBundle(entry, bentry);
         }
     }
 
@@ -81,15 +77,33 @@ namespace BundleEditPlugin
         public override string AssetType => "ClothAsset";
         public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
+            base.RemoveFromBundle(entry, bentry);
+
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             dynamic clothAsset = asset.RootObject;
 
-            //Add res to BUNDLES AND LINK
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothAsset.ClothAssetResource);
             resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            
             entry.LinkAsset(resEntry);
+        }
+    }
 
+    // J-Lyt | Remove ClothColliderSetAsset from Bundle
+    public class RemoveClothColliderSetExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "ClothColliderSetAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
             base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothColliderSetAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothColliderSetAsset.ClothColliderSetAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
         }
     }
 
@@ -194,37 +208,33 @@ namespace BundleEditPlugin
         public override string AssetType => "MeshAsset";
         public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
+            base.AddToBundle(entry, bentry);
+
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             dynamic meshAsset = asset.RootObject;
 
             //Add res to BUNDLES AND LINK
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(meshAsset.MeshSetResource);
             resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            
             entry.LinkAsset(resEntry);
 
             MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
-            //Double check if there are any LODs in the Rigid Mesh, if there are, bundle and link them. Else, just bundle the EBX and move on.
+            
+            //Double check if there are any LODs the mesh, if there are, bundle and link them
+            // J-Lyt | If chunk is in SuperBundle, do not add to bundle.
             if (meshSetRes.Lods.Count > 0)
             {
                 foreach (MeshSetLod lod in meshSetRes.Lods)
                 {
-                    if (lod.ChunkId != Guid.Empty)
+                    ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                    if (lod.ChunkId != Guid.Empty && chunkEntry.SuperBundles.Count == 0)
                     {
-                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
                         chunkEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
                         resEntry.LinkAsset(chunkEntry);
                     }
                 }
-            }
-
-            //SWBF2 has a fancy setup with SBDs, we need to bundle those too
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
-            {
-                ResAssetEntry block = App.AssetManager.GetResEntry(entry.Name.ToLower() + "_mesh/blocks");
-                block.AddToBundle(App.AssetManager.GetBundleId(bentry));
-            }
-
-            base.AddToBundle(entry, bentry);
+            }            
         }
     }
 
@@ -234,15 +244,15 @@ namespace BundleEditPlugin
         public override string AssetType => "ClothWrappingAsset";
         public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
+            base.AddToBundle(entry, bentry);
+
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             dynamic clothWrappingAsset = asset.RootObject;
 
-            //Add res to BUNDLES AND LINK
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothWrappingAsset.ClothWrappingAssetResource);
             resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            
             entry.LinkAsset(resEntry);
-
-            base.AddToBundle(entry, bentry);
         }
     }
 
@@ -252,15 +262,33 @@ namespace BundleEditPlugin
         public override string AssetType => "ClothAsset";
         public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
+            base.AddToBundle(entry, bentry);
+
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             dynamic clothAsset = asset.RootObject;
 
-            //Add res to BUNDLES AND LINK
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothAsset.ClothAssetResource);
             resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+            
             entry.LinkAsset(resEntry);
+        }
+    }
 
+    // J-Lyt | Add ClothColliderSetAsset to Bundle
+    public class ClothColliderSetExtension : AddToBundleExtension
+    {
+        public override string AssetType => "ClothColliderSetAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
             base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothColliderSetAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothColliderSetAsset.ClothColliderSetAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
         }
     }
 
