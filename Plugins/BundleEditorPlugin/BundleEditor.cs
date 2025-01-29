@@ -41,12 +41,14 @@ namespace BundleEditPlugin
             {
                 foreach (MeshSetLod lod in meshSetRes.Lods)
                 {
-                    ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
-
-                    if (lod.ChunkId != Guid.Empty && chunkEntry.SuperBundles.Count == 0)
+                    if (lod.ChunkId != Guid.Empty)
                     {
-                        chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
-                        resEntry.LinkAsset(chunkEntry);
+                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0)
+                        {
+                            chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+                            resEntry.LinkAsset(chunkEntry);
+                        }
                     }
                 }
             }
@@ -220,21 +222,24 @@ namespace BundleEditPlugin
             entry.LinkAsset(resEntry);
 
             MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
-            
+
             //Double check if there are any LODs the mesh, if there are, bundle and link them
             // J-Lyt | If chunk is in SuperBundle, do not add to bundle.
             if (meshSetRes.Lods.Count > 0)
             {
                 foreach (MeshSetLod lod in meshSetRes.Lods)
                 {
-                    ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
-                    if (lod.ChunkId != Guid.Empty && chunkEntry.SuperBundles.Count == 0)
+                    if (lod.ChunkId != Guid.Empty)
                     {
-                        chunkEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
-                        resEntry.LinkAsset(chunkEntry);
+                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0)
+                        {
+                            chunkEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+                            resEntry.LinkAsset(chunkEntry);
+                        }
                     }
                 }
-            }            
+            }
         }
     }
 
