@@ -1,4 +1,4 @@
-﻿v1.0.7 alpha5v3
+﻿v1.0.7 alpha5v4
 ----------------------------------
 New Features:
 - Added minor support for Mesh import
@@ -11,6 +11,7 @@ Improvements:
 - Experimental: significantly improved data explorer responsiveness
 - Ebx: Added YAML export option
 - Ebx: Added option to export debug offsets (Tools->Options)
+- Bundle editor: support for extra types & remove from bundle command
 
 Bug Fixes:
 - Fixed some crashing issues due to missing assets when rewriting bundles

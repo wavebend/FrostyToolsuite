@@ -30,6 +30,7 @@ using System.IO.Compression;
 using FrostySdk.Managers.Entries;
 using Newtonsoft.Json;
 using System.Reflection;
+using System.Linq;
 
 namespace FrostyModManager
 {
@@ -769,7 +770,8 @@ namespace FrostyModManager
 
         private void uninstallModButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (IFrostyMod mod in availableModsList.SelectedItems)
+            // Copy the selected items into a separate list to avoid modifying the collection while iterating.
+            foreach (IFrostyMod mod in availableModsList.SelectedItems.OfType<IFrostyMod>().ToList())
             {
                 FileInfo fi = new FileInfo(mod.Path);
 
