@@ -1934,6 +1934,7 @@ namespace MeshSetPlugin.Resources
         private uint m_bonePartCount;
         private uint m_boneCount;
         private List<ushort> m_boneIndices = new List<ushort>();
+        private List<LinearTransform> m_boneTransforms = new List<LinearTransform>();
         private List<AxisAlignedBox> m_boneBoundingBoxes = new List<AxisAlignedBox>();
         private List<AxisAlignedBox> m_partBoundingBoxes = new List<AxisAlignedBox>();
         private List<LinearTransform> m_partTransforms = new List<LinearTransform>();
@@ -2114,6 +2115,19 @@ namespace MeshSetPlugin.Resources
                     if (m_meshType == MeshType.MeshType_Skinned)
                     {
                         m_boneCount = innerReader.ReadUShort();
+                        if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                        {
+                            if (m_boneTransformsOffset != 0)
+                            {
+                                long curPos = innerReader.Position;
+                                innerReader.Position = (long)m_boneTransformsOffset;
+                                for (int i = 0; i < m_boneCount; i++)
+                                {
+                                    m_boneTransforms.Add(innerReader.ReadLinearTransform());
+                                }
+                                innerReader.Position = curPos;
+                            }
+                        }
                         if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden20, ProfileVersion.Madden22, ProfileVersion.Madden23))
                         {
                             m_bonePartCount = innerReader.ReadUInt();
@@ -2397,6 +2411,11 @@ namespace MeshSetPlugin.Resources
             {
                 if (m_meshType == MeshType.MeshType_Skinned)
                 {
+                    if (m_boneTransforms.Count != 0)
+                    {
+                        meshContainer.AddRelocPtr("BONETRANSFORMS", m_boneTransforms);
+                    }
+
                     if (m_boneIndices.Count != 0)
                     {
                         meshContainer.AddRelocPtr("BONEINDICES", m_boneIndices);
@@ -2554,10 +2573,17 @@ namespace MeshSetPlugin.Resources
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
             {
-                // for now we will just zero this section
                 writer.WritePadding(16);
-                writer.Write(0); //m_unkHash
-                writer.Write(0UL); //m_boneTransformsOffset
+                writer.Write(m_unkHash);
+
+                if (m_boneTransformsOffset != 0)
+                {
+                    meshContainer.WriteRelocPtr("BONETRANSFORMS", m_boneTransforms, writer);
+                }
+                else
+                {
+                    writer.Write((long)0);
+                }
                 writer.Write(0UL);
             }
 
@@ -2766,6 +2792,16 @@ namespace MeshSetPlugin.Resources
             {
                 if (m_meshType == MeshType.MeshType_Skinned)
                 {
+                    if (m_boneTransforms.Count != 0)
+                    {
+                        meshContainer.AddOffset("BONETRANSFORMS", m_boneTransforms, writer);
+                        foreach (var idx in m_boneTransforms)
+                        {
+                            writer.Write(idx);
+                        }
+
+                        writer.WritePadding(16);
+                    }
                     if (m_boneIndices.Count != 0)
                     {
                         meshContainer.AddOffset("BONEINDICES", m_boneIndices, writer);
