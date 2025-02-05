@@ -73,7 +73,23 @@ namespace Frosty.Core.Windows
                 Close();
             }
         }
-        
+
+        private void RemoveConfiguration()
+        {
+            if (FrostyMessageBox.Show("Are you sure you want to remove this profile?", "Remove Profile", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                FrostyConfiguration selectedItem = ConfigurationListView.SelectedItem as FrostyConfiguration;
+                
+                Config.RemoveGame(selectedItem.ProfileName);
+
+                configurations.Remove(selectedItem);
+                ConfigurationListView.Items.Refresh();
+
+                ConfigurationListView.SelectedIndex = 0;
+                Config.Save();
+            }
+        }
+
         private async Task ScanGames()
         {
             await Task.Run((() =>
@@ -202,6 +218,11 @@ namespace Frosty.Core.Windows
         private void SelectConfigurationButton_OnClick(object sender, RoutedEventArgs e)
         {
             SelectConfiguration();
+        }
+
+        private void RemoveConfigurationButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            RemoveConfiguration();
         }
 
         private void CancelButton_OnClick(object sender, RoutedEventArgs e)
