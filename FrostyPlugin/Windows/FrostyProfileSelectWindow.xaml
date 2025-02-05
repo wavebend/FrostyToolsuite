@@ -58,6 +58,7 @@
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button Content="Refresh" Padding="12,0" Margin="6,6,0,6" Click="RefreshButton_OnClicked"/>
                 <Button x:Name="AddConfigurationButton" Content="Add" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
+                <Button x:Name="RemoveConfigurationButton" Content="Remove" Padding="12,0" Margin="6,6,0,6" Click="RemoveConfigurationButton_OnClick"/>
                 <Button x:Name="SelectConfigurationButton" Content="Select" Padding="12,0" Margin="6,6,6,6" Click="SelectConfigurationButton_OnClick"/>
             </StackPanel>
             
