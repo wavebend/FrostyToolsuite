@@ -249,6 +249,32 @@ namespace DuplicationPlugin
         }
     }
 
+    // J-Lyt | Duplicate ClothColliderSetAsset
+    public class ClothColliderSetExtension : DuplicateAssetExtension
+    {
+        public override string AssetType => "ClothColliderSetAsset";
+
+        public override EbxAssetEntry DuplicateAsset(EbxAssetEntry entry, string newName, bool createNew, Type newType)
+        {
+            // Duplicate the ebx
+            EbxAssetEntry newEntry = base.DuplicateAsset(entry, newName, createNew, newType);
+            EbxAsset newAsset = App.AssetManager.GetEbx(newEntry);
+            dynamic newRoot = newAsset.RootObject;
+
+            // Duplicate the res
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(newRoot.ClothColliderSetAssetResource);
+            ResAssetEntry newResEntry = DuplicateRes(resEntry, newEntry.Name, ResourceType.ClothColliderSetAssetData);
+
+            // Update the ebx
+            newRoot.ClothColliderSetAssetResource = newResEntry.ResRid;
+            newEntry.LinkAsset(newResEntry);
+
+            App.AssetManager.ModifyEbx(newEntry.Name, newAsset);
+
+            return newEntry;
+        }
+    }
+
     public class ObjectVariationExtension : DuplicateAssetExtension
     {
         public override string AssetType => "ObjectVariation";
