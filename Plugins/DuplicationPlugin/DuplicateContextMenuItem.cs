@@ -1,5 +1,6 @@
 ﻿using AtlasTexturePlugin;
 using DuplicationPlugin.Windows;
+using Frosty.Controls;
 using Frosty.Core;
 using Frosty.Core.Viewport;
 using Frosty.Core.Windows;
@@ -19,6 +20,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace DuplicationPlugin
@@ -485,11 +487,13 @@ namespace DuplicationPlugin
     public class DuplicateAssetExtension
     {
         public virtual string AssetType => null;
+        public static bool dupeResult;
 
         public virtual EbxAssetEntry DuplicateAsset(EbxAssetEntry entry, string newName, bool createNew, Type newType)
         {
             EbxAsset asset = App.AssetManager.GetEbx(entry);
             EbxAsset newAsset = null;
+            dupeResult = false;
 
             if (createNew)
             {
@@ -531,7 +535,13 @@ namespace DuplicationPlugin
 
             EbxAssetEntry newEntry = App.AssetManager.AddEbx(newName, newAsset);
 
-            newEntry.AddedBundles.AddRange(entry.EnumerateBundles());
+            MessageBoxResult result = FrostyMessageBox.Show("Add the duplicated asset to the bundles of the original asset?", "Duplicate", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                newEntry.AddedBundles.AddRange(entry.EnumerateBundles());
+                dupeResult = true;
+            }
+            
             newEntry.ModifiedEntry.DependentAssets.AddRange(newAsset.Dependencies);
 
             return newEntry;
@@ -559,7 +569,14 @@ namespace DuplicationPlugin
             Guid newGuid;
             using (NativeReader reader = new NativeReader(App.AssetManager.GetChunk(entry)))
             {
-                newGuid = App.AssetManager.AddChunk(reader.ReadToEnd(), new Guid(random), texture, entry.EnumerateBundles().ToArray());
+                if (dupeResult == true)
+                {
+                    newGuid = App.AssetManager.AddChunk(reader.ReadToEnd(), new Guid(random), texture, entry.EnumerateBundles().ToArray());
+                }
+                else
+                {
+                    newGuid = App.AssetManager.AddChunk(reader.ReadToEnd(), new Guid(random), texture);
+                }
             }
 
             ChunkAssetEntry newEntry = App.AssetManager.GetChunkEntry(newGuid);
@@ -578,7 +595,14 @@ namespace DuplicationPlugin
                 ResAssetEntry newEntry;
                 using (NativeReader reader = new NativeReader(App.AssetManager.GetRes(entry)))
                 {
-                    newEntry = App.AssetManager.AddRes(name, resType, entry.ResMeta, reader.ReadToEnd(), entry.EnumerateBundles().ToArray());
+                    if (dupeResult == true)
+                    {
+                        newEntry = App.AssetManager.AddRes(name, resType, entry.ResMeta, reader.ReadToEnd(), entry.EnumerateBundles().ToArray());
+                    }
+                    else
+                    {
+                        newEntry = App.AssetManager.AddRes(name, resType, entry.ResMeta, reader.ReadToEnd());
+                    }  
                 }
 
                 App.Logger.Log(string.Format("Duped res {0} to {1}", entry.Name, newEntry.Name));
