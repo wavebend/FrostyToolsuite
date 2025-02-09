@@ -1111,6 +1111,11 @@ namespace FrostySdk.Managers
                             bFound = true;
                             break;
                         }
+                        else if (entry.AddedBundles.Contains(bindex))
+                        {
+                            bFound = true;
+                            break;
+                        }
                     }
                     if (!bFound)
                         continue;
