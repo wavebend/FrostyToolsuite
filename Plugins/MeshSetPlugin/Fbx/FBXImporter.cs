@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace MeshSetPlugin
 {
@@ -60,6 +61,13 @@ namespace MeshSetPlugin
     {
         public FBXImportNoMeshesFoundException(int lodLevel)
             : base(string.Format("Import file must contain at least one mesh at lod level " + lodLevel))
+        {
+        }
+    }
+    public class FBXImportMissingWeightsException : Exception
+    {
+        public FBXImportMissingWeightsException()
+            : base(string.Format("Mesh must be exported with valid weights"))
         {
         }
     }
@@ -773,11 +781,19 @@ namespace MeshSetPlugin
                             localBoneWeights.AddRange(boneIndicesAndWeights.Select(a => a.boneWeight));
 
                             foundBoneInfluences = (localBoneIndices.Count > foundBoneInfluences) ? localBoneIndices.Count : foundBoneInfluences;
-                            while (localBoneIndices.Count > totalBoneInfluences)
+
+                            if (localBoneIndices.Count > 0)
                             {
-                                // remove the lowest influence bones
-                                localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
-                                localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
+                                while (localBoneIndices.Count > totalBoneInfluences)
+                                {
+                                    // remove the lowest influence bones
+                                    localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
+                                    localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
+                                }
+                            }
+                            else
+                            {
+                                throw new FBXImportMissingWeightsException();
                             }
 
                             int totalWeight = 0;
