@@ -18,12 +18,16 @@ namespace FrostyEditor.Windows
         private List<string> categories = new List<string>()
         {
             "Custom",
+            "Armour and Clothing",
             "Audio",
+            "Characters",
             "Cosmetic",
             "Gameplay",
             "Graphic",
             "Map",
-            "User Interface"
+            "Miscellaneous",
+            "User Interface",
+            "Visuals"
         };
 
         public ModSettingsWindow(FrostyProject inProject = null)
@@ -70,10 +74,29 @@ namespace FrostyEditor.Windows
 
         private void saveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            var mTTB = modTitleTextBox.Text;
+            var mATB = modAuthorTextBox.Text;
+            var mCTB = modCategoryTextBox.Text;
+            var mVTB = modVersionTextBox.Text;
+
+            var invalidChars = new List<string>()
+            {
+                "{", "}"
+            };
+            
             if (modTitleTextBox.Text == "" || modAuthorTextBox.Text == "" || modCategoryTextBox.Text == "" || modVersionTextBox.Text == "")
             {
                 FrostyMessageBox.Show("Title, Author, Category and Version are mandatory fields", "Frosty Editor");
                 return;
+            }
+           
+            foreach(var invalidChar  in invalidChars)
+            {
+                if (mTTB.Contains(invalidChar) || mATB.Contains(invalidChar) || mCTB.Contains(invalidChar) || mVTB.Contains(invalidChar))
+                {
+                    FrostyMessageBox.Show("Invalid Characters: {, }", "Frosty Editor");
+                    return;
+                }
             }
 
             ModSettings.Title = modTitleTextBox.Text;
