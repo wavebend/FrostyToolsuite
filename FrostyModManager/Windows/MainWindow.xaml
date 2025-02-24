@@ -145,7 +145,7 @@
                 <RowDefinition Height="22"/>
                 <RowDefinition Height="26"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="23"/>
+                <RowDefinition Height="0"/>
             </Grid.RowDefinitions>
 
             <!-- Menu -->
@@ -264,7 +264,7 @@
 
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="14"/>
+                                                                <ColumnDefinition Width="2"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="Auto"/>
@@ -690,7 +690,7 @@
 
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="14"/>
+                                                                <ColumnDefinition Width="2"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="Auto"/>
@@ -807,9 +807,9 @@
                                     <Border Grid.Row="0" BorderBrush="{StaticResource ControlBackground}" BorderThickness="0,0,0,2">
                                         <DockPanel Margin="1">
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
-                                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
+                                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="4,0,4,0">
                                                     <!-- Down Button -->
-                                                    <Button x:Name="downButton" Margin="4,0,0,0" IsEnabled="False" Click="downButton_Click" ToolTip="Move mod down in list &#x0a;Shift click to move down 5 spaces &#x0a;Ctrl Shift click to move to bottom">
+                                                    <Button x:Name="downButton" IsEnabled="False" Click="downButton_Click" ToolTip="Move mod down in list &#x0a;Shift click to move down 5 spaces &#x0a;Ctrl Shift click to move to bottom">
                                                         <Image Source="/FrostyModManager;component/Images/Down.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                     <!-- Up Button -->
@@ -817,7 +817,7 @@
                                                         <Image Source="/FrostyModManager;component/Images/Up.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                     <!-- Remove Button -->
-                                                    <Button x:Name="removeButton" Margin="4,0,0,0" IsEnabled="False" Click="removeButton_Click" ToolTip="Remove mod from list">
+                                                    <Button x:Name="removeButton" IsEnabled="False" Click="removeButton_Click" ToolTip="Remove mod from list">
                                                         <Image Source="/FrostyModManager;component/Images/Remove.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                 </StackPanel>
