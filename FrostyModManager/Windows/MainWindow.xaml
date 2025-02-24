@@ -447,6 +447,7 @@
                                         <ctrl:FrostyWatermarkTextBox x:Name="availableModsFilterTextBox"
                                                                      WatermarkText="Filter"
                                                                      BorderThickness="1"
+                                                                     Height="25"
                                                                      Margin="1,1,1,0"
                                                                      VerticalContentAlignment="Center"
                                                                      KeyUp="availableModsFilter_KeyUp"
