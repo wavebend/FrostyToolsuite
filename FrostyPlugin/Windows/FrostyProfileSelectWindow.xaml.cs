@@ -69,8 +69,23 @@ namespace Frosty.Core.Windows
 
             if (ConfigurationListView.SelectedItem is FrostyConfiguration configuration)
             {
-                selectedProfileName = configuration.ProfileName;
-                Close();
+                string version = App.Version;
+
+                if (configuration.ProfileName == "Dragon Age The Veilguard")
+                {
+                    selectedProfileName = configuration.ProfileName;
+                    Close();
+                }
+                else if (configuration.ProfileName == "DragonAgeInquisition")
+                {
+                    FrostyMessageBox.Show(configuration.GameName + " is not supported on " + version + "\n\n" + "Download 1.0.6.3 for " + configuration.GameName + " support.", "Unsupported Profile");
+                    return;
+                }
+                else
+                {
+                    FrostyMessageBox.Show(configuration.GameName + " is not supported." + "\n\n" + "This release only has support for Dragon Age\u2122: The Veilguard", "Unsupported Profile");
+                    return;
+                }
             }
         }
 
