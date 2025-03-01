@@ -1,4 +1,3 @@
-using SharpDX.Direct2D1;
 
 namespace Frosty.Core
 {
@@ -20,13 +19,19 @@ namespace Frosty.Core
         /// </summary>
         /// <returns>The name to use for the menu item.</returns>
         public virtual string Name { get; }
-        
+
+        /// <summary>
+        /// When implemented in a derived class, gets the name of the toolbar item this extension will create.
+        /// </summary>
+        /// <returns>The name to use for the menu tooltip.</returns>
+        public virtual string Tooltip { get; }
+
         /// <summary>
         /// When implemented in a derived class, gets the icon displayed for this toolbar item.
         /// </summary>
-        /// <returns>A <see cref="ImageSource"/> that represents the icon to display for the toolbar item.</returns>
-        public virtual ImageSource Icon { get; }
-        
+        /// <returns>The string that represents the icon location to display in the toolbar item.</returns>
+        public virtual string Icon { get; }
+
         /// <summary>
         /// When implemented in a derived class, gets the action to perform when this too item is clicked.
         /// </summary>
