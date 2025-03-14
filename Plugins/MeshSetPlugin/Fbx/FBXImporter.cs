@@ -64,10 +64,24 @@ namespace MeshSetPlugin
         {
         }
     }
-    public class FBXImportMissingWeightsException : Exception
+    public class FBXImportWeightsThresholdException : Exception
     {
-        public FBXImportMissingWeightsException()
-            : base(string.Format("Mesh must be exported with valid weights"))
+        public FBXImportWeightsThresholdException()
+            : base(string.Format("Weights for any given vertex can not be below 0.002"))
+        {
+        }
+    }
+    public class FBXImportLodsVertexGroupException : Exception
+    {
+        public FBXImportLodsVertexGroupException()
+            : base(string.Format("(LOD 1 - 5) Vertex groups must be limited to eight for any given vertex. Blender: Object > Clean-Up > Limit Total Vertex Groups > Limit > 8"))
+        {
+        }
+    }
+    public class FBXImportVertexGroupException : Exception
+    {
+        public FBXImportVertexGroupException()
+            : base(string.Format("(LOD 0) Vertex groups must be limited to eight for any given vertex. Blender: Object > Clean-Up > Limit Total Vertex Groups > Limit > 8"))
         {
         }
     }
@@ -782,18 +796,11 @@ namespace MeshSetPlugin
 
                             foundBoneInfluences = (localBoneIndices.Count > foundBoneInfluences) ? localBoneIndices.Count : foundBoneInfluences;
 
-                            if (localBoneIndices.Count > 0)
+                            while (localBoneIndices.Count > totalBoneInfluences)
                             {
-                                while (localBoneIndices.Count > totalBoneInfluences)
-                                {
-                                    // remove the lowest influence bones
-                                    localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
-                                    localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
-                                }
-                            }
-                            else
-                            {
-                                throw new FBXImportMissingWeightsException();
+                                // remove the lowest influence bones
+                                localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
+                                localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
                             }
 
                             int totalWeight = 0;
@@ -827,9 +834,19 @@ namespace MeshSetPlugin
                                         maxIndex = k;
                                     }
                                 }
-                                if (totalWeight != 255)
+                                if (totalWeight > 0 && totalWeight != 255)
                                 {
                                     localBoneWeights[maxIndex] = (byte)(maxWeight + (255 - totalWeight));
+                                }
+                                else if (totalWeight == 0 && fmesh.ElementVertexColorCount <= 1)
+                                {
+                                    //System.ArgumentOutOfRangeException | If Vertex Group per Vertex > 8 (LOD 1 - 5)
+                                    throw new FBXImportLodsVertexGroupException();
+                                }
+                                else if (totalWeight == 0 && fmesh.ElementVertexColorCount > 1)
+                                {
+                                    //System.ArgumentOutOfRangeException | Weights for any given vertex can not be below 0.002
+                                    throw new FBXImportWeightsThresholdException();
                                 }
                             }
 
@@ -850,7 +867,16 @@ namespace MeshSetPlugin
 
                             localBoneIndices.AddRange(finalBoneIndices);
 
-                            localBoneWeights.AddRange(new byte[8 - origCount]);
+                            if (origCount <= 8)
+                            {
+                                localBoneWeights.AddRange(new byte[8 - origCount]);
+                            }
+                            else
+                            {
+                                //System.OverflowException | If Vertex Group per Vertex > 8 (LOD 0)
+                                throw new FBXImportVertexGroupException();
+                            }
+
                             localBoneWeights.AddRange(finalBoneWeights);
 
                             // finalize
