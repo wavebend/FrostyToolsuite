@@ -2148,6 +2148,10 @@ namespace Frosty.ModSupport
                     App.Logger.Log($"Applied Mods in {watch.Elapsed.Seconds}s");
                 }
             }
+            else
+            {
+                App.Logger.Log("Launching with previously generated data.");
+            }
 
             cancelToken.ThrowIfCancellationRequested();
 
