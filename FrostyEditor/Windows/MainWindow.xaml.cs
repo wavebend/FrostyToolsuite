@@ -52,7 +52,7 @@ namespace FrostyEditor.Windows
         {
             FrostySdk.Attributes.GlobalAttributes.DisplayModuleInClassId = Config.Get<bool>("DisplayModuleInId", false);
             BookmarkItemDoubleClickCommand = new ItemDoubleClickCommand(BookmarkTreeView_MouseDoubleClick);
-
+            Bookmarks.BookmarkDb.LoadDb();
             m_project = new FrostyProject();
 
             InitializeComponent();
@@ -317,11 +317,6 @@ namespace FrostyEditor.Windows
                 }
             }
 
-            if (ProfilesLibrary.HasLoadedProfile)
-            {
-                Bookmarks.BookmarkDb.LoadDb();
-            }
-
             // load profile through the project if it's apart of the launch args, if not choose on startup
             if (App.OpenProject)
             {
@@ -329,8 +324,7 @@ namespace FrostyEditor.Windows
             }
             else
             {
-                string selectedProfileName = FrostyProfileSelectWindow.Show();
-                if (!string.IsNullOrEmpty(selectedProfileName) && SelectProfile(selectedProfileName))
+                if (ProfilesLibrary.HasLoadedProfile)
                 {
                     NewProject();
                     
@@ -487,17 +481,6 @@ namespace FrostyEditor.Windows
         private void newModMenuItem_Click(object sender, RoutedEventArgs e)
         {
             NewProject();
-        }
-
-        private static bool SelectProfile(string profile)
-        {
-            Frosty.Core.App.ClearProfileData();
-            bool result = Frosty.Core.App.LoadProfile(profile);
-
-            App.InitDiscordRpc();
-            App.UpdateDiscordRpc("Initializing");
-
-            return result;
         }
 
         private void InitialUILoad()
