@@ -2018,7 +2018,7 @@ namespace Frosty.ModSupport
                 }
                 else
                 {
-                    CopyFileIfRequired(m_fs.BasePath + m_patchPath + "/initfs_win32", modDataPath + m_patchPath + "/initfs_win32");
+                    CopyFileIfRequired(Path.Combine(m_fs.BasePath, m_patchPath, "initfs_win32"), Path.Combine(modDataPath, m_patchPath, "initfs_win32"), false);
                 }
 
 
@@ -2130,7 +2130,7 @@ namespace Frosty.ModSupport
                     }
                     else
                     {
-                        CopyFileIfRequired(m_fs.BasePath + "Data/initfs_Win32", modDataPath + "Data/initfs_Win32");
+                        CopyFileIfRequired(Path.Combine(m_fs.BasePath, "Data", "initfs_Win32"), Path.Combine(modDataPath, "Data", "initfs_Win32"), false);
                     }
                 }
 
@@ -2139,7 +2139,14 @@ namespace Frosty.ModSupport
 
                 // stopwatch
                 watch.Stop();
-                App.Logger.Log($"Applied Mods in {watch.Elapsed.Minutes}m {watch.Elapsed.Seconds}s");
+                if (watch.Elapsed.Minutes > 0)
+                {
+                    App.Logger.Log($"Applied Mods in {watch.Elapsed.Minutes}m {watch.Elapsed.Seconds}s");
+                }
+                else
+                {
+                    App.Logger.Log($"Applied Mods in {watch.Elapsed.Seconds}s");
+                }
             }
 
             cancelToken.ThrowIfCancellationRequested();
@@ -2822,15 +2829,14 @@ namespace Frosty.ModSupport
             }
         }
 
-        private void CopyFileIfRequired(string source, string dest)
+        private void CopyFileIfRequired(string source, string dest, bool checkLength = true)
         {
             FileInfo baseFi = new FileInfo(source);
             FileInfo modFi = new FileInfo(dest);
-            if (baseFi.Exists)
+            // copy file if base file exists and recently modified. if checkLength, also check if different file size
+            if (baseFi.Exists && (baseFi.LastWriteTimeUtc > modFi.LastWriteTimeUtc || (checkLength && (baseFi.Length != modFi.Length))))
             {
-                // copy file if it doesn't exist, or recently modified
-                if (!modFi.Exists || (modFi.Exists && baseFi.LastWriteTimeUtc > modFi.LastWriteTimeUtc || baseFi.Length != modFi.Length))
-                    File.Copy(baseFi.FullName, modFi.FullName, true);
+                File.Copy(baseFi.FullName, modFi.FullName, true);
             }
         }
     }
