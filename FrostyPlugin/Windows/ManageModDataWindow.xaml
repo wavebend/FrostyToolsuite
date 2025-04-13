@@ -1,13 +1,13 @@
 ﻿<!--
     ManageModDataWindow
-    Author: Clonedelta
+    Author: Stoichiom, Dyvinia
 -->
-<ctrl:FrostyDockableWindow x:Class="FrostyModManager.ManageModDataWindow"
+<ctrl:FrostyDockableWindow x:Class="Frosty.Core.Windows.ManageModDataWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FrostyModManager"
+        xmlns:local="clr-namespace:Frosty.Core.Windows"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
         Title="Manage ModData" SizeToContent="Height" Width="400" Height="Auto" MaxHeight="250"
@@ -18,7 +18,7 @@
             <RowDefinition Height="0"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Vertical" Margin="8">
-            <TextBlock Grid.Column="0" Text="Packs in ModData:" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,0,0,1"/>
+            <TextBlock Grid.Column="0" Text="ModData:" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,0,0,1"/>
             <ListBox x:Name="modDataList" Grid.Column="1" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinHeight="32" MaxHeight="128" BorderBrush="{StaticResource ControlBackground}" BorderThickness="1" Background="{StaticResource WindowBackground}" Padding="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -33,14 +33,11 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
-                            <Button x:Name="launchModData" Grid.Column="1" Click="launchModData_Click" ToolTip="Attempts to launch game with existing ModData">
-                                <Image Source="/FrostyModManager;component/Images/Play.png" Margin="-2"/>
+                            <Button x:Name="openModData" Grid.Column="3" Click="openModData_Click" ToolTip="Open Folder">
+                                <Image Source="/FrostyCore;component/Images/Open.png" Margin="-1"/>
                             </Button>
-                            <Button x:Name="openModData" Grid.Column="3" Click="openModData_Click" ToolTip="Opens Folder">
-                                <Image Source="/FrostyModManager;component/Images/Open.png" Margin="-1"/>
-                            </Button>
-                            <Button x:Name="deleteModData" Grid.Column="5" Click="deleteModData_Click" ToolTip="Deletes Folder">
-                                <Image Source="/FrostyModManager;component/Images/Remove.png" Margin="-2"/>
+                            <Button x:Name="deleteModData" Grid.Column="5" Click="deleteModData_Click" ToolTip="Delete Folder">
+                                <Image Source="/FrostyCore;component/Images/Remove.png" Margin="-2"/>
                             </Button>
                         </Grid>
                     </DataTemplate>
@@ -60,7 +57,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
 
-            <TextBlock Grid.Column="2" Text="ModData Path:" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,8,0,1"/>
+            <TextBlock Grid.Column="2" Text="Path:" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,8,0,1"/>
             <TextBox IsReadOnly="True" Grid.Column="3" x:Name="modDataNameTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22"/>
         </StackPanel>
 

@@ -926,6 +926,12 @@ namespace FrostyEditor.Windows
             win.ShowDialog();
         }
 
+        private void modDataMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ManageModDataWindow win = new ManageModDataWindow();
+            win.ShowDialog();
+        }
+
         private void FrostyWindow_Closing(object sender, CancelEventArgs e)
         {
             if (m_project.IsDirty)

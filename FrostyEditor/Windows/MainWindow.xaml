@@ -80,6 +80,7 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="ToolsMenuItem" Header="Tools" Height="22">
+                    <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Header="Window" Height="22">
                     <MenuItem x:Name="CloseAllDocumentsMenuItem" Header="Close All Documents" InputGestureText="Ctrl + D" Click="closeAllDocumentsMenuItem_Click">

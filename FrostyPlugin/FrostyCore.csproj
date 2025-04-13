@@ -198,6 +198,9 @@
     <Compile Include="Windows\KeyPromptWindow.xaml.cs">
       <DependentUpon>KeyPromptWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ManageModDataWindow.xaml.cs">
+      <DependentUpon>ManageModDataWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -323,6 +326,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\KeyPromptWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ManageModDataWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -467,6 +474,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="AppIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Remove.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
