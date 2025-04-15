@@ -1737,16 +1737,6 @@ namespace FrostyModManager
             }
         }
 
-        private void launchConfigurationWindow_Click(object sender, RoutedEventArgs e)
-        {
-            Config.Save();
-
-            Windows.PrelaunchWindow2 SelectConfiguration = new Windows.PrelaunchWindow2();
-            App.Current.MainWindow = SelectConfiguration;
-            SelectConfiguration.Show();
-            Close();
-        }
-
         private void logTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (tb.IsFocused)
