@@ -123,17 +123,10 @@
     <Compile Include="Extensions\TextExtension.cs" />
     <Compile Include="DiscordRPC.cs" />
     <Compile Include="FileUnblocker.cs" />
-    <Compile Include="Windows\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -285,7 +278,6 @@
     <Resource Include="Images\Noise.png" />
     <Resource Include="BuildDate.txt" />
     <Resource Include="ChangeLog.txt" />
-    <Resource Include="Credits.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Meshes\Flag.bin">

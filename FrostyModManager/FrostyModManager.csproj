@@ -106,10 +106,6 @@
     <Compile Include="Windows\SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Windows\AboutWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\CollectionSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -134,9 +130,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Windows\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\ConfigWindow.xaml.cs">
       <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
@@ -257,7 +250,6 @@
     <Resource Include="Images\RemoveMod.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Credits.txt" />
     <Resource Include="Images\Frosty.png" />
     <Resource Include="Images\ModImportError.png" />
     <Resource Include="Images\ModImportWarning.png" />
