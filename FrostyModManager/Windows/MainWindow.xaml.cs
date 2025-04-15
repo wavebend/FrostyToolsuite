@@ -1733,7 +1733,7 @@ namespace FrostyModManager
         {
             if (conflictsTabItem.IsSelected)
             {
-                UpdateConflicts();
+                showOnlyReplacementsCheckBox.IsChecked = true;
             }
         }
 
@@ -1849,6 +1849,23 @@ namespace FrostyModManager
 
             // Re-run filter since we might be filtering on applied mods.
             RefreshFilter();
+        }
+
+        private void PART_ShowOnlyReplacementsCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to show all resources? This can take some time.", "Resources", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                UpdateConflicts();
+
+                // Re-run filter since we might be filtering on applied mods.
+                RefreshFilter();
+            }
+            else
+            {
+                showOnlyReplacementsCheckBox.IsChecked = true;
+            }
         }
 
         private void optionsMenuItem_Click(object sender, RoutedEventArgs e)
