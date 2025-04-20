@@ -68,14 +68,15 @@ namespace FrostyEditor.Windows
 
             RefreshConfigurationList();
 
-            string defaultConfigurationName = Config.Get<string>("DefaultProfile", null);
+            string defaultConfigurationName = Config.Get<string>("DefaultProfile2", null);
 
             if (!string.IsNullOrEmpty(defaultConfigurationName))
             {
                 defaultConfiguration = configurations.FirstOrDefault(x => x.ProfileName == defaultConfigurationName);
+                ConfigurationListView.SelectedItem = defaultConfiguration;
+                await Task.Delay(1);
+                SelectConfiguration();
             }
-
-            ConfigurationListView.SelectedItem = defaultConfiguration;
         }
 
         private void LaunchConfigurationButton_OnClick(object sender, RoutedEventArgs e)

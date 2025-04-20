@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ namespace Frosty.Core.Windows
     public partial class FrostyProfileSelectWindow
     {
         private ObservableCollection<FrostyConfiguration> configurations = new ObservableCollection<FrostyConfiguration>();
+        private FrostyConfiguration defaultConfiguration;
         private string selectedProfileName;
         
         public FrostyProfileSelectWindow()
@@ -43,6 +45,16 @@ namespace Frosty.Core.Windows
             }
 
             RefreshConfigurationList();
+
+            string defaultConfigurationName = Config.Get<string>("DefaultProfile2", null);
+
+            if (!string.IsNullOrEmpty(defaultConfigurationName))
+            {
+                defaultConfiguration = configurations.FirstOrDefault(x => x.ProfileName == defaultConfigurationName);
+                ConfigurationListView.SelectedItem = defaultConfiguration;
+                await Task.Delay(1);
+                SelectConfiguration();
+            }
         }
         
         private void RefreshConfigurationList()

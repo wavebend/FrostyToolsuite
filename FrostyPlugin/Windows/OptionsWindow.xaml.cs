@@ -232,7 +232,7 @@ namespace Frosty.Core.Windows
             ExportWithOffsets = Config.Get<bool>("ExportWithOffsets", false);
 
             AssetDisplayModuleInId = Config.Get<bool>("DisplayModuleInId", false);
-            RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
+            RememberChoice = Config.Get<bool>("UseDefaultProfile2", false);
 
             //Checks the registry for the current association instead of loading from config
             string KeyName = "frostyproject";
@@ -262,12 +262,12 @@ namespace Frosty.Core.Windows
             Config.Add("ExportWithOffsets", ExportWithOffsets);
 
             Config.Add("DisplayModuleInId", AssetDisplayModuleInId);
-            Config.Add("UseDefaultProfile", RememberChoice);
+            Config.Add("UseDefaultProfile2", RememberChoice);
 
             if (RememberChoice)
-                Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);
+                Config.Add("DefaultProfile2", ProfilesLibrary.ProfileName);
             else
-                Config.Remove("DefaultProfile");
+                Config.Remove("DefaultProfile2");
 
             Config.Add("Language", Language.SelectedName, ConfigScope.Game);
 
@@ -368,7 +368,7 @@ namespace Frosty.Core.Windows
         {
             base.Load();
             
-            RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
+            RememberChoice = Config.Get<bool>("UseDefaultProfile2", false);
             CommandLineArgs = Config.Get<string>("CommandLineArgs", "", ConfigScope.Game);
         }
 
@@ -376,13 +376,13 @@ namespace Frosty.Core.Windows
         {
             base.Save();
             
-            Config.Add("UseDefaultProfile", RememberChoice);
+            Config.Add("UseDefaultProfile2", RememberChoice);
             Config.Add("CommandLineArgs", CommandLineArgs, ConfigScope.Game);
 
             if (RememberChoice)
-                Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);
+                Config.Add("DefaultProfile2", ProfilesLibrary.ProfileName);
             else
-                Config.Remove("DefaultProfile");
+                Config.Remove("DefaultProfile2");
 
             Config.Save();
         }
