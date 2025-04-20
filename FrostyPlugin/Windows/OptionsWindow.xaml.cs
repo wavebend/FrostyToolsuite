@@ -97,7 +97,7 @@ namespace Frosty.Core.Windows
 
             List<string> sizes = new List<string>() { "1GB", "512MB", "256MB" };
             MaxCasFileSize = new CustomComboData<string, string>(sizes, sizes);
-            MaxCasFileSize.SelectedIndex = sizes.IndexOf(Config.Get<string>("MaxCasFileSize", "512MB"));
+            MaxCasFileSize.SelectedIndex = sizes.IndexOf(Config.Get<string>("MaxCasFileSize", "1GB"));
 
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
             DisableShaderCacheSymLink = Config.Get<bool>("DisableShaderCacheSymLink", false);
