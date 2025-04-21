@@ -239,7 +239,9 @@ namespace FrostyEditor.Windows
         {
             string state = "";
 
-            if (TabControl.SelectedItem is FrostyTabItem ti)
+            bool enabled = Config.Get<bool>("DiscordRPCHideAsset", true);
+
+            if (TabControl.SelectedItem is FrostyTabItem ti && !enabled)
             {
                 string header = ti.Header as string;
                 string tabId = ti.TabId;
@@ -248,9 +250,9 @@ namespace FrostyEditor.Windows
                 {
                     AssetEntry ebx = App.AssetManager.GetEbxEntry(tabId) ?? App.AssetManager.GetCustomAssetEntry("legacy", tabId);
 
-                    state = "Viewing " + ebx.Filename;
+                    state = "Viewing: " + ebx.Filename;
                     if (ebx.IsDirty && ProfilesLibrary.EnableExecution)
-                        state = "Editing " + ebx.Filename;
+                        state = "Editing: " + ebx.Filename;
                 }
                 else
                     state = header;

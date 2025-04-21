@@ -179,6 +179,18 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool DiscordEnabled { get; set; } = false;
 
+        [Category("Discord RPC")]
+        [DisplayName("Hide Project Name")]
+        [Description("Hides project name when rich presence for Discord is turned on.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool DiscordHideProject { get; set; } = false;
+
+        [Category("Discord RPC")]
+        [DisplayName("Hide Opened Asset")]
+        [Description("Hides opened asset name when rich presence for Discord is turned on.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool DiscordHideAsset { get; set; } = false;
+
         [Category("Mod Settings")]
         [DisplayName("Default Author")]
         [Description("Sets the default author for a mod.")]
@@ -226,6 +238,8 @@ namespace Frosty.Core.Windows
             TextEditorIndentOnEnter = Config.Get<bool>("TextEditorIndentOnEnter", false);
 
             DiscordEnabled = Config.Get<bool>("DiscordRPCEnabled", false);
+            DiscordHideProject = Config.Get<bool>("DiscordRPCHideProject", false);
+            DiscordHideAsset = Config.Get<bool>("DiscordRPCHideAsset", false);
             ModSettingsAuthor = Config.Get<string>("ModAuthor", "");
 
             ExportTabSize = Config.Get<int>("ExportTabSize", 2);
@@ -256,6 +270,8 @@ namespace Frosty.Core.Windows
             Config.Add("TextEditorIndentOnEnter", TextEditorIndentOnEnter);
 
             Config.Add("DiscordRPCEnabled", DiscordEnabled);
+            Config.Add("DiscordRPCHideProject", DiscordHideProject);
+            Config.Add("DiscordRPCHideAsset", DiscordHideAsset);
             Config.Add("ModAuthor", ModSettingsAuthor);
 
             Config.Add("ExportTabSize", ExportTabSize);

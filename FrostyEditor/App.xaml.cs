@@ -146,6 +146,8 @@ namespace FrostyEditor
             if (!Config.Get<bool>("DiscordRPCEnabled", false))
                 return;
 
+            bool enabled = Config.Get<bool>("DiscordRPCHideProject", true);
+
             DiscordRichPresence discordPresence = new DiscordRichPresence
             {
                 details = ProfilesLibrary.DisplayName?.Replace("™", ""),
@@ -155,7 +157,7 @@ namespace FrostyEditor
                 largeImageText = "Frosty Editor v" + Frosty.Core.App.Version.Replace(" (Developer)", "")
             };
 
-            if (Current.MainWindow is MainWindow)
+            if (Current.MainWindow is MainWindow && !enabled)
             {
                 if (ProfilesLibrary.EnableExecution)
                 {
