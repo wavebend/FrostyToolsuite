@@ -1291,6 +1291,7 @@ namespace Frosty.ModSupport
             Logger.Log("Loading Mods");
 
             bool needsModding = false;
+            bool newPatch = false;
             if (!File.Exists(Path.Combine(modDataPath, m_patchPath, "mods.json")))
             {
                 needsModding = true;
@@ -1305,6 +1306,7 @@ namespace Frosty.ModSupport
                 if (!IsSamePatch(modDataPath + m_patchPath) || !oldModInfoList.SequenceEqual(currentModInfoList))
                 {
                     needsModding = true;
+                    newPatch = true;
                 }
             }
 
@@ -1411,14 +1413,12 @@ namespace Frosty.ModSupport
                 App.Logger.Log("Cleaning Up ModData");
 
                 List<SymLinkStruct> cmdArgs = new List<SymLinkStruct>();
-                bool newInstallation = false;
 
                 m_fs.ResetManifest();
                 if (!DeleteSelectFiles(modDataPath + m_patchPath))
                 {
                     if (!Directory.Exists(modDataPath))
                     {
-                        newInstallation = true;
                         Logger.Log("Creating ModData");
 
                         // create mod path
@@ -1561,7 +1561,7 @@ namespace Frosty.ModSupport
                 if (cmdArgs.Count > 0)
                 {
                     string reason = "New patch detected.";
-                    if (newInstallation)
+                    if (!newPatch)
                         reason = "New installation detected.";
 
                     FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
@@ -2682,13 +2682,13 @@ namespace Frosty.ModSupport
         private bool IsSamePatch(string modPath)
         {
             string baseLayoutPath = m_fs.ResolvePath("native_patch/layout.toc");
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons, ProfileVersion.DragonAgeTheVeilguard))
             {
                 baseLayoutPath = m_fs.ResolvePath("native_data/layout.toc");
             }
 
             string modLayoutPath = modPath + "/layout.toc";
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons, ProfileVersion.DragonAgeTheVeilguard))
             {
                 modLayoutPath = Directory.GetParent(modPath).FullName + "/Data/layout.toc";
             }
@@ -2709,19 +2709,21 @@ namespace Frosty.ModSupport
             int patchHead = patchLayout.GetValue<int>("head");
             int modHead = modLayout.GetValue<int>("head");
 
+            string modPathParent = Directory.GetParent(modPath).FullName;
+
             if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
             {
                 if (patchHead == 0xBDFB3 && modHead != patchHead)
                 {
                     // SWBF2 new layout requires completely rebuilding ModData from scratch
-                    Directory.Delete(modPath + "../", true);
+                    Directory.Delete(modPathParent, true);
                     return false;
                 }
             }
 
             if (modHead != patchHead)
             {
-                Directory.Delete(modPath + "../", true);
+                Directory.Delete(modPathParent, true);
                 return false;
             }
 
