@@ -367,19 +367,27 @@
                                     <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="4">
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Text="Convenient Links" Foreground="{StaticResource FontColor}" Margin="8" FontWeight="Bold"/>
-                                            <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
+                                            <!--<StackPanel Orientation="Horizontal" Margin="8,8,0,0">
                                                 <TextBlock Text="Frosty Website:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
                                                 <TextBlock>
                                                     <Hyperlink NavigateUri="http://www.frostytoolsuite.com" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                                         http://www.frostytoolsuite.com
                                                     </Hyperlink>
                                                 </TextBlock>
-                                            </StackPanel>
+                                            </StackPanel>-->
                                             <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
-                                                <TextBlock Text="Frosty Support:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
+                                                <TextBlock Text="General Support:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
                                                 <TextBlock>
                                                     <Hyperlink NavigateUri="https://discord.gg/sB8ZUAT" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                                         https://discord.gg/sB8ZUAT
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <StackPanel x:Name="veilguardPanel" Orientation="Horizontal" Margin="8,8,0,0" Visibility="Collapsed">
+                                                <TextBlock Text="Veilguard Support:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
+                                                <TextBlock>
+                                                    <Hyperlink NavigateUri="https://discord.gg/pKF9ReTdAh" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
+                                                        https://discord.gg/pKF9ReTdAh
                                                     </Hyperlink>
                                                 </TextBlock>
                                             </StackPanel>

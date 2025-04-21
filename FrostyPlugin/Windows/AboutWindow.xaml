@@ -53,19 +53,27 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="Website: " Foreground="{StaticResource FontColor}" FontWeight="Bold"/>
                         <TextBlock FontFamily="Global User Interface" FontSize="12" Margin="2" HorizontalAlignment="Center">
                             <Hyperlink NavigateUri="https://frostytoolsuite.com" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                 https://frostytoolsuite.com
                             </Hyperlink>
                         </TextBlock>
-                    </StackPanel>
+                    </StackPanel>-->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Support: " Foreground="{StaticResource FontColor}" FontWeight="Bold"/>
+                        <TextBlock Text="General Support: " Foreground="{StaticResource FontColor}" FontWeight="Bold"/>
                         <TextBlock FontFamily="Global User Interface" FontSize="12" Margin="2" HorizontalAlignment="Center">
                             <Hyperlink NavigateUri="https://discord.gg/sB8ZUAT" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                 https://discord.gg/sB8ZUAT
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="veilguardPanel" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                        <TextBlock Text="Veilguard Support: " Foreground="{StaticResource FontColor}" FontWeight="Bold"/>
+                        <TextBlock FontFamily="Global User Interface" FontSize="12" Margin="2" HorizontalAlignment="Center">
+                            <Hyperlink NavigateUri="https://discord.gg/pKF9ReTdAh" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
+                                https://discord.gg/pKF9ReTdAh
                             </Hyperlink>
                         </TextBlock>
                     </StackPanel>

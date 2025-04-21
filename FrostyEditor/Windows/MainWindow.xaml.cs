@@ -328,6 +328,11 @@ namespace FrostyEditor.Windows
             {
                 if (ProfilesLibrary.HasLoadedProfile)
                 {
+                    if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                    {
+                        veilguardPanel.Visibility = Visibility.Visible;
+                    }
+
                     NewProject();
                     
                     InitialUILoad();
