@@ -233,6 +233,7 @@ namespace FrostyModManager
         public ModPrimaryActionType PrimaryAction;
         public ModSecondaryActionType SecondaryAction;
         public string Name;
+        public string Title;
     }
 
     public class ModResourceInfo
@@ -255,7 +256,7 @@ namespace FrostyModManager
             nameHash = Fnv1.HashString(t + "/" + n);
         }
 
-        public void AddMod(string m, ModPrimaryActionType primaryAction, IEnumerable<int> modAddBundles)
+        public void AddMod(string m, string t, ModPrimaryActionType primaryAction, IEnumerable<int> modAddBundles)
         {
             bool isAdded = false;
             if (modAddBundles != null)
@@ -268,7 +269,7 @@ namespace FrostyModManager
                 }
             }
 
-            mods.Add(new ModAction() { Name = m, PrimaryAction = primaryAction, SecondaryAction = (isAdded) ? ModSecondaryActionType.AddToBundle : ModSecondaryActionType.None });
+            mods.Add(new ModAction() { Name = m, Title = t, PrimaryAction = primaryAction, SecondaryAction = (isAdded) ? ModSecondaryActionType.AddToBundle : ModSecondaryActionType.None });
             if (FirstModToModifyIndex == -1)
             {
                 if (primaryAction != ModPrimaryActionType.None)
@@ -1536,6 +1537,7 @@ namespace FrostyModManager
 
             StringBuilder sb = new StringBuilder();
             List<ModResourceInfo> totalResourceList = new List<ModResourceInfo>();
+            List<string> replacementTitles = new List<string>();
 
             CancellationTokenSource cancelToken = new CancellationTokenSource();
 
@@ -1613,7 +1615,7 @@ namespace FrostyModManager
                                                 foreach (string actionString in handler.GetResourceActions(resource.Name, mod.GetResourceData(resource)))
                                                 {
                                                     string[] arr = actionString.Split(';');
-                                                    AddResourceAction(totalResourceList, mod.Filename, arr[0], arr[1], (ModPrimaryActionType)Enum.Parse(typeof(ModPrimaryActionType), arr[2]));
+                                                    AddResourceAction(totalResourceList, mod.Filename, mod.ModDetails.Title, arr[0], arr[1], (ModPrimaryActionType)Enum.Parse(typeof(ModPrimaryActionType), arr[2]));
                                                 }
                                                 primaryAction = ModPrimaryActionType.Merge;
                                             }
@@ -1623,7 +1625,7 @@ namespace FrostyModManager
                                     else if (resource.IsAdded) primaryAction = ModPrimaryActionType.Add;
                                     else if (resource.IsModified) primaryAction = ModPrimaryActionType.Modify;
 
-                                    totalResourceList[index].AddMod(mod.Filename, primaryAction, resource.AddedBundles);
+                                    totalResourceList[index].AddMod(mod.Filename, mod.ModDetails.Title, primaryAction, resource.AddedBundles);
                                 }
                             }
                         }
@@ -1636,7 +1638,20 @@ namespace FrostyModManager
                 }
 
                 if (onlyShowReplacements)
+                {
                     totalResourceList.RemoveAll(item => item.ModCount <= 1);
+
+                    foreach (ModResourceInfo item in totalResourceList)
+                    {
+                        foreach (ModAction modTitle in item.Mods)
+                        {
+                            if (!replacementTitles.Contains(modTitle.Title))
+                            {
+                                replacementTitles.Add(modTitle.Title);
+                            }
+                        }
+                    }
+                }
             }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
 
             if (cancelled)
@@ -1696,7 +1711,17 @@ namespace FrostyModManager
                 gvc.CellTemplate = dt;
                 gvc.Width = 150;
 
-                columns.Add(gvc);
+                if (onlyShowReplacements)
+                {
+                    if (replacementTitles.Any(modTitle => modTitle == gvc.Header.ToString()))
+                    {
+                        columns.Add(gvc);
+                    }
+                }
+                else
+                {
+                    columns.Add(gvc);
+                }
             }
 
             GridView gv = conflictsListView.View as GridView;
@@ -1716,7 +1741,7 @@ namespace FrostyModManager
             conflictsListView.SelectedIndex = 0;
         }
 
-        private void AddResourceAction(List<ModResourceInfo> totalResourceList, string modName, string resourceName, string resourceType, ModPrimaryActionType type)
+        private void AddResourceAction(List<ModResourceInfo> totalResourceList, string modName, string modTitle, string resourceName, string resourceType, ModPrimaryActionType type)
         {
             int index = totalResourceList.FindIndex((ModResourceInfo a) => a.Equals(resourceType + "/" + resourceName));
             if (index == -1)
@@ -1726,14 +1751,18 @@ namespace FrostyModManager
                 index = totalResourceList.Count - 1;
             }
 
-            totalResourceList[index].AddMod(modName, type, null);
+            totalResourceList[index].AddMod(modName, modTitle, type, null);
         }
 
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (conflictsTabItem.IsSelected)
+            if (conflictsTabItem.IsSelected && showOnlyReplacementsCheckBox.IsChecked == false)
             {
                 showOnlyReplacementsCheckBox.IsChecked = true;
+            }
+            else if (conflictsTabItem.IsSelected && showOnlyReplacementsCheckBox.IsChecked == true)
+            {
+                UpdateConflicts();
             }
         }
 
