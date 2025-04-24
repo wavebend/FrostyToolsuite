@@ -53,7 +53,7 @@ namespace FrostyModManager
         public App()
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
-            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + " Alpha" + Frosty.Core.App.AlphaVersion;
+            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + " - " + Frosty.Core.App.BuildVersion;
 
             Frosty.Core.App.IsEditor = false;
 
@@ -180,7 +180,7 @@ namespace FrostyModManager
         private void CheckVersion()
         {
             bool checkPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
-            Version localVersion = Assembly.GetEntryAssembly().GetName().Version;
+            Version localVersion = new Version(Frosty.Core.App.BuildVersion);
 
             try
             {
@@ -188,10 +188,10 @@ namespace FrostyModManager
                 {
                     System.Threading.Tasks.Task.Run(() =>
                     {
-                        MessageBoxResult mbResult = FrostyMessageBox.Show("You are using an outdated version of Frosty." + Environment.NewLine + "Would you like to download the latest version?", "Frosty Mod Manager", MessageBoxButton.YesNo);
+                        MessageBoxResult mbResult = FrostyMessageBox.Show("You are using an outdated version of Frosty.\n\nWould you like to download the latest version?", "Frosty Mod Manager", MessageBoxButton.YesNo);
                         if (mbResult == MessageBoxResult.Yes)
                         {
-                            System.Diagnostics.Process.Start("https://github.com/CadeEvs/FrostyToolsuite/releases/latest");
+                            System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
                         }
                     });
                 }
@@ -200,7 +200,7 @@ namespace FrostyModManager
             {
                 System.Threading.Tasks.Task.Run(() =>
                 {
-                    FrostyMessageBox.Show("Frosty Update Checker returned with an error:" + Environment.NewLine + e.Message, "Frosty Mod Manager", MessageBoxButton.OK);
+                    FrostyMessageBox.Show("Frosty Update Checker returned with an error:\n\n" + e.Message, "Frosty Mod Manager", MessageBoxButton.OK);
                 });
             }
         }

@@ -13,11 +13,7 @@ namespace Frosty.Core
     {
         public string Name;
 
-        [JsonProperty(PropertyName = "prerelease")]
-        public bool IsPrerelease;
         [JsonProperty(PropertyName = "tag_name")]
-        public string Tag;
-        [JsonProperty(PropertyName = "target_commitish")]
         public Version Version;
     }
 
@@ -39,8 +35,8 @@ namespace Frosty.Core
         public static bool CheckVersion(bool checkPrerelease, Version localVersion)
         {
             Release release = checkPrerelease
-                ? GetLatestRelease("https://api.github.com/repos/CadeEvs/FrostyToolsuite/releases")
-                : GetLatestRelease("https://api.github.com/repos/CadeEvs/FrostyToolsuite/releases/latest", false);
+                ? GetLatestRelease("https://api.github.com/repos/J-Lyt/FrostyToolsuite/releases")
+                : GetLatestRelease("https://api.github.com/repos/J-Lyt/FrostyToolsuite/releases/latest", false);
 
             bool isLocalPrerelease = false;
 #if FROSTY_ALPHA
