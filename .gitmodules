@@ -1,0 +1,3 @@
+[submodule "Plugins/DatapathFixPlugin"]
+	path = Plugins/DatapathFixPlugin
+	url = https://github.com/J-Lyt/DatapathFixPlugin
