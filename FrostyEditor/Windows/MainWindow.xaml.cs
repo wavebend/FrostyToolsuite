@@ -503,6 +503,11 @@ namespace FrostyEditor.Windows
             {
                 LaunchButton.IsEnabled = true;
             }
+
+            if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
+            {
+                App.CheckVersion();
+            }
         }
 
         private void ResetItemsSources()

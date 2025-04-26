@@ -190,6 +190,9 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="Utils\HalfUtils.cs" />
     <Compile Include="Utils\UpdateCheckerUtils.cs" />
+    <Compile Include="Windows\UpdateCheckerWindow.xaml.cs">
+      <DependentUpon>UpdateCheckerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -323,6 +326,10 @@
     <Page Include="Themes\Controls\Notification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\UpdateCheckerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

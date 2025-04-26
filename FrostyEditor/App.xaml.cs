@@ -17,6 +17,8 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using FrostySdk.Managers.Entries;
+using Frosty.Core.Windows;
+using System.Media;
 
 namespace FrostyEditor
 {
@@ -202,10 +204,10 @@ namespace FrostyEditor
 
             Config.Load();
 
-            if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
-            {
-                CheckVersion();
-            }
+            //if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
+            //{
+            //    CheckVersion();
+            //}
 
             // get startup profile (if one exists)
             if (Config.Get<bool>("UseDefaultProfile", false))
@@ -251,9 +253,10 @@ namespace FrostyEditor
             }
         }
 
-        private void CheckVersion()
+        public static void CheckVersion()
         {
-            bool checkPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
+            //bool checkPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
+            bool checkPrerelease = false;
             Version localVersion = new Version(Frosty.Core.App.BuildVersion);
 
             try
@@ -262,11 +265,21 @@ namespace FrostyEditor
                 {
                     System.Threading.Tasks.Task.Run(() =>
                     {
-                        MessageBoxResult mbResult = FrostyMessageBox.Show("You are using an outdated version of Frosty.\n\nWould you like to download the latest version?", "Frosty Editor", MessageBoxButton.YesNo);
-                        if (mbResult == MessageBoxResult.Yes)
-                        {
-                            System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
-                        }
+                        //MessageBoxResult mbResult = FrostyMessageBox.Show("You are using an outdated version of Frosty.\n\nWould you like to download the latest version?", "Frosty Editor", MessageBoxButton.YesNo);
+                        //if (mbResult == MessageBoxResult.Yes)
+                        //{
+                        //    System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
+                        //}
+
+                        Application.Current.Dispatcher.Invoke((Action)delegate {
+                            SystemSounds.Exclamation.Play();
+                            UpdateCheckerWindow win = new UpdateCheckerWindow();
+                            win.Owner = Application.Current.MainWindow;
+                            if (win.ShowDialog() == true)
+                            {
+                                System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
+                            }
+                        });
                     });
                 }
             }

@@ -494,6 +494,11 @@ namespace FrostyModManager
             dt.VisualTree = factory;
             GridViewColumn appliedBindingColumn = (availableModsList.View as GridView).Columns[2];
             appliedBindingColumn.CellTemplate = dt;
+
+            if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
+            {
+                App.CheckVersion();
+            }
         }
 
         private void addProfileButton_Click(object sender, RoutedEventArgs e)

@@ -49,11 +49,11 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool UpdateCheck { get; set; } = true;
 
-        [Category("Update Checking")]
-        [DisplayName("Check for Prerelease Updates")]
-        [Description("Check Github for Frosty Alpha and Beta updates on startup")]
-        [EbxFieldMeta(EbxFieldType.Boolean)]
-        public bool UpdateCheckPrerelease { get; set; } = false;
+        //[Category("Update Checking")]
+        //[DisplayName("Check for Prerelease Updates")]
+        //[Description("Check Github for Frosty Alpha and Beta updates on startup")]
+        //[EbxFieldMeta(EbxFieldType.Boolean)]
+        //public bool UpdateCheckPrerelease { get; set; } = false;
 
         [Category("General")]
         [DisplayName("Applying Thread Count")]
@@ -91,7 +91,7 @@ namespace Frosty.Core.Windows
             base.Load();
             
             UpdateCheck = Config.Get<bool>("UpdateCheck", true);
-            UpdateCheckPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
+            //UpdateCheckPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
 
             ApplyingThreadCount = Config.Get<int>("ApplyingThreadCount", Environment.ProcessorCount);
 
@@ -109,7 +109,7 @@ namespace Frosty.Core.Windows
             base.Save();
             
             Config.Add("UpdateCheck", UpdateCheck);
-            Config.Add("UpdateCheckPrerelease", UpdateCheckPrerelease);
+            //Config.Add("UpdateCheckPrerelease", UpdateCheckPrerelease);
             
             Config.Add("ApplyingThreadCount", ApplyingThreadCount);
             Config.Add("MaxCasFileSize", MaxCasFileSize.SelectedName);

@@ -2,6 +2,7 @@
 using Frosty.Core;
 using Frosty.Core.Controls;
 using Frosty.Core.Managers;
+using Frosty.Core.Windows;
 using FrostyCore;
 using FrostyEditor;
 using FrostyModManager.Windows;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Net;
 using System.Net.Cache;
 using System.Reflection;
@@ -122,10 +124,10 @@ namespace FrostyModManager
 
             Config.Load();
 
-            if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
-            {
-                CheckVersion();
-            }
+            //if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
+            //{
+            //    CheckVersion();
+            //}
 
             // get startup profile (if one exists)
             if (Config.Get<bool>("UseDefaultProfile", false))
@@ -177,9 +179,10 @@ namespace FrostyModManager
             LaunchArgs = sb.ToString().Trim();
         }
 
-        private void CheckVersion()
+        public static void CheckVersion()
         {
-            bool checkPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
+            //bool checkPrerelease = Config.Get<bool>("UpdateCheckPrerelease", false);
+            bool checkPrerelease = false;
             Version localVersion = new Version(Frosty.Core.App.BuildVersion);
 
             try
@@ -188,11 +191,21 @@ namespace FrostyModManager
                 {
                     System.Threading.Tasks.Task.Run(() =>
                     {
-                        MessageBoxResult mbResult = FrostyMessageBox.Show("You are using an outdated version of Frosty.\n\nWould you like to download the latest version?", "Frosty Mod Manager", MessageBoxButton.YesNo);
-                        if (mbResult == MessageBoxResult.Yes)
-                        {
-                            System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
-                        }
+                        //MessageBoxResult mbResult = FrostyMessageBox.Show("You are using an outdated version of Frosty.\n\nWould you like to download the latest version?", "Frosty Mod Manager", MessageBoxButton.YesNo);
+                        //if (mbResult == MessageBoxResult.Yes)
+                        //{
+                        //    System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
+                        //}
+
+                        Application.Current.Dispatcher.Invoke((Action)delegate {
+                            SystemSounds.Exclamation.Play();
+                            UpdateCheckerWindow win = new UpdateCheckerWindow();
+                            win.Owner = Application.Current.MainWindow;
+                            if (win.ShowDialog() == true)
+                            {
+                                System.Diagnostics.Process.Start("https://github.com/J-Lyt/FrostyToolsuite/releases/latest");
+                            }
+                        });
                     });
                 }
             }
