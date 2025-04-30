@@ -322,26 +322,6 @@ namespace FrostyModManager
         {
             (App.Logger as FrostyLogger).AddBinding(tb, TextBox.TextProperty);
 
-            string selectedProfileName = FrostyProfileSelectWindow.Show();
-            if (!string.IsNullOrEmpty(selectedProfileName))
-            {
-                Frosty.Core.App.ClearProfileData();
-                if (!Frosty.Core.App.LoadProfile(selectedProfileName))
-                {
-                    Closing -= FrostyWindow_Closing;
-                    Close();
-                    return;
-                }
-
-                App.NotificationManager.RemoveAllNotifications();
-            }
-            else
-            {
-                Closing -= FrostyWindow_Closing;
-                Close();
-                return;
-            }
-
             Config.Save();
             Title = "Frosty Mod Manager - " + Frosty.Core.App.Version + " (" + ProfilesLibrary.DisplayName + ")";
 
