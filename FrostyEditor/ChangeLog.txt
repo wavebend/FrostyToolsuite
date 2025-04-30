@@ -1,5 +1,100 @@
-﻿v1.0.7 alpha5v4
-----------------------------------
+﻿v1.0.7 - 2025.4.30.0
+--------
+Misc:
+- Various 'Check for Updates' Changes
+- Experimental workaround for .fbproject files that are being used by another process
+
+Plugin Changes:
+- Added 'DatapathFixPlugin' to Frosty Editor and Mod Manager
+
+v1.0.7 - 2025.4.24.0
+--------
+Improvements:
+- Additional options for DiscordRPC
+- Only show columns with conflicting resources when 'Show replacements only' is checked.
+
+Bug Fixes:
+- Fixed issue where ModData would not be deleted when new game patch is detected.
+
+Misc:
+- Removed Frosty Website Link and Added link for 'Frosty DAV Modding' discord.
+
+Technical Changes:
+- Changed versioning to build date and revision
+
+Plugin Changes:
+- [SoundEditorPlugin] Updated 'System.Drawing.Common' Package to 4.7.2  
+
+v1.0.7 - 2025.4.20.0
+--------
+Improvements:
+- Show replacements only by default when selecting the 'Actions' tab
+
+Bug Fixes:
+- Fixed 'Remember Profile Choice' Option
+
+Misc:
+- Removed 'Select Game' Option from 'File' menu (Frosty Mod Manager)
+- Change geometry data for splash based on app
+
+Technical Changes:
+- Added additional versioning information
+- Moved AboutWindow to FrostyCore
+- Set Default MaxCasFileSize to 1GB
+
+
+v1.0.7 - 2025.4.13.0
+--------
+Improvements:
+- Validation has been added to the encryption key window to prevent invalid keys from being entered
+- Bookmarks will now save and load correctly
+- During mesh import, exceptions will be thrown when Vertex Groups are more than eight for any given vertex and when Weights for any given vertex are below 0.002
+- Minor QOL Improvements to applying mods
+
+Bug Fixes:
+- Fixed issue where temporary editor mods did not get removed
+- Fixed various crashing issues
+- Fix out of range exception when generating typeinfo.cache
+
+Misc:
+- The banner for the 'Dragon Age: The Veilguard' Profile has been changed
+
+Technical Changes:
+- Used HashSets instead of Lists
+- Moved manage ModData functionality to FrostyCore
+- Changed ealayer3.dll to release build
+- Fixes writing cat files
+- Removed 'BlankPlugin', 'LaunchPlatformPlugin' and 'TestPlugin'
+
+
+v1.0.7 - 2025.3.1.0
+--------
+Improvements:
+- .Bin Import/Export: Assets export to .bin by default instead of .xml. During import, you now have the option to only import the data, which keeps the original FileGuid and RootInstanceGuid
+- TexturePlugin: All supported image formats will be shown when importing textures
+- More mod categories have been added for export
+- Validation has been added during the mod export process
+- During mesh import, exceptions will be thrown if an issue is detected with your .fbx file
+- Improved support for plugins that use the 'ToolbarExtension'
+
+Bug Fixes:
+- Fixed issue where FirstMip/H32 data was not being stored for chunks
+- Fixed various bundle related issues
+- Fixed various crashing issues
+
+Options:
+- Added an option in the profile selection window to remove game profile
+
+Misc:
+- UI Fixes and Changes
+- Prevented the user from selecting any profile except Dragon Age: The Veilguard
+
+Plugin Changes:
+- Added support for additional assets to the BundleEditorPlugin and DuplicationPlugin
+- When duplicating an asset within the editor, you now have the option to add the duplicated asset to the bundles of the original asset
+
+v1.0.7 alpha5v4
+-----------------------
 New Features:
 - Added minor support for Mesh import
 - Added support for Localization modding & previewing (Revamped Bioware Localization Plugin)
@@ -12,6 +107,9 @@ Improvements:
 - Ebx: Added YAML export option
 - Ebx: Added option to export debug offsets (Tools->Options)
 - Bundle editor: support for extra types & remove from bundle command
+- Added relevant display names to the fbx export window
+- Added a column that shows Applied Mods. (Frosty Mod Manager)
+- Mods can now be filtered depending on their applied state. (Frosty Mod Manager)
 
 Bug Fixes:
 - Fixed some crashing issues due to missing assets when rewriting bundles
@@ -20,15 +118,16 @@ Bug Fixes:
 - Fixed mod manager not exiting properly
 - Added crash prevention for registry scan errors
 - Added some fallback parameters for the mesh preview
+- Fixed a crashing issue related to duplicated meshes
+- Fixed default posing issue when importing fem meshes.
 
 Options:
 - Added an option in Tools -> Options to disable shader compilation at launch, for faster launching
 
 Misc:
 - When importing a ebx as .bin file, bypass the ebx writer entirely as a workaround to ebxwriter limitations
----------------
-Old Changelogs:
 
+Old Changelogs:
 
 v1.0.6
 --------
