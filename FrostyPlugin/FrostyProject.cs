@@ -13,6 +13,7 @@ using Frosty.Controls;
 using Frosty.Core.Windows;
 using System.Windows;
 using FrostySdk.Managers.Entries;
+using System.Security.Cryptography;
 
 namespace Frosty.Core
 {
@@ -107,6 +108,9 @@ namespace Frosty.Core
             }
             return LegacyLoad(inFilename);
         }
+
+        public bool saveFailed = false;
+        public string backupFilename = "";
 
         public void Save(string overrideFilename = "", bool updateDirtyState = true)
         {
@@ -454,9 +458,24 @@ namespace Frosty.Core
 
                 if (isValid)
                 {
-                    // replace existing project
-                    File.Delete(fi.FullName);
-                    File.Move(tempFilename, fi.FullName);
+                    try
+                    {
+                        // replace existing project
+                        File.Delete(fi.FullName);
+                        File.Move(tempFilename, fi.FullName);
+                        saveFailed = false;
+                    }
+                    catch(IOException e) when ((e.HResult & 0x0000FFFF ) == 32)
+                    {
+                        Random r = new Random();
+
+                        FrostyMessageBox.Show(fi.Name + " is being used by another process and has failed to save.\n\nYour project has been saved and will now be loaded.", "Frosty Editor");
+
+                        backupFilename = fi.FullName.Replace(".fbproject", "_" + r.Next(1000, 9999).ToString("D4") + ".fbproject");
+
+                        File.Move(tempFilename, backupFilename);
+                        saveFailed = true;
+                    }
                 }
             }
         }

@@ -602,14 +602,23 @@ namespace FrostyEditor.Windows
             {
                 FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
 
-                dataExplorer.RefreshItems();
-                legacyExplorer.RefreshItems();
-                RefreshTabs();
+                if (m_project.saveFailed == false)
+                {
+                    dataExplorer.RefreshItems();
+                    legacyExplorer.RefreshItems();
+                    RefreshTabs();
 
-                App.Logger.Log("Project saved to {0}", m_project.Filename);
+                    App.Logger.Log("Project saved to {0}", m_project.Filename);
 
-                UpdateWindowTitle();
-                UpdateDiscordState();
+                    UpdateWindowTitle();
+                    UpdateDiscordState();
+                }
+                else
+                {
+                    App.Logger.LogError("Project has failed to save to {0}", m_project.Filename);
+                    App.Logger.Log("Project copied to {0}", m_project.backupFilename);
+                    LoadProject(m_project.backupFilename, false);
+                }
             }
             m_autoSaveTimer?.Start();
         }
@@ -621,14 +630,23 @@ namespace FrostyEditor.Windows
             {
                 FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
 
-                dataExplorer.RefreshItems();
-                legacyExplorer.RefreshItems();
-                RefreshTabs();
+                if (m_project.saveFailed == false)
+                {
+                    dataExplorer.RefreshItems();
+                    legacyExplorer.RefreshItems();
+                    RefreshTabs();
 
-                App.Logger.Log("Project saved to {0}", m_project.Filename);
+                    App.Logger.Log("Project saved to {0}", m_project.Filename);
 
-                UpdateWindowTitle();
-                UpdateDiscordState();
+                    UpdateWindowTitle();
+                    UpdateDiscordState();
+                }
+                else
+                {
+                    App.Logger.LogError("Project has failed to save to {0}", m_project.Filename);
+                    App.Logger.Log("Project copied to {0}", m_project.backupFilename);
+                    LoadProject(m_project.backupFilename, false);
+                }
             }
             m_autoSaveTimer?.Start();
         }
