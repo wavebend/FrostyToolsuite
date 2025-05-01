@@ -33,7 +33,13 @@ namespace Frosty.Core.Windows
         {
             try
             {
-                changelogTextBox.Text = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/J-Lyt/FrostyToolsuite/refs/heads/DragonAge/FrostyEditor/ChangeLog.txt");
+                string changeLogRaw = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/J-Lyt/FrostyToolsuite/refs/heads/DragonAge/FrostyEditor/ChangeLog.txt");
+
+                int index = changeLogRaw.IndexOf("v1.0.7 - " + App.BuildVersion);
+
+                string changeLog = changeLogRaw.Substring(0, index);
+
+                changelogTextBox.Text = changeLog;
             }
             catch
             {
