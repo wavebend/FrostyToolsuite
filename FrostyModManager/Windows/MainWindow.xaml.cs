@@ -850,8 +850,58 @@ namespace FrostyModManager
                 mod = new FrostyMod(modFilename, modObj);
             }
 
-            if (mod.GameVersion != fs.Head)
+            bool GameVersionHead = mod.GameVersion != fs.Head;
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                string ForPatch = "Mod was designed for Patch ";
+
+                if (GameVersionHead && mod.GameVersion == 2373991)
+                {
+                    mod.AddWarning(ForPatch + "5 (Steam)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 3377309)
+                {
+                    mod.AddWarning(ForPatch + "5 (EA)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 2373347)
+                {
+                    mod.AddWarning(ForPatch + "4 (Steam)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 3376665)
+                {
+                    mod.AddWarning(ForPatch + "4 (EA)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 2370459)
+                {
+                    mod.AddWarning(ForPatch + "3 (Steam)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 3373777)
+                {
+                    mod.AddWarning(ForPatch + "3 (EA)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 2355883)
+                {
+                    mod.AddWarning(ForPatch + "2 (Steam)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 3359200)
+                {
+                    mod.AddWarning(ForPatch + "2 (EA)");
+                }
+                else if (GameVersionHead && mod.GameVersion == 2306651)
+                {
+                    mod.AddWarning(ForPatch + "1 (Steam)");
+                }
+                else if (GameVersionHead)
+                {
+                    mod.AddWarning("Mod was designed for a different game version");
+                }
+            }
+            else if (GameVersionHead)
+            {
                 mod.AddWarning("Mod was designed for a different game version");
+            }
+
             availableMods.Add(mod);
 
             return mod;
