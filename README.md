@@ -1,14 +1,18 @@
-# FrostyToolsuite
+# FrostyToolsuite (Dragon Age: The Veilguard)
 The most advanced modding platform for games running on DICE's Frostbite game engine.
 
-## Setup
+<a title="Frosty Toolsuite" href="https://discord.gg/sB8ZUAT">
+  <img alt="Frosty Toolsuite" src="https://img.shields.io/discord/333086156478480384?color=white&label=Frosty%20Toolsuite&logo=discord&logoColor=white&style=flat-square"></a>
+<a title="DAV Modding (Frosty)" href="https://discord.gg/pKF9ReTdAh">
+  <img alt="DAV Modding (Frosty)" src="https://img.shields.io/discord/1322742362434437131?color=5255a4&label=DAV%20Modding%20(Frosty)&logo=discord&logoColor=white&style=flat-square"></a>
+<a title="Downloads" href="https://github.com/J-Lyt/FrostyToolsuite/releases">
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/J-Lyt/FrostyToolsuite/total?color=white&label=Downloads&logo=github&style=flat-square"></a>
 
-1. Download Git https://git-scm.com/download/win.
-2. Create an empty folder, go inside it, right click an empty space and hit "Git Bash Here". That should open up a command prompt.
-3. Press the green "Code" button in the repository and copy the text under "HTTPS".
-4. Type out ``git clone -b <branch_name> <HTTPS code>`` in the command prompt and hit enter. This should clone the project files into the folder.
-5. Open the solution (found under FrostyEditor) with **Visual Studio 2019**, and make sure the project is set to ``DeveloperDebug`` and ``x64``. Close out of retarget window if prompted.
-6. Only build the projects themselves, never the solution.
+## Release
+Download the latest release from [releases](https://github.com/J-Lyt/FrostyToolsuite/releases/latest).
 
-## License
-The Content, Name, Code, and all assets are licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+## Build
+
+1. Clone Repository
+2. Open the solution (found under FrostyEditor) with **Visual Studio 2022**, and make sure the project is set to ``Developer - Debug`` or ``Release - Final``.
+3. Only build the projects themselves, never the solution.
