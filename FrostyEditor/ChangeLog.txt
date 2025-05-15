@@ -1,4 +1,25 @@
-﻿v1.0.7 - 2025.4.30.0
+﻿v1.0.7 - 2025.5.15.0
+--------
+Improvements:
+- Mod Manager can now load menu extensions from plugins
+
+Bug Fixes:
+- Fixed issue where incorrect guid were assigned causing the editor to crash when saving certain ebx files
+
+Misc:
+- Update window will now only show the changelog for versions newer than the current version
+- Warning message within the Mod Manager now includes which patch a mod was designed for
+
+Technical Changes:
+- Profile selection now occurs before main window has loaded
+- Added 'PathMap' to obscure local path in stacktrace
+
+Plugin Changes:
+- [DatapathFixPlugin] Added messagebox when launching game for the first time
+- [DatapathFixPlugin] Removed 'Check for Updates' Functionality
+- [DatapathFixPlugin] Added 'Dragon Age: The Veilguard' icon to Datapathfix.exe
+
+v1.0.7 - 2025.4.30.0
 --------
 Misc:
 - Various 'Check for Updates' Changes
