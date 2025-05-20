@@ -1169,6 +1169,7 @@ namespace MeshSetPlugin
                         case (int)ProfileVersion.Battlefield1: skeletonName = "Characters/skeletons/Character/3pAntSkeleton"; break;
                         case (int)ProfileVersion.Anthem: skeletonName = "Animation/HMM/HMM_Skeleton"; break;
                         case (int)ProfileVersion.DragonAgeInquisition: skeletonName = "DA3/Animation/Humanoid/Human/AdultMale/hm_skeleton"; break;
+                        case (int)ProfileVersion.DragonAgeTheVeilguard: skeletonName = "TechAnim/Rigs/RGZ/RGZ_skeleton"; break;
                     }
                 }
 
