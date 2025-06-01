@@ -1408,6 +1408,13 @@ namespace Frosty.ModSupport
                 PrintLog();
 #endif
 
+#if !FROSTY_DEVELOPER
+                if (Config.Get<bool>("PrintLog", true))
+                {
+                    PrintLog();
+                }
+#endif
+
                 cancelToken.ThrowIfCancellationRequested();
                 Logger.Log("Cleaning Up ModData");
                 App.Logger.Log("Cleaning Up ModData");

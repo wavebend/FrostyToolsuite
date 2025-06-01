@@ -86,6 +86,12 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool UseSteamProtocol { get; set; } = false;
 
+        [Category("General")]
+        [DisplayName("Print Log")]
+        [Description("Prints a 'log.txt' file to your Frosty Editor/Mod Manager directory showing all added and modified assets when creating ModData.\n\nModData must be re-created for the log file to be generated.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool PrintLog { get; set; } = false;
+
         public override void Load()
         {
             base.Load();
@@ -102,6 +108,7 @@ namespace Frosty.Core.Windows
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
             DisableShaderCacheSymLink = Config.Get<bool>("DisableShaderCacheSymLink", false);
             UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", false);
+            PrintLog = Config.Get<bool>("PrintLog", false);
         }
 
         public override void Save()
@@ -117,6 +124,7 @@ namespace Frosty.Core.Windows
             Config.Add("DisableLaunchProcessCheck", DisableLaunchProcessCheck);
             Config.Add("DisableShaderCacheSymLink", DisableShaderCacheSymLink);
             Config.Add("UseSteamProtocol", UseSteamProtocol);
+            Config.Add("PrintLog", PrintLog);
         }
     }
     
