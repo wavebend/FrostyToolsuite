@@ -13,6 +13,6 @@ Download the latest release from [releases](https://github.com/J-Lyt/FrostyTools
 
 ## Build
 
-1. Clone Repository
+1. Clone Repository ``git clone https://github.com/J-Lyt/FrostyToolsuite.git --recurse-submodules``
 2. Open the solution (found under FrostyEditor) with **Visual Studio 2022**, and make sure the project is set to ``Developer - Debug`` or ``Release - Final``.
 3. Only build the projects themselves, never the solution.
