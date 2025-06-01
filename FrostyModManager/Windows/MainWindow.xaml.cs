@@ -1919,7 +1919,7 @@ namespace FrostyModManager
 
         private void PART_ShowOnlyReplacementsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to show all resources? This can take some time.", "Resources", MessageBoxButton.YesNo);
+            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to show all resources?\n\nThis may take a while if you have a lot of mods applied.", "Resources", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
