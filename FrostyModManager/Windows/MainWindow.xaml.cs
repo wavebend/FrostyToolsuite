@@ -31,6 +31,7 @@ using FrostySdk.Managers.Entries;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Linq;
+using System.Media;
 
 namespace FrostyModManager
 {
@@ -480,6 +481,12 @@ namespace FrostyModManager
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
             {
                 App.CheckVersion();
+            }
+
+            if (Environment.CurrentDirectory.Contains("OneDrive"))
+            {
+                SystemSounds.Exclamation.Play();
+                FrostyMessageBox.Show($"Your Frosty Mod Manager installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Mod Manager");
             }
         }
 
