@@ -1,17 +1,41 @@
-﻿v1.0.7 - 2025.5.15.0
+﻿v1.0.7 - 2025.6.3.0
+--------
+Improvements:
+- Added support for importing meshes that need tangent space compression
+- When an exception is generated, it will now be translated to English when possible.
+
+Bug Fixes:
+- Fixed issue where DiscordRPC would cause the editor to crash when reading the header of a null asset
+- Fixed issue where a duplicated mesh asset would be reverted after an invalid mesh import
+- Fixed issue where the mod manager would crash when creating ModData if an incompatible mod was applied
+- Fixed issue where the editor would crash when opening an invalid duplicated asset
+
+Misc:
+- Set default skeleton for Dragon Age: The Veilguard
+- Added option to allow end-users to print log when creating ModData
+- Changes to 'Actions' (now 'Resources') Tab within Frosty Mod Manager
+- Added MessageBox to alert user if Frosty installation is in OneDrive
+- Additional exception information will be added to the output (Type, HResult, message and source)
+- The end-users operating system information and which application the excpetion occurred on will be added to the exception
+- Added buttons 'Copy Exception', 'Copy Log' and 'Open Logs Folder' to the exception window
+
+Plugin Changes:
+- [TestPlugin] Re-added Plugin (Removed unintentionally from the previous release)
+
+v1.0.7 - 2025.5.15.0
 --------
 Improvements:
 - Mod Manager can now load menu extensions from plugins
 
 Bug Fixes:
-- Fixed issue where incorrect guid were assigned causing the editor to crash when saving certain ebx files
+- Fixed issue where incorrect guids were assigned causing the editor to crash when saving certain ebx files
 
 Misc:
 - Update window will now only show the changelog for versions newer than the current version
 - Warning message within the Mod Manager now includes which patch a mod was designed for
 
 Technical Changes:
-- Profile selection now occurs before main window has loaded
+- Profile selection for Mod Manager now occurs before main window has loaded
 - Added 'PathMap' to obscure local path in stacktrace
 
 Plugin Changes:
