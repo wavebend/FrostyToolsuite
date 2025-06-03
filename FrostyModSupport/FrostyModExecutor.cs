@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FrostySdk.Managers.Entries;
+using System.Media;
 
 namespace Frosty.ModSupport
 {
@@ -391,6 +392,12 @@ namespace Frosty.ModSupport
 
             return hash;
         }
+
+        public class NullChunkException : Exception
+        {
+            public NullChunkException() : base() { }
+        }
+
         private void ProcessModResources(IResourceContainer fmod)
         {
             // Bundle whitelist may not contain the chunk bundle. This adds it to prevent issues
@@ -695,7 +702,7 @@ namespace Frosty.ModSupport
                             resource.FillAssetEntry(entry);
 
                             byte[] data = fmod.GetResourceData(resource);
-                            var chunkEntry = m_am.GetChunkEntry(guid);
+                            var chunkEntry = m_am.GetChunkEntry(guid) ?? throw new NullChunkException();
 
                             if (data == null)
                             {
@@ -1363,12 +1370,54 @@ namespace Frosty.ModSupport
 
                 // Load Mod Resources
                 int currentMod = 0;
+
+                string nullChunkText = "\"{0}\" is incompatible with the installed version of the game.\n\nPlease remove it from the 'Applied Mods' list and try again.";
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    if (m_fs.Head > 3350000)
+                    {
+                        nullChunkText = nullChunkText.Replace("installed", "EA App");
+                    }
+                    else if (m_fs.Head < 2380000)
+                    {
+                        nullChunkText = nullChunkText.Replace("installed", "Steam");
+                    }
+                }
+
                 foreach (FrostyMod mod in modList)
                 {
                     Logger.Log($"Loading Mods ({mod.ModDetails?.Title ?? mod.Filename.Replace(".fbmod", "")})");
                     if (mod.NewFormat)
                     {
-                        ProcessModResources(mod);
+                        try
+                        {
+                            ProcessModResources(mod);
+                        }
+                        catch (AggregateException ae)
+                        {
+                            bool GameVersionHead = mod.GameVersion != m_fs.Head;
+
+                            var ignoredExceptions = new List<Exception>();
+
+                            foreach (var ex in ae.Flatten().InnerExceptions)
+                            {
+                                if (ex is NullChunkException && GameVersionHead)
+                                {
+                                    SystemSounds.Exclamation.Play();
+                                    FrostyMessageBox.Show(string.Format(nullChunkText, mod.ModDetails.Title), "Failed to create ModData");
+                                    throw new OperationCanceledException();
+                                }
+                                else
+                                {
+                                    ignoredExceptions.Add(ex);
+                                }
+                            }
+                            if (ignoredExceptions.Count > 0)
+                            {
+                                throw new AggregateException(ignoredExceptions);
+                            }
+                        }
                     }
                     else
                     {
