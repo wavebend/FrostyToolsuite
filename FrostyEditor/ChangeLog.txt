@@ -1,4 +1,9 @@
-﻿v1.0.7 - 2025.6.3.0
+﻿v1.0.7 - 2025.6.3.1
+--------
+Bug Fixes:
+- Reverted "Fixed issue where the mod manager would crash when creating ModData if an incompatible mod was applied"
+
+v1.0.7 - 2025.6.3.0
 --------
 Improvements:
 - Added support for importing meshes that need tangent space compression
