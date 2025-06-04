@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FrostySdk.Managers.Entries;
+using System.Media;
 
 namespace Frosty.ModSupport
 {
@@ -391,6 +392,12 @@ namespace Frosty.ModSupport
 
             return hash;
         }
+
+        public class NullEntryException : Exception
+        {
+            public NullEntryException() : base() { }
+        }
+
         private void ProcessModResources(IResourceContainer fmod)
         {
             // Bundle whitelist may not contain the chunk bundle. This adds it to prevent issues
@@ -494,7 +501,14 @@ namespace Frosty.ModSupport
 
                             if (data == null)
                             {
-                                data = NativeReader.ReadInStream(m_am.GetRawStream(ebxEntry));
+                                try
+                                {
+                                    data = NativeReader.ReadInStream(m_am.GetRawStream(ebxEntry));
+                                }
+                                catch (System.NullReferenceException)
+                                {
+                                    throw new NullEntryException();
+                                }
 
                                 entry.Sha1 = ebxEntry.Sha1;
                                 entry.OriginalSize = ebxEntry.OriginalSize;
@@ -590,7 +604,14 @@ namespace Frosty.ModSupport
 
                             if (data == null)
                             {
-                                data = NativeReader.ReadInStream(m_am.GetRawStream(resEntry));
+                                try
+                                {
+                                    data = NativeReader.ReadInStream(m_am.GetRawStream(resEntry));
+                                }
+                                catch (System.NullReferenceException)
+                                {
+                                    throw new NullEntryException();
+                                }
 
                                 entry.Sha1 = resEntry.Sha1;
                                 entry.OriginalSize = resEntry.OriginalSize;
@@ -699,7 +720,14 @@ namespace Frosty.ModSupport
 
                             if (data == null)
                             {
-                                data = NativeReader.ReadInStream(m_am.GetRawStream(chunkEntry));
+                                try
+                                {
+                                    data = NativeReader.ReadInStream(m_am.GetRawStream(chunkEntry));
+                                }
+                                catch (System.NullReferenceException)
+                                {
+                                    throw new NullEntryException();
+                                }
 
                                 entry.Sha1 = (chunkEntry.Sha1 == Sha1.Zero) ? Utils.GenerateSha1(data) : chunkEntry.Sha1;
                                 entry.OriginalSize = chunkEntry.OriginalSize;
@@ -1368,7 +1396,46 @@ namespace Frosty.ModSupport
                     Logger.Log($"Loading Mods ({mod.ModDetails?.Title ?? mod.Filename.Replace(".fbmod", "")})");
                     if (mod.NewFormat)
                     {
-                        ProcessModResources(mod);
+                        try
+                        {
+                            ProcessModResources(mod);
+                        }
+                        catch (AggregateException ae)
+                        {
+                            string nullEntryText = "\"{0}\" is incompatible with the installed version of the game.\n\nPlease remove it from the 'Applied Mods' list and try again.";
+
+                            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+                            {
+                                if (m_fs.Head > 3350000 && mod.GameVersion < 2380000)
+                                {
+                                    nullEntryText = nullEntryText.Replace("installed", "EA App");
+                                }
+                                else if (m_fs.Head < 2380000 && mod.GameVersion > 3350000)
+                                {
+                                    nullEntryText = nullEntryText.Replace("installed", "Steam");
+                                }
+                            }
+
+                            var ignoredExceptions = new List<Exception>();
+
+                            foreach (var ex in ae.Flatten().InnerExceptions)
+                            {
+                                if (ex is NullEntryException)
+                                {
+                                    SystemSounds.Exclamation.Play();
+                                    FrostyMessageBox.Show(string.Format(nullEntryText, mod.ModDetails.Title), "Failed to create ModData");
+                                    throw new OperationCanceledException();
+                                }
+                                else
+                                {
+                                    ignoredExceptions.Add(ex);
+                                }
+                            }
+                            if (ignoredExceptions.Count > 0)
+                            {
+                                throw new AggregateException(ignoredExceptions);
+                            }
+                        }
                     }
                     else
                     {
