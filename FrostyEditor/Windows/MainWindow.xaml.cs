@@ -240,7 +240,7 @@ namespace FrostyEditor.Windows
         {
             string state = "";
 
-            bool enabled = Config.Get<bool>("DiscordRPCHideAsset", true);
+            bool enabled = Config.Get<bool>("DiscordRPCHideAsset", false);
 
             if (TabControl.SelectedItem is FrostyTabItem ti && !enabled)
             {

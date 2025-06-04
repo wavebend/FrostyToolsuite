@@ -146,7 +146,7 @@ namespace FrostyEditor
             if (!Config.Get<bool>("DiscordRPCEnabled", false))
                 return;
 
-            bool enabled = Config.Get<bool>("DiscordRPCHideProject", true);
+            bool enabled = Config.Get<bool>("DiscordRPCHideProject", false);
 
             DiscordRichPresence discordPresence = new DiscordRichPresence
             {
