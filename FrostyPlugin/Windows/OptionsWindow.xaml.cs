@@ -17,6 +17,7 @@ using FrostySdk;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using FrostySdk.Managers.Entries;
+using System.IO;
 
 namespace Frosty.Core.Windows
 {
@@ -388,12 +389,27 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public string CommandLineArgs { get; set; } = "";
 
+        [Category("Manager")]
+        [DisplayName("Enable Custom Mods Directory")]
+        [Description("Enables custom directory to load mods from.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool UseCustomModsDirectory { get; set; } = false;
+
+        [Category("Manager")]
+        [DisplayName("Custom Mods Directory")]
+        [Description("Select directory to load mods from upon startup.")]
+        [EbxFieldMeta(EbxFieldType.String)]
+        [DependsOn("UseCustomModsDirectory")]
+        public string CustomModsDirectory { get; set; }
+
         public override void Load()
         {
             base.Load();
             
             RememberChoice = Config.Get<bool>("UseDefaultProfile2", false);
             CommandLineArgs = Config.Get<string>("CommandLineArgs", "", ConfigScope.Game);
+            UseCustomModsDirectory = Config.Get<bool>("UseCustomModsDirectory", false);
+            CustomModsDirectory = Config.Get<string>("CustomModsDirectory", "");
         }
 
         public override void Save()
@@ -402,6 +418,12 @@ namespace Frosty.Core.Windows
             
             Config.Add("UseDefaultProfile2", RememberChoice);
             Config.Add("CommandLineArgs", CommandLineArgs, ConfigScope.Game);
+            
+            Config.Add("UseCustomModsDirectory", UseCustomModsDirectory);
+            if (Directory.Exists(CustomModsDirectory))
+            {
+                Config.Add("CustomModsDirectory", CustomModsDirectory);
+            }
 
             if (RememberChoice)
                 Config.Add("DefaultProfile2", ProfilesLibrary.ProfileName);
