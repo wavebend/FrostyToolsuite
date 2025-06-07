@@ -268,6 +268,7 @@
     <Resource Include="Images\Import.png" />
     <Resource Include="Images\CircleCheck.png" />
     <Resource Include="Images\CircleX.png" />
+    <Resource Include="Images\ModImportWarningApplied.png" />
     <Content Include="ThirdParty\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

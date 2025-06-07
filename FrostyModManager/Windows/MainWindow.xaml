@@ -862,8 +862,8 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <CheckBox x:Name="enabledCheckBox" Grid.Column="0" VerticalAlignment="Center" IsChecked="{Binding Path=IsEnabled}" IsEnabled="{Binding Path=IsFound}" Checked="enabledCheckBox_Checked" Unchecked="enabledCheckBox_Checked"/>
-                                                    <Image Grid.Column="1" Source="{Binding Path=ModIcon}" Margin="8,0,0,0" Width="16" RenderOptions.BitmapScalingMode="Fant"/>
-                                                    <TextBlock Grid.Column="2" Text="{Binding Path=ModName}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                                    <Image Grid.Column="1" Source="{Binding Path=ModIcon}" Margin="8,0,0,0" Width="16" RenderOptions.BitmapScalingMode="Fant" ToolTip="{Binding Path=ModTooltip}"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding Path=ModName}" Margin="8,0,0,0" VerticalAlignment="Center" ToolTip="{Binding Path=ModTooltip}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>

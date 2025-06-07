@@ -1,4 +1,7 @@
-﻿using Frosty.Core.Mod;
+﻿using Frosty.Core;
+using Frosty.Core.Mod;
+using FrostySdk;
+using System.IO;
 using System.Windows.Media;
 
 namespace FrostyModManager
@@ -10,9 +13,13 @@ namespace FrostyModManager
             get
             {
                 if (Mod != null)
+                {
                     return Mod.ModDetails.Title;
+                }
                 else
+                {
                     return BackupFileName;
+                }
             }
         }
         public ImageSource ModIcon
@@ -20,9 +27,42 @@ namespace FrostyModManager
             get
             {
                 if (Mod != null)
-                    return Mod.ModDetails.Icon;
+                {
+                    if (Mod.ModDetails.Icon != null)
+                    {
+                        return Mod.ModDetails.Icon;
+                    }
+                    else
+                    {
+                        return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/DefaultModIcon.png") as ImageSource;
+                    }
+                }
                 else
-                    return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/ModImportWarning.png") as ImageSource;
+                {
+                    return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/ModImportWarningApplied.png") as ImageSource;
+                }
+            }
+        }
+
+        public string ModTooltip 
+        {
+            get 
+            {
+                if (Mod == null)
+                {
+                    DirectoryInfo modsDir = new DirectoryInfo(Path.Combine("Mods", ProfilesLibrary.ProfileName));
+
+                    if (Config.Get<bool>("UseCustomModsDirectory", false) && Directory.Exists(Config.Get<string>("CustomModsDirectory", "")))
+                    {
+                        modsDir = new DirectoryInfo(Path.Combine(Config.Get<string>("CustomModsDirectory", ""), ProfilesLibrary.ProfileName));
+                    }
+                        
+                    return $"Missing from: {modsDir}";
+                }
+                else
+                {
+                    return null;
+                } 
             }
         }
 
