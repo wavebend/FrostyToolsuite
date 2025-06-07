@@ -400,6 +400,8 @@ namespace FrostyModManager
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(availableModsList.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("ModDetails.Category", null, StringComparison.OrdinalIgnoreCase);
             view.GroupDescriptions.Add(groupDescription);
+            view.SortDescriptions.Add(new SortDescription("ModDetails.Category", ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription("ModDetails.Title", ListSortDirection.Ascending));
 
             foreach (string packName in Config.EnumerateKeys(ConfigScope.Pack))
             {
@@ -1534,6 +1536,8 @@ namespace FrostyModManager
 
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("ModDetails.Category");
             view.GroupDescriptions.Add(groupDescription);
+            view.SortDescriptions.Add(new SortDescription("ModDetails.Category", ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription("ModDetails.Title", ListSortDirection.Ascending));
 
             if (lastInstalledMod != null)
             {
