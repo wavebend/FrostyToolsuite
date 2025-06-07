@@ -575,8 +575,7 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Applied"
-                                                                    Width="74">
+                                                    <GridViewColumn Header="Applied" Width="75">
                                                         <!-- GridViewColumn.CellTemplate created in code -->
                                                     </GridViewColumn>
                                                 </GridView.Columns>

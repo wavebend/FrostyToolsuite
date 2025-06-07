@@ -494,7 +494,8 @@ namespace FrostyModManager
             factory.SetValue(Image.HeightProperty, 16.0d);
             factory.SetValue(Image.WidthProperty, 16.0d);
             factory.SetValue(Image.HorizontalAlignmentProperty, HorizontalAlignment.Center);
-            factory.SetValue(Image.VerticalAlignmentProperty, VerticalAlignment.Center);
+            factory.SetValue(Image.VerticalAlignmentProperty, VerticalAlignment.Top);
+            factory.SetValue(Image.MarginProperty, new Thickness(0, 4, 0, 0));
             factory.SetBinding(Image.VisibilityProperty, new Binding("ModDetails.Title")
             {
                 Converter = new ModAppliedConverter(),
