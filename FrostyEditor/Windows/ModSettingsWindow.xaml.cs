@@ -74,29 +74,23 @@ namespace FrostyEditor.Windows
 
         private void saveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var mTTB = modTitleTextBox.Text;
-            var mATB = modAuthorTextBox.Text;
-            var mCTB = modCategoryTextBox.Text;
-            var mVTB = modVersionTextBox.Text;
+            string mTTB = modTitleTextBox.Text;
+            string mATB = modAuthorTextBox.Text;
+            string mCTB = modCategoryTextBox.Text;
+            string mVTB = modVersionTextBox.Text;
 
-            var invalidChars = new List<string>()
-            {
-                "{", "}"
-            };
-            
-            if (modTitleTextBox.Text == "" || modAuthorTextBox.Text == "" || modCategoryTextBox.Text == "" || modVersionTextBox.Text == "")
+            if (string.IsNullOrWhiteSpace(mTTB) || string.IsNullOrWhiteSpace(mATB) || string.IsNullOrWhiteSpace(mCTB) || string.IsNullOrWhiteSpace(mVTB))
             {
                 FrostyMessageBox.Show("Title, Author, Category and Version are mandatory fields", "Frosty Editor");
                 return;
             }
-           
-            foreach(var invalidChar  in invalidChars)
+
+            string[] invalidChars = { "{", "}" };
+
+            if (invalidChars.Any(mTTB.Contains) || invalidChars.Any(mATB.Contains) || invalidChars.Any(mCTB.Contains) || invalidChars.Any(mVTB.Contains))
             {
-                if (mTTB.Contains(invalidChar) || mATB.Contains(invalidChar) || mCTB.Contains(invalidChar) || mVTB.Contains(invalidChar))
-                {
-                    FrostyMessageBox.Show("Invalid Characters: {, }", "Frosty Editor");
-                    return;
-                }
+                FrostyMessageBox.Show("Invalid Characters: {, }", "Frosty Editor");
+                return;
             }
 
             ModSettings.Title = modTitleTextBox.Text;
