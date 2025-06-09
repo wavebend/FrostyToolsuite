@@ -38,9 +38,10 @@ namespace Frosty.Core
             14 - Can duplicate blueprint bundles
             15 - Adds superbundle ids for toc chunks
             16 - H32 and FirstMip are now stored even if chunk was only added to bundles
+            17 - Added link for the modpage
         */
 
-        private const uint FormatVersion = 16;
+        private const uint FormatVersion = 17;
 
         private const ulong Magic = 0x00005954534F5246;
 
@@ -145,6 +146,7 @@ namespace Frosty.Core
                 writer.WriteNullTerminatedString(modSettings.Category);
                 writer.WriteNullTerminatedString(modSettings.Version);
                 writer.WriteNullTerminatedString(modSettings.Description);
+                writer.WriteNullTerminatedString(modSettings.Link);
 
                 if (modSettings.Icon != null && modSettings.Icon.Length != 0)
                 {
@@ -645,6 +647,7 @@ namespace Frosty.Core
                 modSettings.Category = reader.ReadNullTerminatedString();
                 modSettings.Version = reader.ReadNullTerminatedString();
                 modSettings.Description = reader.ReadNullTerminatedString();
+                modSettings.Link = version >= 17 ? reader.ReadNullTerminatedString() : "";
 
                 int size = reader.ReadInt();
                 if (size > 0)

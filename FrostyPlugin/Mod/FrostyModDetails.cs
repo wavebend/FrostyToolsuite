@@ -19,6 +19,32 @@ namespace Frosty.Core.Mod
 
         private string category;
 
+        public string LinkID
+        {  
+            get
+            {
+                if (Link != null)
+                {
+                    if (Link.Contains("nexusmods.com"))
+                    {
+                        return "Nexus Mods";
+                    }
+                    else if (Link.Contains("moddb.com"))
+                    {
+                        return "Mod DB";
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public FrostyModDetails(string inTitle, string inAuthor, string inCategory, string inVersion, string inDescription, string inModPageLink)
         {
             Title = inTitle;

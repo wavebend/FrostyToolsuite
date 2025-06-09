@@ -578,6 +578,19 @@
                                                     <GridViewColumn Header="Applied" Width="75">
                                                         <!-- GridViewColumn.CellTemplate created in code -->
                                                     </GridViewColumn>
+                                                    <GridViewColumn Header="Link" Width="Auto">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Grid Height="32">
+                                                                    <TextBlock Margin="0,4,0,0">
+                                                                        <Hyperlink NavigateUri="{Binding Path=ModDetails.Link}" RequestNavigate="Hyperlink_RequestNavigate" TextDecorations="None">
+                                                                            <TextBlock Text="{Binding Path=ModDetails.LinkID}" ToolTip="Opens in your browser"/>
+                                                                        </Hyperlink>
+                                                                    </TextBlock>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
                                                 </GridView.Columns>
                                             </GridView>
                                         </ListView.View>

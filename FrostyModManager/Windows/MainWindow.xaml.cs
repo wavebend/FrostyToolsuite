@@ -2232,5 +2232,14 @@ namespace FrostyModManager
                 foundMenuItem.Items.Add(menuExtItem);
             }
         }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(e.Uri.AbsoluteUri);
+            }
+            catch { }
+        }
     }
 }

@@ -4,6 +4,8 @@ using System.IO;
 using Frosty.Core;
 using Frosty.Core.Mod;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace FrostyEditor.Windows
 {
@@ -47,6 +49,7 @@ namespace FrostyEditor.Windows
             modCategoryComboBox.SelectedIndex = ModSettings.SelectedCategory;
             modVersionTextBox.Text = ModSettings.Version;
             modDescriptionTextBox.Text = ModSettings.Description;
+            modPageLinkTextBox.Text = ModSettings.Link;
 
             if (modCategoryComboBox.SelectedItem.ToString() == "Custom")
             {
@@ -74,10 +77,16 @@ namespace FrostyEditor.Windows
 
         private void saveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (modPageLinkTextBox.Text.All(char.IsWhiteSpace))
+            {
+                modPageLinkTextBox.Text = "";
+            }
+
             string mTTB = modTitleTextBox.Text;
             string mATB = modAuthorTextBox.Text;
             string mCTB = modCategoryTextBox.Text;
             string mVTB = modVersionTextBox.Text;
+            string mLTB = modPageLinkTextBox.Text;
 
             if (string.IsNullOrWhiteSpace(mTTB) || string.IsNullOrWhiteSpace(mATB) || string.IsNullOrWhiteSpace(mCTB) || string.IsNullOrWhiteSpace(mVTB))
             {
@@ -93,12 +102,31 @@ namespace FrostyEditor.Windows
                 return;
             }
 
+            string[] approvedDomains = { "nexusmods.com", "moddb.com" };
+
+            if (mLTB != "" && (!Uri.IsWellFormedUriString(mLTB, UriKind.Absolute) || !mLTB.StartsWith("https://www.") || !approvedDomains.Any(mLTB.Contains)))
+            {
+                FrostyMessageBox.Show("Link must be valid:\n\nhttps://www.nexusmods.com/{GAME}/mods/{ID}\nhttps://www.moddb.com/mods/{MOD}", "Frosty Editor");
+                return;
+            }
+
+            if (mLTB.Contains("nexusmods.com") && mLTB.Contains("?"))
+            {
+                int index = mLTB.IndexOf("?");
+
+                if (index >= 0)
+                {
+                    modPageLinkTextBox.Text = mLTB.Substring(0, index);
+                }
+            }
+
             ModSettings.Title = modTitleTextBox.Text;
             ModSettings.Author = modAuthorTextBox.Text;
             ModSettings.Category = modCategoryTextBox.Text;
             ModSettings.SelectedCategory = modCategoryComboBox.SelectedIndex;
             ModSettings.Version = modVersionTextBox.Text;
             ModSettings.Description = modDescriptionTextBox.Text;
+            ModSettings.Link = modPageLinkTextBox.Text;
             ModSettings.Icon = iconImageButton.GetImage();
             ModSettings.SetScreenshot(0, ssImageButton1.GetImage());
             ModSettings.SetScreenshot(1, ssImageButton2.GetImage());
