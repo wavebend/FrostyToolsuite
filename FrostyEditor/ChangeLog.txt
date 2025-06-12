@@ -1,4 +1,31 @@
-﻿v1.0.7 - 2025.6.3.1
+﻿v1.0.7 - 2025.6.12.0
+--------
+Improvements:
+- Added option to choose a custom mods directory for the Mod Manager
+- Added sorting options for Applied Mods list in Mod Manager
+- Added a new 'Recent Projects' MenuItem under File, which can store up to 10 recently opened projects.
+- Added a 'Link' column to the Available Mods list that shows a hyperlink to a modpage
+
+Bug Fixes:
+- Fixed issue where 'DiscordRPCHideAsset', 'DiscordRPCHideProject' and 'PrintLog' would always be enabled if not found in config file
+- Fixed issue where the mod manager would crash when creating ModData if an incompatible mod was applied
+- Fixed issue where the 'Link' would not be read or written when exporting a mod
+
+Misc:
+- Available Mods list is now sorted alphabetically
+- Minor fixes to the 'Applied' mods column and icon
+- Mods in the Applied Mods list that don't have an icon will use the default
+- Added tooltip to mods in the Applied Mods list when the .fbmod is missing
+
+Technical Changes:
+- Fixed an issue where the Config could not save values that are not a convertible or a JToken, i.e Lists, Arrays, classes, etc.
+- Mod export validation clean-up
+
+Plugin Changes:
+- [DatapathFixPlugin] Plugin is now disabled by default
+- [DatapathFixPlugin] User will only be prompted to enable the plugin if the EA App version of 'Dragon Age: The Veilguard' is launched. (Will always be prompted for other games unless support is added.)
+
+v1.0.7 - 2025.6.3.1
 --------
 Bug Fixes:
 - Reverted "Fixed issue where the mod manager would crash when creating ModData if an incompatible mod was applied"
