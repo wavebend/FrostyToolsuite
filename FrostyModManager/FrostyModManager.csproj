@@ -30,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Developer - Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +40,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -59,6 +61,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Beta|x64' ">
     <OutputPath>bin\Release\Beta\</OutputPath>
@@ -68,6 +71,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -77,6 +81,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <PackageReference Include="System.Buffers">
+      <Version>4.6.1</Version>
+    </PackageReference>
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml" />
@@ -84,6 +91,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Memory">
+      <Version>4.6.3</Version>
+    </PackageReference>
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -97,6 +107,76 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Compression\SharpSevenZip\ArchiveEmulationStreamProxy.cs" />
+    <Compile Include="Compression\SharpSevenZip\ArchiveExtractCallback.cs" />
+    <Compile Include="Compression\SharpSevenZip\ArchiveFileInfo.cs" />
+    <Compile Include="Compression\SharpSevenZip\ArchiveOpenCallback.cs" />
+    <Compile Include="Compression\SharpSevenZip\ArchiveProperty.cs" />
+    <Compile Include="Compression\SharpSevenZip\ArchiveUpdateCallback.cs" />
+    <Compile Include="Compression\SharpSevenZip\AssemblyInfo.cs" />
+    <Compile Include="Compression\SharpSevenZip\CallbackBase.cs" />
+    <Compile Include="Compression\SharpSevenZip\Com.cs" />
+    <Compile Include="Compression\SharpSevenZip\CompressionMode.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\ExtractFileCallbackArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\ExtractFileCallbackReason.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\FileInfoEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\FileNameEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\FileOverwriteEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\IntEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\OpenEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\PercentDoneEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventArguments\ProgressEventArgs.cs" />
+    <Compile Include="Compression\SharpSevenZip\EventSynchronizationStrategy.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\CompressionFailedException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\ExtractionFailedException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\LzmaException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipArchiveException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipCompressionFailedException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipExtractionFailedException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipInvalidFileNamesException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipLibraryException.cs" />
+    <Compile Include="Compression\SharpSevenZip\Exceptions\SharpSevenZipSfxValidationException.cs" />
+    <Compile Include="Compression\SharpSevenZip\ExtractFileCallback.cs" />
+    <Compile Include="Compression\SharpSevenZip\ExtractStream.cs" />
+    <Compile Include="Compression\SharpSevenZip\FileChecker.cs" />
+    <Compile Include="Compression\SharpSevenZip\Formats.cs" />
+    <Compile Include="Compression\SharpSevenZip\ICancellable.cs" />
+    <Compile Include="Compression\SharpSevenZip\InternalCompressionMode.cs" />
+    <Compile Include="Compression\SharpSevenZip\LibraryFeature.cs" />
+    <Compile Include="Compression\SharpSevenZip\Lzma\LzmaDecodeStream.cs" />
+    <Compile Include="Compression\SharpSevenZip\Lzma\LzmaEncodeStream.cs" />
+    <Compile Include="Compression\SharpSevenZip\Lzma\LzmaProgressCallback.cs" />
+    <Compile Include="Compression\SharpSevenZip\NativeMethods.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Buffer\InBuffer.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Buffer\OutBuffer.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Common\Crc.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lzma\Base.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lzma\Decoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lzma\Encoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lz\BinTree.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lz\IMatchFinder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lz\InWindow.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\Lz\OutWindow.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\RangeCoder\BitDecoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\RangeCoder\BitEncoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\RangeCoder\BitTreeDecoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\RangeCoder\BitTreeEncoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\RangeCoder\Decoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\Compression\RangeCoder\Encoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\Sdk\ICoder.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipArchiveFormat.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipBase.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipCompressor.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipCompressorAsynchronous.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipExtractor.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipExtractorAsynchronous.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipLibraryManager.cs" />
+    <Compile Include="Compression\SharpSevenZip\SharpSevenZipSfx.cs" />
+    <Compile Include="Compression\SharpSevenZip\StreamWithAttributes.cs" />
+    <Compile Include="Compression\SharpSevenZip\StreamWrappers.cs" />
+    <Compile Include="Compression\SharpSevenZip\UpdateData.cs" />
+    <Compile Include="Compression\SharpSevenZip\ZipEncryptionMethod.cs" />
     <Compile Include="FrostyAppliedMod.cs" />
     <Compile Include="Windows\CollectionSettingsWindow.xaml.cs">
       <DependentUpon>CollectionSettingsWindow.xaml</DependentUpon>
@@ -269,6 +349,9 @@
     <Resource Include="Images\CircleCheck.png" />
     <Resource Include="Images\CircleX.png" />
     <Resource Include="Images\ModImportWarningApplied.png" />
+    <Content Include="ThirdParty\7z.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ThirdParty\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

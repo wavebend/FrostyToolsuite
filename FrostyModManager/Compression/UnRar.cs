@@ -96,6 +96,35 @@ namespace FrostyModManager.Compression
                 CmtBuf = new string((char)0, 65536);
                 CmtBufSize = 65536;
             }
+
+            public RARHeaderDataEx Copy()
+            {
+                var res = new RARHeaderDataEx
+                {
+                    ArcName = ArcName,
+                    ArcNameW = ArcNameW,
+                    FileName = FileName,
+                    FileNameW = FileNameW,
+                    Flags = Flags,
+                    PackSize = PackSize,
+                    PackSizeHigh = PackSizeHigh,
+                    UnpSize = UnpSize,
+                    UnpSizeHigh = UnpSizeHigh,
+                    HostOS = HostOS,
+                    FileCRC = FileCRC,
+                    FileTime = FileTime,
+                    UnpVer = UnpVer,
+                    Method = Method,
+                    FileAttr = FileAttr,
+                    CmtBuf = CmtBuf,
+                    CmtBufSize = CmtBufSize,
+                    CmtSize = CmtSize,
+                    CmtState = CmtState,
+                    Reserved = (uint[])Reserved.Clone()
+                };
+
+                return res;
+            }
         }
 
         public delegate int UNRARCALLBACK(uint msg, int UserData, IntPtr p1, int p2);
@@ -127,12 +156,80 @@ namespace FrostyModManager.Compression
 
     public class RarDecompressor : IDecompressor
     {
-        private IntPtr handle;
-        UnRar.RARHeaderDataEx currentHeader;
+        private string archiveName;
+        private List<IntPtr> handles;
 
         public bool OpenArchive(string filename)
         {
-            UnRar.RAROpenArchiveDataEx archiveData = new UnRar.RAROpenArchiveDataEx();
+            if (handles == null)
+            {
+                handles = new List<IntPtr>();
+            }
+
+            OpenArchiveHandle(filename, out var archiveData);
+
+            archiveName = filename;
+
+            return archiveData.OpenResult == 0;
+        }
+
+        public void CloseArchive()
+        {
+            foreach (var handle in handles)
+            {
+                if (handle == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                UnRar.SetProcessDataProc(handle, null);
+                UnRar.CloseArchive(handle);
+            }
+
+            handles.Clear();
+        }
+
+        public IEnumerable<CompressedFileInfo> EnumerateFiles()
+        {
+            return EnumerateFiles((fi) => false, out _, out _);
+        }
+
+        public byte[] DecompressToMemory(CompressedFileInfo fileInfo)
+        {
+            var currentHeader = GetHeaderByName(fileInfo.Filename, out var handle);
+
+            if (string.IsNullOrWhiteSpace(currentHeader.FileNameW))
+            {
+                throw new ArgumentException($"Compressed rar file '{fileInfo.Filename}' could not be found in archive file '{archiveName}'.");
+            }
+
+            ulong decompressedSize = ((ulong)currentHeader.UnpSizeHigh << 16) | currentHeader.UnpSize;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var processDataProc = new UnRar.PROCESSDATAPROC((a, b) =>
+                {
+                    ms.Write(a, 0, b);
+                    return (ms.Length != (long)decompressedSize) ? 1 : 0;
+                });
+
+                UnRar.SetProcessDataProc(handle, processDataProc);
+                UnRar.ProcessFile(handle, UnRar.RAROperation.Extract, string.Empty, string.Empty);
+
+                return ms.ToArray();
+            }
+        }
+
+        public void DecompressToFile(CompressedFileInfo fileInfo, string filename)
+        {
+            byte[] buffer = DecompressToMemory(fileInfo);
+            using (NativeWriter writer = new NativeWriter(new FileStream(filename, FileMode.Create)))
+                writer.Write(buffer);
+        }
+
+        private IntPtr OpenArchiveHandle(string filename, out UnRar.RAROpenArchiveDataEx archiveData)
+        {
+            archiveData = new UnRar.RAROpenArchiveDataEx();
             archiveData.Initialize();
             archiveData.ArcName = filename + "\0";
             archiveData.ArcNameW = filename + "\0";
@@ -140,25 +237,25 @@ namespace FrostyModManager.Compression
             archiveData.CmtBufSize = 0;
             archiveData.OpenMode = 1;
 
-            handle = UnRar.OpenArchiveEx(ref archiveData);
-            return archiveData.OpenResult == 0;
+            var handle = UnRar.OpenArchiveEx(ref archiveData);
+
+            if (handle != IntPtr.Zero)
+            {
+                handles.Add(handle);
+            }
+
+            return handle;
         }
 
-        public void CloseArchive()
+        private IEnumerable<CompressedFileInfo> EnumerateFiles(Func<CompressedFileInfo, bool> predicate, out UnRar.RARHeaderDataEx header, out IntPtr handle)
         {
-            if (handle == IntPtr.Zero)
-                return;
+            handle = OpenArchiveHandle(archiveName, out _);
 
-            UnRar.SetProcessDataProc(handle, null);
-            UnRar.CloseArchive(handle);
+            var result = new List<CompressedFileInfo>();
 
-            processDataProc = null;
-            handle = IntPtr.Zero;
-        }
+            header = new UnRar.RARHeaderDataEx();
 
-        public IEnumerable<CompressedFileInfo> EnumerateFiles()
-        {
-            currentHeader = new UnRar.RARHeaderDataEx();
+            var currentHeader = new UnRar.RARHeaderDataEx();
             currentHeader.Initialize();
 
             UnRar.RARRetCode retCode = UnRar.ReadHeaderEx(handle, ref currentHeader);
@@ -168,7 +265,16 @@ namespace FrostyModManager.Compression
                 {
                     if ((currentHeader.Flags & 0x20) == 0)
                     {
-                        yield return new CompressedFileInfo(currentHeader.FileNameW, ((ulong)currentHeader.PackSizeHigh << 16) | currentHeader.PackSize, ((ulong)currentHeader.UnpSizeHigh << 16) | currentHeader.UnpSize);
+                        var fileInfo = new CompressedFileInfo(currentHeader.FileNameW, ((ulong)currentHeader.PackSizeHigh << 16) | currentHeader.PackSize, ((ulong)currentHeader.UnpSizeHigh << 16) | currentHeader.UnpSize);
+
+                        result.Add(fileInfo);
+
+                        if (predicate(fileInfo))
+                        {
+                            header = currentHeader.Copy();
+
+                            return result;
+                        }
                     }
 
                     // move onto next file
@@ -185,35 +291,19 @@ namespace FrostyModManager.Compression
                 }
             }
             else
+            {
                 // uh-oh error
                 throw new InvalidDataException();
-        }
-
-        private UnRar.PROCESSDATAPROC processDataProc;
-        public byte[] DecompressToMemory()
-        {
-            ulong decompressedSize = ((ulong)currentHeader.UnpSizeHigh << 16) | currentHeader.UnpSize;
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                processDataProc = new UnRar.PROCESSDATAPROC((a, b) =>
-                {
-                    ms.Write(a, 0, b);
-                    return (ms.Length != (long)decompressedSize) ? 1 : 0;
-                });
-
-                UnRar.SetProcessDataProc(handle, processDataProc);
-                UnRar.ProcessFile(handle, UnRar.RAROperation.Extract, string.Empty, string.Empty);
-
-                return ms.ToArray();
             }
+
+            return result;
         }
 
-        public void DecompressToFile(string filename)
+        private UnRar.RARHeaderDataEx GetHeaderByName(string name, out IntPtr handle)
         {
-            byte[] buffer = DecompressToMemory();
-            using (NativeWriter writer = new NativeWriter(new FileStream(filename, FileMode.Create)))
-                writer.Write(buffer);
+            EnumerateFiles((fi) => fi.Filename == name, out var header, out handle);
+
+            return header;
         }
     }
 }

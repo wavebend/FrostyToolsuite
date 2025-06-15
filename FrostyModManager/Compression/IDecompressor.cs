@@ -52,7 +52,7 @@ namespace FrostyModManager.Compression
         void CloseArchive();
 
         IEnumerable<CompressedFileInfo> EnumerateFiles();
-        byte[] DecompressToMemory();
-        void DecompressToFile(string filename);
+        byte[] DecompressToMemory(CompressedFileInfo fileInfo);
+        void DecompressToFile(CompressedFileInfo fileInfo, string filename);
     }
 }

@@ -1,18 +1,21 @@
 ﻿using FrostySdk.IO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace FrostyModManager.Compression
 {
     public class ZipDecompressor : IDecompressor
     {
         private ZipArchive archive;
-        private ZipArchiveEntry currentEntry;
+        private string archiveName;
 
         public bool OpenArchive(string filename)
         {
             archive = new ZipArchive(new FileStream(filename, FileMode.Open, FileAccess.Read), ZipArchiveMode.Read);
+            archiveName = filename;
             return true;
         }
 
@@ -20,28 +23,29 @@ namespace FrostyModManager.Compression
         {
             archive.Dispose();
             archive = null;
-            currentEntry = null;
         }
 
         public IEnumerable<CompressedFileInfo> EnumerateFiles()
         {
-            foreach (ZipArchiveEntry entry in archive.Entries)
-            {
-                currentEntry = entry;
-                yield return new CompressedFileInfo(entry.FullName, (ulong)entry.CompressedLength, (ulong)entry.Length, entry.Open());
-            }
-            currentEntry = null;
+            return archive.Entries.Select(e => new CompressedFileInfo(e.FullName, (ulong)e.CompressedLength, (ulong)e.Length, e.Open()));
         }
 
-        public void DecompressToFile(string filename)
+        public void DecompressToFile(CompressedFileInfo fileInfo, string filename)
         {
-            byte[] buffer = DecompressToMemory();
+            byte[] buffer = DecompressToMemory(fileInfo);
             using (NativeWriter writer = new NativeWriter(new FileStream(filename, FileMode.Create)))
                 writer.Write(buffer);
         }
 
-        public byte[] DecompressToMemory()
+        public byte[] DecompressToMemory(CompressedFileInfo fileInfo)
         {
+            var currentEntry = GetEntryByName(fileInfo.Filename);
+
+            if (currentEntry == null)
+            {
+                throw new ArgumentException($"Compressed zip file '{fileInfo.Filename}' could not be found in archive file '{archiveName}'.");
+            }
+
             Stream stream = currentEntry.Open();
             using (MemoryStream ms = new MemoryStream())
             {
@@ -59,6 +63,16 @@ namespace FrostyModManager.Compression
 
                 return ms.ToArray();
             }
+        }
+
+        private ZipArchiveEntry GetEntryByName(string name)
+        {
+            return archive.Entries.FirstOrDefault(e =>
+            {
+                var fileInfo = new CompressedFileInfo(e.FullName, (ulong)e.CompressedLength, (ulong)e.Length, e.Open());
+
+                return fileInfo.Filename == name;
+            });
         }
     }
 

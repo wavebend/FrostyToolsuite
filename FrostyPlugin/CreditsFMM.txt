@@ -7,6 +7,9 @@ License (MIT): https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md
 Project: LZMA SDK
 License: Public domain
 
+Project: SharpSevenZip
+License (LGPL-3.0): https://github.com/JeremyAnsel/SharpSevenZip/blob/main/LICENSE
+
 Project: UnRAR
 Alexander L. Roshal
 The source code of UnRAR utility is freeware. This means:

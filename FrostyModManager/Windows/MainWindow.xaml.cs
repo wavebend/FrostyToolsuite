@@ -1108,10 +1108,14 @@ namespace FrostyModManager
                             try
                             {
                                 // search out fbmods in archive
-                                decompressor.OpenArchive(filename);
+                                if (!decompressor.OpenArchive(filename))
+                                {
+                                    errors.Add(new ImportErrorInfo() { filename = fi.Name, error = "Archive is invalid." });
+                                    continue;
+                                }
+
                                 foreach (CompressedFileInfo compressedFi in decompressor.EnumerateFiles())
                                 {
-
                                     if (compressedFi.Extension == ".fbpack")
                                     {
                                         //create temp file
@@ -1119,7 +1123,7 @@ namespace FrostyModManager
                                         FileInfo tempfile = new FileInfo(tempdir + compressedFi.Filename);
 
                                         tempdir.Create();
-                                        decompressor.DecompressToFile(tempfile.FullName);
+                                        decompressor.DecompressToFile(compressedFi, tempfile.FullName);
 
                                         //install temp file
                                         Dispatcher.Invoke(() => {
@@ -1139,7 +1143,7 @@ namespace FrostyModManager
                                     else if (compressedFi.Extension == ".fbmod")
                                     {
                                         string modFilename = compressedFi.Filename;
-                                        byte[] buffer = decompressor.DecompressToMemory();
+                                        byte[] buffer = decompressor.DecompressToMemory(compressedFi);
 
                                         using (MemoryStream ms = new MemoryStream(buffer))
                                         {
@@ -1175,6 +1179,7 @@ namespace FrostyModManager
                                         }
                                     }
                                 }
+
                                 decompressor.CloseArchive();
                             }
                             catch
@@ -1185,7 +1190,7 @@ namespace FrostyModManager
                             if (mods.Count == 0 && fbpacks == 0)
                             {
                                 // no point continuing with this archive
-                                errors.Add(new ImportErrorInfo() { filename = fi.Name, error = "Archive contains no installable mods." });
+                                errors.Add(new ImportErrorInfo() { filename = fi.Name, error = "Archive contains no installable mods.", isWarning = true });
                                 continue;
                             }
 
@@ -1236,7 +1241,7 @@ namespace FrostyModManager
                                 {
                                     if (mods.Contains(compressedFi.Filename) || archives.Contains(compressedFi.Filename))
                                     {
-                                        decompressor.DecompressToFile(Path.Combine(modsDir.FullName, compressedFi.Filename));
+                                        decompressor.DecompressToFile(compressedFi,Path.Combine(modsDir.FullName, compressedFi.Filename));
                                     }
                                 }
                                 decompressor.CloseArchive();
@@ -1257,7 +1262,15 @@ namespace FrostyModManager
                                 {
                                     if (collections.Contains(compressedFi.Filename))
                                     {
-                                        decompressor.DecompressToFile(Path.Combine(modsDir.FullName, compressedFi.Filename));
+                                        try
+                                        {
+                                            decompressor.DecompressToFile(compressedFi, Path.Combine(modsDir.FullName, compressedFi.Filename));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            App.Logger.Log($"Exception while decompressing zip collection file '{compressedFi.Filename}'. Details: {ex}");
+                                            errors.Add(new ImportErrorInfo { error = ex.Message, filename = compressedFi.Filename });
+                                        }
                                     }
                                 }
                                 decompressor.CloseArchive();
