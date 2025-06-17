@@ -156,7 +156,7 @@
     <EmbeddedResource Include="Profiles.bin" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Profiles\AnthemSDK.dll">
+    <!--<Content Include="Profiles\AnthemSDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Profiles\BF1SDK.dll">
@@ -176,11 +176,11 @@
     </Content>
     <Content Include="Profiles\DragonAgeSDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Content>-->
     <Content Include="Profiles\DragonAgeTheVeilguardSDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Profiles\Fifa17SDK.dll">
+    <!--<Content Include="Profiles\Fifa17SDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Profiles\Fifa18SDK.dll">
@@ -251,7 +251,7 @@
     </Content>
     <Content Include="Profiles\SWSSDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Content>-->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FrostyHash\FrostyHash.vcxproj">
@@ -259,11 +259,11 @@
       <Name>FrostyHash</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <Content Include="Profiles\BF2042SDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
+  </ItemGroup>-->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
