@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -544,6 +545,11 @@ namespace FrostyEditor.Windows
                 SystemSounds.Exclamation.Play();
                 FrostyMessageBox.Show($"Your Frosty Editor installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Editor");
             }
+
+            if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/manager_config.json"))
+            {
+                openSettingsModManager.IsEnabled = false;
+            }
         }
 
         private void ResetItemsSources()
@@ -985,6 +991,30 @@ namespace FrostyEditor.Windows
         {
             ManageModDataWindow win = new ManageModDataWindow();
             win.ShowDialog();
+        }
+
+        private void openSettingsModManager_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start($"{Frosty.Core.App.GlobalSettingsPath}/manager_config.json");
+            }
+            catch
+            {
+                FrostyMessageBox.Show($"{Frosty.Core.App.GlobalSettingsPath}/manager_config.json could not be found.", "Frosty Editor", MessageBoxButton.OK);
+            }
+        }
+
+        private void openSettingsEditor_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start($"{Frosty.Core.App.GlobalSettingsPath}/editor_config.json");
+            }
+            catch
+            {
+                FrostyMessageBox.Show($"{Frosty.Core.App.GlobalSettingsPath}/editor_config.json could not be found.", "Frosty Editor", MessageBoxButton.OK);
+            }
         }
 
         private void FrostyWindow_Closing(object sender, CancelEventArgs e)

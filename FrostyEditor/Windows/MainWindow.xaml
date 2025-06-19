@@ -86,6 +86,10 @@
                 </MenuItem>
                 <MenuItem x:Name="ToolsMenuItem" Header="Tools" Height="22">
                     <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
+                    <MenuItem Header="Open Config">
+                        <MenuItem x:Name="openSettingsModManager" Header="Mod Manager" Click="openSettingsModManager_Click"/>
+                        <MenuItem x:Name="openSettingsEditor" Header="Editor" Click="openSettingsEditor_Click"/>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Window" Height="22">
                     <MenuItem x:Name="CloseAllDocumentsMenuItem" Header="Close All Documents" InputGestureText="Ctrl + D" Click="closeAllDocumentsMenuItem_Click">
