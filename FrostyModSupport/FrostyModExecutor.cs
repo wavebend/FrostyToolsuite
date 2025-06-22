@@ -222,132 +222,140 @@ namespace Frosty.ModSupport
         {
             using (NativeWriter writer = new NativeWriter(new FileStream("log.txt", FileMode.Create, FileAccess.Write)))
             {
-                if (m_addedSuperBundles.Count > 0)
+                try
                 {
-                    writer.WriteLine("Added SuperBundles:");
-                    foreach (string sb in m_addedSuperBundles)
+                    if (m_addedSuperBundles.Count > 0)
                     {
-                        writer.WriteLine($"  - {sb}");
+                        writer.WriteLine("Added SuperBundles:");
+                        foreach (string sb in m_addedSuperBundles)
+                        {
+                            writer.WriteLine($"  - {sb}");
+                        }
+                        writer.WriteLine(string.Empty);
                     }
-                    writer.WriteLine(string.Empty);
+
+                    if (m_modifiedSuperBundles.Count > 0)
+                    {
+                        writer.WriteLine("Modified SuperBundles:");
+                        foreach (var kv in m_modifiedSuperBundles)
+                        {
+                            writer.WriteLine($"  {m_am.GetSuperBundle(kv.Key).Name}:");
+
+                            List<Guid> sortedChunks = new List<Guid>(kv.Value.Modify.Chunks);
+                            sortedChunks.Sort();
+
+                            if (kv.Value.Modify.Chunks.Count > 0)
+                            {
+                                writer.WriteLine($"    Modified Chunks:");
+                                foreach (Guid chunkId in sortedChunks)
+                                {
+                                    writer.WriteLine($"    - {chunkId}");
+                                }
+                            }
+
+                            sortedChunks = new List<Guid>(kv.Value.Add.Chunks);
+                            sortedChunks.Sort();
+
+                            if (kv.Value.Add.Chunks.Count > 0)
+                            {
+                                writer.WriteLine($"    Added Chunks:");
+                                foreach (Guid chunkId in sortedChunks)
+                                {
+                                    writer.WriteLine($"    - {chunkId}");
+                                }
+                            }
+                        }
+                        writer.WriteLine(string.Empty);
+                    }
+
+                    if (m_modifiedBundles.Count > 0)
+                    {
+                        Dictionary<int, string> bundleHashMap = new Dictionary<int, string>();
+                        foreach (BundleEntry be in m_am.EnumerateBundles())
+                        {
+                            if (!bundleHashMap.ContainsKey(HashBundle(be)))
+                                bundleHashMap.Add(HashBundle(be), be.Name);
+                        }
+                        writer.WriteLine("Modified Bundles:");
+
+                        List<int> bundles = m_modifiedBundles.Keys.ToList();
+                        bundles.Sort();
+
+                        foreach (int hash in bundles)
+                        {
+                            var kv = m_modifiedBundles[hash];
+                            writer.WriteLine($"  {bundleHashMap[hash]}:");
+
+                            if (kv.Modify.Ebx.Count > 0)
+                            {
+                                writer.WriteLine($"    Modified Ebx:");
+                                List<string> sorted = new List<string>(kv.Modify.Ebx);
+                                sorted.Sort();
+                                foreach (string name in sorted)
+                                {
+                                    writer.WriteLine($"    - {name}");
+                                }
+                            }
+                            if (kv.Add.Ebx.Count > 0)
+                            {
+                                writer.WriteLine($"    Added Ebx:");
+                                List<string> sorted = new List<string>(kv.Add.Ebx);
+                                sorted.Sort();
+                                foreach (string name in sorted)
+                                {
+                                    writer.WriteLine($"    - {name}");
+                                }
+                            }
+
+                            if (kv.Modify.Res.Count > 0)
+                            {
+                                writer.WriteLine($"    Modified Res:");
+                                List<string> sorted = new List<string>(kv.Modify.Res);
+                                sorted.Sort();
+                                foreach (string name in sorted)
+                                {
+                                    writer.WriteLine($"    - {name}");
+                                }
+                            }
+                            if (kv.Add.Res.Count > 0)
+                            {
+                                writer.WriteLine($"    Added Res:");
+                                List<string> sorted = new List<string>(kv.Add.Res);
+                                sorted.Sort();
+                                foreach (string name in sorted)
+                                {
+                                    writer.WriteLine($"    - {name}");
+                                }
+                            }
+
+                            if (kv.Modify.Chunks.Count > 0)
+                            {
+                                writer.WriteLine($"    Modified Chunks:");
+                                List<Guid> sorted = new List<Guid>(kv.Modify.Chunks);
+                                sorted.Sort();
+                                foreach (Guid chunkId in sorted)
+                                {
+                                    writer.WriteLine($"    - {chunkId}");
+                                }
+                            }
+                            if (kv.Add.Chunks.Count > 0)
+                            {
+                                writer.WriteLine($"    Added Chunks:");
+                                List<Guid> sorted = new List<Guid>(kv.Add.Chunks);
+                                sorted.Sort();
+                                foreach (Guid chunkId in sorted)
+                                {
+                                    writer.WriteLine($"    - {chunkId}");
+                                }
+                            }
+                        }
+                        writer.WriteLine(string.Empty);
+                    }
                 }
-
-                if (m_modifiedSuperBundles.Count > 0)
+                catch (Exception ex)
                 {
-                    writer.WriteLine("Modified SuperBundles:");
-                    foreach (var kv in m_modifiedSuperBundles)
-                    {
-                        writer.WriteLine($"  {m_am.GetSuperBundle(kv.Key).Name}:");
-
-                        List<Guid> sortedChunks = new List<Guid>(kv.Value.Modify.Chunks);
-                        sortedChunks.Sort();
-
-                        if (kv.Value.Modify.Chunks.Count > 0)
-                        {
-                            writer.WriteLine($"    Modified Chunks:");
-                            foreach (Guid chunkId in sortedChunks)
-                            {
-                                writer.WriteLine($"    - {chunkId}");
-                            }
-                        }
-
-                        sortedChunks = new List<Guid>(kv.Value.Add.Chunks);
-                        sortedChunks.Sort();
-
-                        if (kv.Value.Add.Chunks.Count > 0)
-                        {
-                            writer.WriteLine($"    Added Chunks:");
-                            foreach (Guid chunkId in sortedChunks)
-                            {
-                                writer.WriteLine($"    - {chunkId}");
-                            }
-                        }
-                    }
                     writer.WriteLine(string.Empty);
-                }
-
-                if (m_modifiedBundles.Count > 0)
-                {
-                    Dictionary<int, string> bundleHashMap = new Dictionary<int, string>();
-                    foreach (BundleEntry be in m_am.EnumerateBundles())
-                    {
-                        if (!bundleHashMap.ContainsKey(HashBundle(be)))
-                            bundleHashMap.Add(HashBundle(be), be.Name);
-                    }
-                    writer.WriteLine("Modified Bundles:");
-                    
-                    List<int> bundles = m_modifiedBundles.Keys.ToList();
-                    bundles.Sort();
-
-                    foreach (int hash in bundles)
-                    {
-                        var kv = m_modifiedBundles[hash];
-                        writer.WriteLine($"  {bundleHashMap[hash]}:");
-
-                        if (kv.Modify.Ebx.Count > 0)
-                        {
-                            writer.WriteLine($"    Modified Ebx:");
-                            List<string> sorted = new List<string>(kv.Modify.Ebx);
-                            sorted.Sort();
-                            foreach (string name in sorted)
-                            {
-                                writer.WriteLine($"    - {name}");
-                            }
-                        }
-                        if (kv.Add.Ebx.Count > 0)
-                        {
-                            writer.WriteLine($"    Added Ebx:");
-                            List<string> sorted = new List<string>(kv.Add.Ebx);
-                            sorted.Sort();
-                            foreach (string name in sorted)
-                            {
-                                writer.WriteLine($"    - {name}");
-                            }
-                        }
-
-                        if (kv.Modify.Res.Count > 0)
-                        {
-                            writer.WriteLine($"    Modified Res:");
-                            List<string> sorted = new List<string>(kv.Modify.Res);
-                            sorted.Sort();
-                            foreach (string name in sorted)
-                            {
-                                writer.WriteLine($"    - {name}");
-                            }
-                        }
-                        if (kv.Add.Res.Count > 0)
-                        {
-                            writer.WriteLine($"    Added Res:");
-                            List<string> sorted = new List<string>(kv.Add.Res);
-                            sorted.Sort();
-                            foreach (string name in sorted)
-                            {
-                                writer.WriteLine($"    - {name}");
-                            }
-                        }
-
-                        if (kv.Modify.Chunks.Count > 0)
-                        {
-                            writer.WriteLine($"    Modified Chunks:");
-                            List<Guid> sorted = new List<Guid>(kv.Modify.Chunks);
-                            sorted.Sort();
-                            foreach (Guid chunkId in sorted)
-                            {
-                                writer.WriteLine($"    - {chunkId}");
-                            }
-                        }
-                        if (kv.Add.Chunks.Count > 0)
-                        {
-                            writer.WriteLine($"    Added Chunks:");
-                            List<Guid> sorted = new List<Guid>(kv.Add.Chunks);
-                            sorted.Sort();
-                            foreach (Guid chunkId in sorted)
-                            {
-                                writer.WriteLine($"    - {chunkId}");
-                            }
-                        }
-                    }
-                    writer.WriteLine(string.Empty);
+                    writer.WriteLine($"Failed: {ex.Message}");
                 }
             }
         }
