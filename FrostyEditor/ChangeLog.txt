@@ -1,4 +1,19 @@
-﻿v1.0.7 - 2025.6.12.0
+﻿v1.0.7 - 2025.6.22.0
+--------
+Improvements:
+- Added the option to create 'Separators' for the Applied Mods list
+- Added index value to Applied Mods and text to indicate which is High/Low Priority
+- Config files for the Editor/Mod Manager can now be opened from: 'Open Config' under 'Tools'
+
+Bug Fixes:
+- Fixed an issue where certain archives would not decompress when added through the mod manager
+
+Technical Changes:
+- 'DragonAgeTheVeilguardSDK.dll' is now the only profile included with the Editor/Mod Manager
+- Config will now save when: Add Mod, Remove Mod, Move Mod Up/Down
+- Added try-catch for PrintLog
+
+v1.0.7 - 2025.6.12.0
 --------
 Improvements:
 - Added option to choose a custom mods directory for the Mod Manager
