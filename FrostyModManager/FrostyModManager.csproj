@@ -181,6 +181,9 @@
     <Compile Include="Windows\CollectionSettingsWindow.xaml.cs">
       <DependentUpon>CollectionSettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SeparatorWindow.xaml.cs">
+      <DependentUpon>SeparatorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\PrelaunchWindow2.xaml.cs">
       <DependentUpon>PrelaunchWindow2.xaml</DependentUpon>
     </Compile>
@@ -194,6 +197,10 @@
     <Page Include="Windows\ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SeparatorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\LaunchOptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

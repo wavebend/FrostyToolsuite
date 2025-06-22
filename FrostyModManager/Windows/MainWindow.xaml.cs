@@ -2284,5 +2284,27 @@ namespace FrostyModManager
             }
             catch { }
         }
+
+        private void separatorButton_Click(object sender, RoutedEventArgs e)
+        {
+            string separator = "";
+
+            SeparatorWindow win = new SeparatorWindow();
+            if (win.ShowDialog() == true)
+            {
+                separator = win.NameSeparator;
+            }
+            else
+            {
+                return;
+            }
+
+            selectedPack.AddMod(null, false, $"{separator}_Separator");
+
+            appliedModsList.Items.Refresh();
+
+            // focus on tab item
+            appliedModsTabItem.IsSelected = true;
+        }
     }
 }
