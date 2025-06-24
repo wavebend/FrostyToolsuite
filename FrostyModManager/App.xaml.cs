@@ -127,27 +127,27 @@ namespace FrostyModManager
             //}
 
             // get startup profile (if one exists)
-            if (Config.Get<bool>("UseDefaultProfile", false))
-            {
-                string prof = Config.Get<string>("DefaultProfile", null);
-                if (!string.IsNullOrEmpty(prof))
-                {
-                    try
-                    {
-                        defaultConfig = new FrostyConfiguration(prof);
-                    }
-                    catch (System.IO.FileNotFoundException)
-                    {
-                        Config.RemoveGame(prof); // couldn't find the exe, so remove it from the profile list
-                        Config.Save();
-                    }
-                }
-                else
-                {
-                    Config.Add("UseDefaultProfile", false);
-                    Config.Save();
-                }
-            }
+            //if (Config.Get<bool>("UseDefaultProfile", false))
+            //{
+            //    string prof = Config.Get<string>("DefaultProfile", null);
+            //    if (!string.IsNullOrEmpty(prof))
+            //    {
+            //        try
+            //        {
+            //            defaultConfig = new FrostyConfiguration(prof);
+            //        }
+            //        catch (System.IO.FileNotFoundException)
+            //        {
+            //            Config.RemoveGame(prof); // couldn't find the exe, so remove it from the profile list
+            //            Config.Save();
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Config.Add("UseDefaultProfile", false);
+            //        Config.Save();
+            //    }
+            //}
 
             StringBuilder sb = new StringBuilder();
             if (e.Args.Length > 0)
