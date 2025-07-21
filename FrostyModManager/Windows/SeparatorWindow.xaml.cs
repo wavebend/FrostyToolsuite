@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace FrostyModManager
 {
@@ -13,23 +12,27 @@ namespace FrostyModManager
     public partial class SeparatorWindow : FrostyDockableWindow
     {
         public string NameSeparator { get; private set; } = "";
+        public string[] invalidChars = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|", "{", "}" };
 
         public SeparatorWindow()
         {
             InitializeComponent();
+
+            string invalidCharsJoin = String.Join(" ", invalidChars);
+            charsTextBox.Text = $"Invalid Characters: {invalidCharsJoin}";
 
             doneButton.IsEnabled = false;
         }
 
         private void nameSeparatorTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (nameSeparatorTextBox.Text != "")
+            if (string.IsNullOrWhiteSpace(nameSeparatorTextBox.Text) || invalidChars.Any(nameSeparatorTextBox.Text.Contains))
             {
-                doneButton.IsEnabled = true;
+                doneButton.IsEnabled = false;
             }
             else
             {
-                doneButton.IsEnabled = false;
+                doneButton.IsEnabled = true;
             }
         }
 

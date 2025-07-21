@@ -94,11 +94,12 @@ namespace FrostyEditor.Windows
                 return;
             }
 
-            string[] invalidChars = { "{", "}" };
+            string[] invalidChars = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|", "{", "}" };
 
             if (invalidChars.Any(mTTB.Contains) || invalidChars.Any(mATB.Contains) || invalidChars.Any(mCTB.Contains) || invalidChars.Any(mVTB.Contains))
             {
-                FrostyMessageBox.Show("Invalid Characters: {, }", "Frosty Editor");
+                string invalidCharsJoin = String.Join(" ", invalidChars);
+                FrostyMessageBox.Show($"Invalid Characters: {invalidCharsJoin}", "Frosty Editor");
                 return;
             }
 

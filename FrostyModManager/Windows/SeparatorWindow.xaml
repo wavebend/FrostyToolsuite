@@ -7,7 +7,7 @@
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
         mc:Ignorable="d"
-        Title="Add Separator" Height="90" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Add Separator" Height="110" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -20,11 +20,12 @@
     <Grid>
         <Grid Background="{StaticResource ListBackground}">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="52"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,7,4,4" VerticalAlignment="Top">
                 <ctrl:FrostyWatermarkTextBox x:Name="nameSeparatorTextBox" WatermarkText="Name" BorderThickness="1" VerticalContentAlignment="Center" Height="22" TextChanged="nameSeparatorTextBox_TextChanged"/>
+                <TextBlock x:Name="charsTextBox" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Height="16" Margin="0,4,0,0" Text=""/>
             </StackPanel>
 
             <Grid Grid.Row="1" Margin="4">
