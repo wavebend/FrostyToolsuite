@@ -35,20 +35,15 @@ namespace Frosty.Core.Windows
                 return;
             }
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard) && EncryptionKey.Length == 16416)
+            if (EncryptionKey.Length == 16416)
             {
                 DialogResult = true;
                 Close();
-            }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard) && EncryptionKey.Length != 16416)
-            {
-                FrostyMessageBox.Show("Encryption key is invalid. Please try again.", "Frosty Core");
-                return;
             }
             else
             {
-                DialogResult = true;
-                Close();
+                FrostyMessageBox.Show("Encryption key is invalid. Please try again.", "Frosty Core");
+                return;
             }
         }
 

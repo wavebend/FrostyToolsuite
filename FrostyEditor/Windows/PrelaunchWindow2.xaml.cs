@@ -146,7 +146,7 @@ namespace FrostyEditor.Windows
             {
                 if (configuration.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
                 {
-                    FrostyMessageBox.Show(configuration.GameName + " already has a profile.", "Frosty Editor");
+                    FrostyMessageBox.Show($"{configuration.GameName} already has a profile.", "Frosty Editor");
                     return;
                 }
             }
@@ -260,7 +260,7 @@ namespace FrostyEditor.Windows
             });
         }
 
-        private async void SelectConfiguration()
+        private void SelectConfiguration()
         {
             if (ConfigurationListView.SelectedIndex == -1)
                 return;
@@ -272,18 +272,20 @@ namespace FrostyEditor.Windows
                 if (configuration.ProfileName == "Dragon Age The Veilguard")
                 {
                     LaunchConfiguration(configuration.ProfileName);
-                    await Task.Delay(1);
                     Close();
                 }
                 else if (configuration.ProfileName == "DragonAgeInquisition")
                 {
-                    FrostyMessageBox.Show(configuration.GameName + " is not supported on " + version + "\n\n" + "Use 1.0.6.3 for " + configuration.GameName, "Unsupported Profile");
+                    FrostyMessageBox.Show($"{configuration.GameName} is not supported on {version}\n\nUse 1.0.6.3 for {configuration.GameName}", "Unsupported Profile");
                     return;
                 }
                 else
                 {
-                    FrostyMessageBox.Show(configuration.GameName + " is not supported." + "\n\n" + "This release only has support for Dragon Age\u2122: The Veilguard", "Unsupported Profile");
-                    return;
+                    if (FrostyMessageBox.Show($"{configuration.GameName} is not supported.\n\nThis release only has support for Dragon Age\u2122: The Veilguard\n\nDo you wish to continue anyway?", "Unsupported Profile", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        LaunchConfiguration(configuration.ProfileName);
+                        Close();
+                    }
                 }
             }
             ConfigurationListView.SelectedIndex = -1;
