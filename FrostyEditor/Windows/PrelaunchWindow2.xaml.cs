@@ -75,9 +75,10 @@ namespace FrostyEditor.Windows
                 if (!string.IsNullOrEmpty(defaultConfigurationName))
                 {
                     defaultConfiguration = configurations.FirstOrDefault(x => x.ProfileName == defaultConfigurationName);
-                    ConfigurationListView.SelectedItem = defaultConfiguration;
+
                     await Task.Delay(1);
-                    SelectConfiguration();
+                    LaunchConfiguration(defaultConfiguration.ProfileName);
+                    Close();
                 }
             }
         }
