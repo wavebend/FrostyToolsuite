@@ -546,9 +546,23 @@ namespace FrostyEditor.Windows
                 FrostyMessageBox.Show($"Your Frosty Editor installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Editor");
             }
 
+            appCompatFlagsLayer();
+
             if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/manager_config.json"))
             {
                 openSettingsModManager.IsEnabled = false;
+            }
+        }
+
+        public void appCompatFlagsLayer()
+        {
+            string processName = $"{ProfilesLibrary.ProfileName}.exe";
+            string exePath = Path.Combine(Config.Get<string>("GamePath", "", ConfigScope.Game), processName);
+            string keyName = (string)Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers").GetValue(exePath);
+
+            if (keyName != null && keyName.Contains("DISABLEDXMAXIMIZEDWINDOWEDMODE"))
+            {
+                FrostyMessageBox.Show($"\"Disable full-screen optimisations\" is enabled for '{processName}'\n\nThis is known to cause issues when launching the game with Frosty. Please disable it prior to launch.", "Frosty Editor");
             }
         }
 
