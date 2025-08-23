@@ -1,11 +1,14 @@
 ﻿using Frosty.Controls;
-using System.Windows.Media.Imaging;
-using System.IO;
 using Frosty.Core;
 using Frosty.Core.Mod;
-using System.Collections.Generic;
+using FrostySdk.IO;
+using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace FrostyEditor.Windows
 {
@@ -16,6 +19,7 @@ namespace FrostyEditor.Windows
     {
         private ModSettings ModSettings => project.GetModSettings();
         private FrostyProject project;
+        private byte[] dexResource;
 
         private List<string> categories = new List<string>()
         {
@@ -50,6 +54,9 @@ namespace FrostyEditor.Windows
             modVersionTextBox.Text = ModSettings.Version;
             modDescriptionTextBox.Text = ModSettings.Description;
             modPageLinkTextBox.Text = ModSettings.Link;
+            modDEXResourceNameTextBox.Text = ModSettings.DexResourceName;
+
+            dexResource = ModSettings.DEXResource;
 
             if (modCategoryComboBox.SelectedItem.ToString() == "Custom")
             {
@@ -67,6 +74,96 @@ namespace FrostyEditor.Windows
             ssImageButton2.SetImage(ModSettings.GetScreenshot(1));
             ssImageButton3.SetImage(ModSettings.GetScreenshot(2));
             ssImageButton4.SetImage(ModSettings.GetScreenshot(3));
+
+            if (dexResource == null)
+            {
+                exportDEXButton.IsEnabled = false;
+                clearDEXButton.IsEnabled = false;
+            }
+        }
+
+        private void importDEXButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "ZIP Files (*.zip)|*.zip",
+                Title = "Import DAVExtender(Dex) Archive",
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                byte[] buffer = null;
+                using (NativeReader reader = new NativeReader(new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)))
+                    buffer = reader.ReadToEnd();
+
+                if (buffer.Length > (32 * 1024 * 1024))
+                {
+                    FrostyMessageBox.Show("DEX Archive cannot be larger than 32 MB", "Frosty Editor");
+                    dexButtonEnabled();
+                    return;
+                }
+
+                if (parseZip(buffer, "dex.json", ofd.SafeFileName))
+                {
+                    modDEXResourceNameTextBox.Text = ofd.SafeFileName;
+                    dexResource = buffer;
+
+                    dexButtonEnabled();
+                }
+            }
+        }
+
+        private void dexButtonEnabled()
+        {
+            if (dexResource != null)
+            {
+                exportDEXButton.IsEnabled = true;
+                clearDEXButton.IsEnabled = true;
+            }
+            else
+            {
+                exportDEXButton.IsEnabled = false;
+                clearDEXButton.IsEnabled = false;
+            }
+        }
+
+        private bool parseZip(byte[] buffer, string filename, string archiveName)
+        {
+            Stream data = new MemoryStream(buffer);
+
+            ZipArchive archive = new ZipArchive(data);
+
+            if (archive.GetEntry(filename) == null)
+            {
+                FrostyMessageBox.Show($"{filename} cannot be found in {archiveName}. It is either missing or stored within a folder.\n\nAll files and folders must be at the root of the archive.", "Frosty Editor");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void exportDEXButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "ZIP Files (*.zip)|*.zip",
+                Title = "Export DAVExtender(Dex) Archive",
+                FileName = modDEXResourceNameTextBox.Text,
+                DefaultExt = ".zip"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                File.WriteAllBytes(sfd.FileName, dexResource);
+            }
+        }
+
+        private void clearDEXButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            dexResource = null;
+            modDEXResourceNameTextBox.Text = "";
+            exportDEXButton.IsEnabled = false;
+            clearDEXButton.IsEnabled = false;
         }
 
         private void cancelButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -128,6 +225,8 @@ namespace FrostyEditor.Windows
             ModSettings.Version = modVersionTextBox.Text;
             ModSettings.Description = modDescriptionTextBox.Text;
             ModSettings.Link = modPageLinkTextBox.Text;
+            ModSettings.DexResourceName = modDEXResourceNameTextBox.Text;
+            ModSettings.DEXResource = dexResource;
             ModSettings.Icon = iconImageButton.GetImage();
             ModSettings.SetScreenshot(0, ssImageButton1.GetImage());
             ModSettings.SetScreenshot(1, ssImageButton2.GetImage());

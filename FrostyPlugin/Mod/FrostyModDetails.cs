@@ -13,6 +13,7 @@ namespace Frosty.Core.Mod
         public string Description { get; }
         public string Category => (category == "") ? "Misc" : category;
         public string Link { get; }
+        public string DexResourceName { get; }
         public ImageSource Icon { get; private set; }
         public List<ImageSource> Screenshots { get; } = new List<ImageSource>();
         public List<FrostyModRequirement> Requirements { get; } = new List<FrostyModRequirement>();
@@ -45,7 +46,35 @@ namespace Frosty.Core.Mod
             }
         }
 
-        public FrostyModDetails(string inTitle, string inAuthor, string inCategory, string inVersion, string inDescription, string inModPageLink)
+        public bool HasDexResource
+        {
+            get 
+            {
+                if (DexResourceName != "")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public string DexVisibility {
+            get {
+                if (!HasDexResource)
+                {
+                    return "Collapsed";
+                }
+                else
+                {
+                    return "Visible";
+                }
+            }
+        }
+
+        public FrostyModDetails(string inTitle, string inAuthor, string inCategory, string inVersion, string inDescription, string inModPageLink, string inDexResourceName)
         {
             Title = inTitle;
             Author = inAuthor;
@@ -53,6 +82,7 @@ namespace Frosty.Core.Mod
             Description = inDescription;
             category = inCategory;
             Link = inModPageLink;
+            DexResourceName = inDexResourceName;
         }
 
         public void SetIcon(byte[] buffer)

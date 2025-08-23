@@ -30,19 +30,19 @@
                 <Grid DockPanel.Dock="Top" Margin="5">
                     <StackPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Title " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="Title " FontFamily="Global User Interface" Width="82"/>
                             <TextBox x:Name="modTitleTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Author " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="Author " FontFamily="Global User Interface" Width="82"/>
                             <TextBox x:Name="modAuthorTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Version " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="Version " FontFamily="Global User Interface" Width="82"/>
                             <TextBox Grid.Column="1" x:Name="modVersionTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Category " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="Category " FontFamily="Global User Interface" Width="82"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.5*"/>
@@ -54,8 +54,24 @@
                             </Grid>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Link " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="Link " FontFamily="Global User Interface" Width="82"/>
                             <TextBox Grid.Column="1" x:Name="modPageLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
+                        </DockPanel>
+                        <DockPanel LastChildFill="True">
+                            <Label Content="DEX Archive " FontFamily="Global User Interface" Width="82"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="75"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0" x:Name="modDEXResourceNameTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" IsEnabled="False"/>
+                                <Button Grid.Column="1" x:Name="importDEXButton" Content="Import" Click="importDEXButton_Click" Margin="1,1,1,1"/>
+                                <Button Grid.Column="2" x:Name="exportDEXButton" Content="Export" Click="exportDEXButton_Click" Margin="1,1,1,1"/>
+                                <Button Grid.Column="3" x:Name="clearDEXButton" Content="Clear" Click="clearDEXButton_Click" Margin="1,1,1,1"/>
+                            </Grid>
                         </DockPanel>
                     </StackPanel>
                 </Grid>

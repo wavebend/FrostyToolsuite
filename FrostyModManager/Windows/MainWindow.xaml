@@ -162,6 +162,10 @@
                 </MenuItem>
                 <MenuItem x:Name="toolsMenuItem" Header="Tools" Height="22">
                     <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
+                    <MenuItem x:Name="dexHeader" Header="DAVExtender(Dex)" Visibility="Collapsed">
+                        <MenuItem x:Name="dexInstall" Header="Install" Click="dexInstall_Click"/>
+                        <MenuItem x:Name="dexMods" Header="Open Mods Folder" Click="dexMods_Click"/>
+                    </MenuItem>
                     <MenuItem Header="Open Config">
                         <MenuItem x:Name="openSettingsModManager" Header="Mod Manager" Click="openSettingsModManager_Click"/>
                         <MenuItem x:Name="openSettingsEditor" Header="Editor" Click="openSettingsEditor_Click"/>
@@ -582,6 +586,15 @@
                                                     <GridViewColumn Header="Applied" Width="75">
                                                         <!-- GridViewColumn.CellTemplate created in code -->
                                                     </GridViewColumn>
+                                                    <GridViewColumn Header="DEX" Width="Auto">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Grid Height="32">
+                                                                    <CheckBox Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0" IsChecked="{Binding Path=ModDetails.HasDexResource, Mode=OneWay}" IsHitTestVisible="False" Visibility="{Binding Path=ModDetails.DexVisibility}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
                                                     <GridViewColumn Header="Link" Width="Auto">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
@@ -601,6 +614,68 @@
                                         <ListView.GroupStyle>
                                             <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
                                         </ListView.GroupStyle>
+                                    </ListView>
+                                </Grid>
+                            </ctrl:FrostyTabItem>
+                            <!-- DAVExtender(Dex) Mods -->
+                            <ctrl:FrostyTabItem x:Name="tabDEX" Header="DAVExtender(Dex) Mods" Visibility="Collapsed">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <ListView x:Name="LoadedDEXMods" Grid.Row="1">
+                                        <ListView.View>
+                                            <ctrl:FrostyAutoSizedGridView>
+                                                <GridView.Columns>
+                                                    <GridViewColumn Header="Name">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="24">
+                                                                    <TextBlock Text="{Binding Path=Slug}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Major Version">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="24">
+                                                                    <TextBlock Text="{Binding Path=MajorVersion}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Minor Version">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="24">
+                                                                    <TextBlock Text="{Binding Path=MinorVersion}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="API Version">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="24">
+                                                                    <TextBlock Text="{Binding Path=RequiredExtenderApiVersion}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Startup Scripts">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="24">
+                                                                    <TextBlock Text="{Binding Path=StartupScriptsJoin}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                </GridView.Columns>
+                                            </ctrl:FrostyAutoSizedGridView>
+                                        </ListView.View>
                                     </ListView>
                                 </Grid>
                             </ctrl:FrostyTabItem>

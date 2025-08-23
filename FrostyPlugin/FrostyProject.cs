@@ -39,9 +39,10 @@ namespace Frosty.Core
             15 - Adds superbundle ids for toc chunks
             16 - H32 and FirstMip are now stored even if chunk was only added to bundles
             17 - Added link for the modpage
+            18 - Added support for DAVExtender(Dex) Mods
         */
 
-        private const uint FormatVersion = 17;
+        private const uint FormatVersion = 18;
 
         private const ulong Magic = 0x00005954534F5246;
 
@@ -147,6 +148,7 @@ namespace Frosty.Core
                 writer.WriteNullTerminatedString(modSettings.Version);
                 writer.WriteNullTerminatedString(modSettings.Description);
                 writer.WriteNullTerminatedString(modSettings.Link);
+                writer.WriteNullTerminatedString(modSettings.DexResourceName);
 
                 if (modSettings.Icon != null && modSettings.Icon.Length != 0)
                 {
@@ -170,6 +172,16 @@ namespace Frosty.Core
                     {
                         writer.Write(0);
                     }
+                }
+
+                if (modSettings.DEXResource != null && modSettings.DEXResource.Length != 0)
+                {
+                    writer.Write(modSettings.DEXResource.Length);
+                    writer.Write(modSettings.DEXResource);
+                }
+                else
+                {
+                    writer.Write(0);
                 }
 
                 // -----------------------------------------------------------------------------
@@ -648,6 +660,7 @@ namespace Frosty.Core
                 modSettings.Version = reader.ReadNullTerminatedString();
                 modSettings.Description = reader.ReadNullTerminatedString();
                 modSettings.Link = version >= 17 ? reader.ReadNullTerminatedString() : "";
+                modSettings.DexResourceName = version >= 18 ? reader.ReadNullTerminatedString() : "";
 
                 int size = reader.ReadInt();
                 if (size > 0)
@@ -658,6 +671,15 @@ namespace Frosty.Core
                     size = reader.ReadInt();
                     if (size > 0)
                         modSettings.SetScreenshot(i, reader.ReadBytes(size));
+                }
+
+                if (version >= 18)
+                {
+                    size = reader.ReadInt();
+                    if (size > 0)
+                    {
+                        modSettings.DEXResource = reader.ReadBytes(size);
+                    }
                 }
 
                 modSettings.ClearDirtyFlag();

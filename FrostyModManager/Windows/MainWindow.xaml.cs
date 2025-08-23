@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,6 +34,9 @@ using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using DEXManifest;
+using Newtonsoft.Json.Linq;
+using SharpSevenZip;
 
 namespace FrostyModManager
 {
@@ -479,6 +482,25 @@ namespace FrostyModManager
             {
             }
 
+            if (File.Exists($"{fs.BasePath}d3d11.dll") || File.Exists($"{fs.BasePath}DAVE.asi") && ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                RefreshDexMods();
+
+                tabDEX.Visibility = Visibility.Visible;
+                dexHeader.Visibility = Visibility.Visible;
+                dexInstall.Header = "Installed";
+                dexInstall.IsEnabled = false;
+
+                string d3d11 = "d3d11.dll";
+
+                if (File.Exists($"{fs.BasePath}DAVE.asi"))
+                {
+                    d3d11 = "DAVE.asi";
+                }
+
+                App.Logger.Log($"DAVExtender(Dex) is installed: {fs.BasePath}{d3d11}");
+            }
+
             LoadedPluginsList.ItemsSource = App.PluginManager.LoadedPlugins;
 
             if (Config.Get("ApplyModOrder", "List") == "List")
@@ -527,6 +549,34 @@ namespace FrostyModManager
             }
 
             GC.Collect();
+        }
+
+        private void RefreshDexMods()
+        {
+            var activeMods = new List<ActiveMod>();
+
+            string selectedPackName = Config.Get<string>("SelectedPack", "", ConfigScope.Game);
+            string modPath = $"{fs.BasePath}ModData\\{selectedPackName}\\Data\\DAVExtender";
+
+            if (Directory.Exists(modPath))
+            {
+                string[] modDir = Directory.GetDirectories(modPath);
+
+                foreach (var mod in modDir)
+                {
+                    string modJSONPath = $"{mod}\\dex.json";
+
+                    if (File.Exists(modJSONPath))
+                    {
+                        string modJSONString = File.ReadAllText(modJSONPath);
+                        ActiveMod modJSON = ManifestActiveMod.FromJson(modJSONString);
+
+                        activeMods.Add(modJSON);
+                    }
+                }
+            }
+
+            LoadedDEXMods.ItemsSource = activeMods;
         }
 
         public void appCompatFlagsLayer()
@@ -791,6 +841,8 @@ namespace FrostyModManager
                 }
 
             }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
+
+            RefreshDexMods();
 
             if (retCode != -1)
                 WindowState = WindowState.Minimized;
@@ -1633,6 +1685,30 @@ namespace FrostyModManager
         {
             ManageModDataWindow win = new ManageModDataWindow();
             win.ShowDialog();
+        }
+
+        private void dexInstall_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start("https://www.nexusmods.com/dragonagetheveilguard/mods/2315");
+            }
+            catch { }
+        }
+
+        private void dexMods_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedPackName = Config.Get<string>("SelectedPack", "", ConfigScope.Game);
+            string modsPath = $"{fs.BasePath}ModData\\{selectedPackName}\\Data\\DAVExtender";
+
+            try
+            {
+                Process.Start(modsPath);
+            }
+            catch
+            {
+                FrostyMessageBox.Show($"{modsPath} could not be found.", "Frosty Mod Manager", MessageBoxButton.OK);
+            }
         }
 
         private void openSettingsModManager_Click(object sender, RoutedEventArgs e)

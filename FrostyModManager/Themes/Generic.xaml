@@ -98,6 +98,9 @@
                                                 <DataTrigger Binding="{Binding Path=Type}" Value="FSFILE">
                                                     <Setter TargetName="typeName" Property="Text" Value="FSF"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=Type}" Value="EMBEDDED">
+                                                    <Setter TargetName="typeName" Property="Text" Value="EMB"/>
+                                                </DataTrigger>
                                             </DataTemplate.Triggers>
                                             
                                         </DataTemplate>

@@ -21,10 +21,11 @@ namespace Frosty.Core.Mod
             4 - Various structural changes as well as removal of modifiedBundles
             5 - Added link for the modpage
             6 - Added superbundle ids for toc chunks
+            7 - Added support for DAVExtender(Dex) Mods
         */
 
         public static ulong Magic = 0x01005954534F5246;
-        public static uint Version = 6;
+        public static uint Version = 7;
 
         public FrostyModDetails ModDetails { get; }
         public string Path { get; }
@@ -58,6 +59,7 @@ namespace Frosty.Core.Mod
                 modObj.GetValue<string>("category"),
                 modObj.GetValue<string>("version"),
                 modObj.GetValue<string>("description"),
+                "",
                 ""
                 );
             GameVersion = modObj.GetValue<int>("gameVersion");

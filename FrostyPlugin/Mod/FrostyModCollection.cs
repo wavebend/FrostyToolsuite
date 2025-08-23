@@ -16,6 +16,7 @@ namespace Frosty.Core.Mod
         public string version { get; set; }
         public string description { get; set; }
         public string category { get; set; }
+        public string dexresourcename {  get; set; }
         public List<string> mods { get; set; }
         public List<string> modVersions { get; set; }
     }
@@ -56,7 +57,7 @@ namespace Frosty.Core.Mod
         public FrostyModCollection(CollectionManifest manifest, List<FrostyMod> mods)
         {
             Filename = manifest.title + ".fbcollection";
-            ModDetails = new FrostyModDetails(manifest.title, manifest.author, manifest.category, manifest.version, manifest.description, manifest.link);
+            ModDetails = new FrostyModDetails(manifest.title, manifest.author, manifest.category, manifest.version, manifest.description, manifest.link, manifest.dexresourcename);
             Mods = mods;
         }
 
@@ -83,7 +84,7 @@ namespace Frosty.Core.Mod
                 CollectionManifest manifest = null;
                 using (StreamReader sreader = new StreamReader(reader.CreateViewStream(manifestOffset, manifestSize)))
                     manifest = JsonConvert.DeserializeObject<CollectionManifest>(sreader.ReadToEnd());
-                ModDetails = new FrostyModDetails(manifest.title, manifest.author, manifest.category, manifest.version, manifest.description, manifest.link);
+                ModDetails = new FrostyModDetails(manifest.title, manifest.author, manifest.category, manifest.version, manifest.description, manifest.link, manifest.dexresourcename);
 
                 reader.Position = iconOffset;
                 ModDetails?.SetIcon(reader.ReadBytes(iconSize));

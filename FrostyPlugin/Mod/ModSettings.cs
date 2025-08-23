@@ -98,6 +98,26 @@ namespace Frosty.Core.Mod
             }
         }
 
+        public byte[] DEXResource 
+        {
+            get => dexResourceData;
+            set {
+                dexResourceData = value;
+                isDirty = true;
+            }
+        }
+
+        public string DexResourceName {
+            get => dexResourceName;
+            set {
+                if (!dexResourceName.Equals(value))
+                {
+                    dexResourceName = value;
+                    isDirty = true;
+                }
+            }
+        }
+
         private string title = "";
         private string author = "";
         private string category = "";
@@ -105,9 +125,11 @@ namespace Frosty.Core.Mod
         private string version = "";
         private string description = "";
         private string link = "";
+        private string dexResourceName = "";
 
         private byte[] iconData = null;
         private byte[][] screenshotData = null;
+        private byte[] dexResourceData = null;
 
         private bool isDirty;
 

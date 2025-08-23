@@ -139,12 +139,21 @@ namespace FrostyModManager.Controls
                             {
                                 foreach (BaseModResource resource in localMod.Resources)
                                 {
-                                    if (resource.Type == ModResourceType.Embedded)
-                                        continue;
-
                                     string resType = resource.Type.ToString().ToUpper();
                                     string resourceName = resource.Name;
 
+                                    if (resource.Type == ModResourceType.Embedded)
+                                    {
+                                        if (resource.Name == "DexResource")
+                                        {
+                                            resourceName = localMod.ModDetails.DexResourceName;
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                  
                                     if (resource.UserData != "")
                                     {
                                         string[] arr = resource.UserData.Split(';');

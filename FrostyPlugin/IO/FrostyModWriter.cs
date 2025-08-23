@@ -325,10 +325,16 @@ namespace Frosty.Core.IO
             WriteNullTerminatedString(settings.Version);
             WriteNullTerminatedString(settings.Description);
             WriteNullTerminatedString(settings.Link);
+            WriteNullTerminatedString(settings.DexResourceName);
 
             AddResource(new EmbeddedResource("Icon", settings.Icon, manifest));
+            
             for (int i = 0; i < 4; i++)
+            {
                 AddResource(new EmbeddedResource("Screenshot" + i.ToString(), settings.GetScreenshot(i), manifest));
+            }
+
+            AddResource(new EmbeddedResource("DexResource", settings.DEXResource, manifest));
 
             // @todo: superbundles
 
