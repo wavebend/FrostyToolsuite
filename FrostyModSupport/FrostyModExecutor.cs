@@ -1328,7 +1328,6 @@ namespace Frosty.ModSupport
             Logger.Log("Loading Mods");
 
             bool needsModding = false;
-            bool newPatch = false;
             if (!File.Exists(Path.Combine(modDataPath, m_patchPath, "mods.json")))
             {
                 needsModding = true;
@@ -1343,7 +1342,6 @@ namespace Frosty.ModSupport
                 if (!IsSamePatch(modDataPath + m_patchPath) || !oldModInfoList.SequenceEqual(currentModInfoList))
                 {
                     needsModding = true;
-                    newPatch = true;
                 }
             }
 
@@ -1496,12 +1494,14 @@ namespace Frosty.ModSupport
                 App.Logger.Log("Cleaning Up ModData");
 
                 List<SymLinkStruct> cmdArgs = new List<SymLinkStruct>();
+                bool newInstallation = false;
 
                 m_fs.ResetManifest();
                 if (!DeleteSelectFiles(modDataPath + m_patchPath))
                 {
                     if (!Directory.Exists(modDataPath))
                     {
+                        newInstallation = true;
                         Logger.Log("Creating ModData");
 
                         // create mod path
@@ -1644,7 +1644,7 @@ namespace Frosty.ModSupport
                 if (cmdArgs.Count > 0)
                 {
                     string reason = "New patch detected.";
-                    if (!newPatch)
+                    if (newInstallation)
                         reason = "New installation detected.";
 
                     FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
