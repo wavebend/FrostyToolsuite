@@ -1,6 +1,7 @@
 ﻿using Frosty.Controls;
 using Frosty.Core;
 using Frosty.Core.Mod;
+using FrostySdk;
 using FrostySdk.IO;
 using Microsoft.Win32;
 using System;
@@ -57,6 +58,11 @@ namespace FrostyEditor.Windows
             modDEXResourceNameTextBox.Text = ModSettings.DexResourceName;
 
             dexResource = ModSettings.DEXResource;
+
+            if (dexResource != null || ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                dockPanelDex.Visibility = System.Windows.Visibility.Visible;
+            }
 
             if (modCategoryComboBox.SelectedItem.ToString() == "Custom")
             {

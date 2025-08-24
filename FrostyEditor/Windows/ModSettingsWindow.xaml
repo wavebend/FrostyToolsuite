@@ -57,7 +57,7 @@
                             <Label Content="Link " FontFamily="Global User Interface" Width="82"/>
                             <TextBox Grid.Column="1" x:Name="modPageLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
                         </DockPanel>
-                        <DockPanel LastChildFill="True">
+                        <DockPanel x:Name="dockPanelDex" LastChildFill="True" Visibility="Collapsed">
                             <Label Content="DEX Archive " FontFamily="Global User Interface" Width="82"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
