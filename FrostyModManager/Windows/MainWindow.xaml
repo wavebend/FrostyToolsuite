@@ -593,16 +593,26 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="DEX" Width="Auto">
+                                                    <GridViewColumn Header="Flags" Width="47">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <Grid Height="32">
-                                                                    <CheckBox Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0" IsChecked="{Binding Path=ModDetails.HasDexResource, Mode=OneWay}" IsHitTestVisible="False" Visibility="{Binding Path=ModDetails.DexVisibility}"/>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="21"/>
+                                                                        <ColumnDefinition/>
+                                                                    </Grid.ColumnDefinitions>
+
+                                                                    <Grid Grid.Column="0" Margin="0,6,0,0" Visibility="{Binding Path=ModDetails.HasDexResource, Converter={StaticResource booleanToVisibilityConverter}}">
+                                                                        <Image Source="/FrostyCore;component/Images/Assets/ArchiveFileType.png" Width="14" HorizontalAlignment="Left" VerticalAlignment="Top" Opacity="0.75" ToolTip="Has DAVExtender(Dex) Archive"/>
+                                                                    </Grid>
+                                                                    <Grid Grid.Column="{Binding Path=ModDetails.GridColumn}" Margin="0,6,0,0" Visibility="{Binding Path=ModDetails.HasRootResource, Converter={StaticResource booleanToVisibilityConverter}}">
+                                                                        <Image Source="/FrostyCore;component/Images/Assets/BlankFileType.png" Width="14" HorizontalAlignment="Left" VerticalAlignment="Top" Opacity="0.75" ToolTip="Has Root Description File"/>
+                                                                    </Grid>
                                                                 </Grid>
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Link" Width="Auto">
+                                                    <GridViewColumn Header="Link" Width="78">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <Grid Height="32">

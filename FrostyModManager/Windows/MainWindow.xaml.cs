@@ -523,7 +523,7 @@ namespace FrostyModManager
                 FrostyMessageBox.Show($"Your Frosty Mod Manager installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Mod Manager");
             }
 
-            appCompatFlagsLayer();
+            CheckGameFlags();
 
             if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/editor_config.json"))
             {
@@ -561,7 +561,7 @@ namespace FrostyModManager
             LoadedDEXMods.ItemsSource = activeMods;
         }
 
-        public void appCompatFlagsLayer()
+        public void CheckGameFlags()
         {
             string processName = $"{ProfilesLibrary.ProfileName}.exe";
             string exePath = Path.Combine(Config.Get<string>("GamePath", "", ConfigScope.Game), processName);

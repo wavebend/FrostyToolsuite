@@ -144,7 +144,7 @@ namespace FrostyModManager.Controls
 
                                     if (resource.Type == ModResourceType.Embedded)
                                     {
-                                        if (resource.Name == "DexResource")
+                                        if (resource.Name == "DexResource" && resource.Size != 0)
                                         {
                                             resourceName = localMod.ModDetails.DexResourceName;
                                         }

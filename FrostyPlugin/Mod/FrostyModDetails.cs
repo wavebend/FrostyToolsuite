@@ -17,13 +17,14 @@ namespace Frosty.Core.Mod
         public ImageSource Icon { get; private set; }
         public List<ImageSource> Screenshots { get; } = new List<ImageSource>();
         public List<FrostyModRequirement> Requirements { get; } = new List<FrostyModRequirement>();
+        public bool HasDexResource => DexResourceName != "";
+        public bool HasRootResource { get; set; }
+        public int GridColumn => HasDexResource && HasRootResource ? 1 : 0;
 
         private string category;
 
-        public string LinkID
-        {  
-            get
-            {
+        public string LinkID {
+            get {
                 if (Link != null)
                 {
                     if (Link.Contains("nexusmods.com"))
@@ -42,34 +43,6 @@ namespace Frosty.Core.Mod
                 else
                 {
                     return null;
-                }
-            }
-        }
-
-        public bool HasDexResource
-        {
-            get 
-            {
-                if (DexResourceName != "")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        public string DexVisibility {
-            get {
-                if (!HasDexResource)
-                {
-                    return "Collapsed";
-                }
-                else
-                {
-                    return "Visible";
                 }
             }
         }
