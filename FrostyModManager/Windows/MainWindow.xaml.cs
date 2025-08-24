@@ -202,18 +202,18 @@ namespace FrostyModManager
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            Window mainWindow = Application.Current.MainWindow;
             String title = (String)value;
-            MainWindow mainWindow = (MainWindow)parameter;
 
-            if (mainWindow.selectedPack != null)
+            if ((mainWindow as MainWindow).selectedPack != null)
             {
-                if (mainWindow.selectedPack.AppliedMods.Exists(x => x.ModName == title))
+                if ((mainWindow as MainWindow).selectedPack.AppliedMods.Exists(x => x.ModName == title))
                 {
                     return Visibility.Visible;
                 }
             }
 
-            return Visibility.Hidden;
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -511,24 +511,6 @@ namespace FrostyModManager
             {
                 orderComboBox.SelectedIndex = 1;
             }
-
-            FrameworkElementFactory factory = new FrameworkElementFactory(typeof(Image));
-            factory.SetValue(Image.SourceProperty, new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/CircleCheck.png") as ImageSource);
-            factory.SetValue(Image.HeightProperty, 16.0d);
-            factory.SetValue(Image.WidthProperty, 16.0d);
-            factory.SetValue(Image.HorizontalAlignmentProperty, HorizontalAlignment.Center);
-            factory.SetValue(Image.VerticalAlignmentProperty, VerticalAlignment.Top);
-            factory.SetValue(Image.MarginProperty, new Thickness(0, 4, 0, 0));
-            factory.SetBinding(Image.VisibilityProperty, new Binding("ModDetails.Title")
-            {
-                Converter = new ModAppliedConverter(),
-                ConverterParameter = this,
-                Mode = BindingMode.OneWay,
-            });
-            DataTemplate dt = new DataTemplate();
-            dt.VisualTree = factory;
-            GridViewColumn appliedBindingColumn = (availableModsList.View as GridView).Columns[2];
-            appliedBindingColumn.CellTemplate = dt;
 
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
             {

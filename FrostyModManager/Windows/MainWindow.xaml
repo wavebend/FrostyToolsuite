@@ -14,6 +14,7 @@
 
     <ctrl:FrostyWindow.Resources>
         <conv:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+        <local:ModAppliedConverter x:Key="ModAppliedConverter"/>
         <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -583,8 +584,14 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Applied" Width="75">
-                                                        <!-- GridViewColumn.CellTemplate created in code -->
+                                                    <GridViewColumn Header="Applied" Width="53">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Grid Height="32">
+                                                                    <Image Source="/FrostyModManager;component/Images/CircleCheck.png" Width="16" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0" Visibility="{Binding Path=ModDetails.Title, Converter={StaticResource ModAppliedConverter}, Mode=OneWay}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
                                                     <GridViewColumn Header="DEX" Width="Auto">
                                                         <GridViewColumn.CellTemplate>
