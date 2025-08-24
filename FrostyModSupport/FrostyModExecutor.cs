@@ -6,6 +6,7 @@ using FrostySdk;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -13,13 +14,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Media;
 using System.Threading;
 using System.Threading.Tasks;
-using FrostySdk.Managers.Entries;
-using System.Media;
-using System.IO.Compression;
 
 namespace Frosty.ModSupport
 {
@@ -147,6 +146,7 @@ namespace Frosty.ModSupport
             public string Category { get; set; }
             public string Link { get; set; }
             public string FileName { get; set; }
+            public string Hash { get; set; }
 
 
             public override bool Equals(object obj)
@@ -1339,7 +1339,25 @@ namespace Frosty.ModSupport
 
                 // check if the mod data needs recreating
                 // ie. mod change or patch
-                if (!IsSamePatch(modDataPath + m_patchPath) || !oldModInfoList.SequenceEqual(currentModInfoList))
+                bool hashMatch = true;
+
+                if (oldModInfoList.SequenceEqual(currentModInfoList))
+                {
+                    for (int i = 0; i < oldModInfoList.Count; i++)
+                    {
+                        if (oldModInfoList[i].Hash != currentModInfoList[i].Hash)
+                        {
+                            hashMatch = false;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    hashMatch = false;
+                }
+
+                if (!IsSamePatch(modDataPath + m_patchPath) || !hashMatch)
                 {
                     needsModding = true;
                 }
@@ -2217,60 +2235,33 @@ namespace Frosty.ModSupport
                     }
                 }
 
-                // Process DEX Mods
-                List<string> dexMods = new List<string>();
-                int dexCount = 0;
+                // Process DEX Mods              
+                string dexModPath = Path.Combine(modDataPath, m_patchPath, "DAVExtender");
+                DirectoryInfo dexModDir = new DirectoryInfo(dexModPath);
+
+                if (Directory.Exists(dexModPath))
+                {
+                    dexModDir.Delete(true);
+                }
 
                 foreach (FrostyMod mod in modList)
                 {
                     if (mod.NewFormat && mod.ModDetails.HasDexResource)
                     {
-                        string modPath = Path.Combine(modDataPath, m_patchPath, "DAVExtender");
-                        DirectoryInfo modDir = new DirectoryInfo(modPath);
-
                         Parallel.ForEach(mod.Resources, resource =>
                         {
-                            if (resource.Type == ModResourceType.Embedded && resource.Name == "DexResource")
+                            if (resource.Type == ModResourceType.Embedded && resource.Name == "DexResource" && resource.Size != 0)
                             {
-                                dexCount++;
-
-                                dexMods.Add(mod.Filename);
-
-                                if (!Directory.Exists(modPath))
-                                {
-                                    Directory.CreateDirectory(modPath);
-                                }
-
-                                Directory.CreateDirectory(Path.Combine(modPath, mod.Filename));
+                                Directory.CreateDirectory(Path.Combine(dexModPath, mod.Filename));
 
                                 byte[] dexResource = mod.GetResourceData(resource);
 
                                 Stream data = new MemoryStream(dexResource);
 
                                 ZipArchive archive = new ZipArchive(data);
-                                archive.ExtractToDirectory(Path.Combine(modPath, mod.Filename));
+                                archive.ExtractToDirectory(Path.Combine(dexModPath, mod.Filename));
                             }
                         });
-
-                        if (Directory.Exists(modPath))
-                        {
-                            string[] dexModsDirs = Directory.GetDirectories(modPath);
-
-                            foreach (var dexMod in dexModsDirs)
-                            {
-                                DirectoryInfo dexModDir = new DirectoryInfo(dexMod);
-
-                                if (!dexMods.Contains(Path.GetFileName(dexMod)))
-                                {
-                                    dexModDir.Delete(true);
-                                }
-                            }
-
-                            if (dexCount == 0)
-                            {
-                                modDir.Delete(true);
-                            }
-                        }
                     }
                 }
 
@@ -2482,6 +2473,13 @@ namespace Frosty.ModSupport
             }
         }
 
+        private string GenerateModInfoHash(string filename)
+        {
+            FileInfo fi = new FileInfo(filename);
+
+            return $"{fi.Length}{fi.LastWriteTimeUtc:ddMMyyyyHHmmss}";
+        }
+
         private List<ModInfo> GenerateModInfoList(string[] modPaths, string rootPath)
         {
             List<ModInfo> modInfoList = new List<ModInfo>();
@@ -2500,7 +2498,8 @@ namespace Frosty.ModSupport
                         Version = fmod.ModDetails.Version,
                         Category = fmod.ModDetails.Category,
                         Link = fmod.ModDetails.Link,
-                        FileName = path
+                        FileName = path,
+                        Hash = GenerateModInfoHash(fi.FullName),
                     };
                 }
                 else
@@ -2514,7 +2513,8 @@ namespace Frosty.ModSupport
                             Version = fcollection.ModDetails.Version,
                             Category = fcollection.ModDetails.Category,
                             Link = fcollection.ModDetails.Link,
-                            FileName = path
+                            FileName = path,
+                            Hash = GenerateModInfoHash(fi.FullName),
                         };
                     }
                     else
