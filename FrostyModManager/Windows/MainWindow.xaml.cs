@@ -980,56 +980,60 @@ namespace FrostyModManager
                 mod = new FrostyMod(modFilename, modObj);
             }
 
-            bool GameVersionHead = mod.GameVersion != fs.Head;
+            bool equalGameVersion = mod.GameVersion != fs.Head;
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
             {
-                string ForPatch = "Mod was designed for Patch ";
+                const string forPatch = "Mod was designed for Patch ";
 
-                if (GameVersionHead && mod.GameVersion == 2373991)
+                switch (equalGameVersion)
                 {
-                    mod.AddWarning(ForPatch + "5 (Steam)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 3377309)
-                {
-                    mod.AddWarning(ForPatch + "5 (EA)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 2373347)
-                {
-                    mod.AddWarning(ForPatch + "4 (Steam)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 3376665)
-                {
-                    mod.AddWarning(ForPatch + "4 (EA)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 2370459)
-                {
-                    mod.AddWarning(ForPatch + "3 (Steam)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 3373777)
-                {
-                    mod.AddWarning(ForPatch + "3 (EA)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 2355883)
-                {
-                    mod.AddWarning(ForPatch + "2 (Steam)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 3359200)
-                {
-                    mod.AddWarning(ForPatch + "2 (EA)");
-                }
-                else if (GameVersionHead && mod.GameVersion == 2306651)
-                {
-                    mod.AddWarning(ForPatch + "1 (Steam)");
-                }
-                else if (GameVersionHead)
-                {
-                    mod.AddWarning("Mod was designed for a different game version");
+                    case true when mod.GameVersion == 2373991:
+                        mod.AddWarning(forPatch + "5 (Steam)");
+                        break;
+                    case true when mod.GameVersion == 3377309:
+                        mod.AddWarning(forPatch + "5 (EA)");
+                        break;
+                    case true when mod.GameVersion == 2373347:
+                        mod.AddWarning(forPatch + "4 (Steam)");
+                        break;
+                    case true when mod.GameVersion == 3376665:
+                        mod.AddWarning(forPatch + "4 (EA)");
+                        break;
+                    case true when mod.GameVersion == 2370459:
+                        mod.AddWarning(forPatch + "3 (Steam)");
+                        break;
+                    case true when mod.GameVersion == 3373777:
+                        mod.AddWarning(forPatch + "3 (EA)");
+                        break;
+                    case true when mod.GameVersion == 2355883:
+                        mod.AddWarning(forPatch + "2 (Steam)");
+                        break;
+                    case true when mod.GameVersion == 3359200:
+                        mod.AddWarning(forPatch + "2 (EA)");
+                        break;
+                    case true when mod.GameVersion == 2306651:
+                        mod.AddWarning(forPatch + "1 (Steam)");
+                        break;
+                    case true when mod.GameVersion == 2355866:
+                        mod.AddWarning(forPatch + "1 (EA)");
+                        break;
+                    case true:
+#if FROSTY_DEVELOPER
+                        mod.AddWarning($"Mod was designed for a different game version ({mod.GameVersion})");
+#elif !FROSTY_DEVELOPER
+                        mod.AddWarning("Mod was designed for a different game version");
+#endif
+                        break;
                 }
             }
-            else if (GameVersionHead)
+            else if (equalGameVersion)
             {
+#if FROSTY_DEVELOPER
+                mod.AddWarning($"Mod was designed for a different game version ({mod.GameVersion})");
+#elif !FROSTY_DEVELOPER
                 mod.AddWarning("Mod was designed for a different game version");
+#endif
             }
 
             lock (availableMods)
