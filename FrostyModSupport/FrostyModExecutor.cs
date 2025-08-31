@@ -1498,9 +1498,7 @@ namespace Frosty.ModSupport
 
 #if FROSTY_DEVELOPER
                 PrintLog();
-#endif
-
-#if !FROSTY_DEVELOPER
+#elif !FROSTY_DEVELOPER
                 if (Config.Get<bool>("PrintLog", false))
                 {
                     PrintLog();

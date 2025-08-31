@@ -46,13 +46,13 @@ namespace Frosty.Core.Windows
     {
         [Category("Update Checking")]
         [DisplayName("Check for Updates")]
-        [Description("Check Github for Frosty updates on startup")]
+        [Description("Check GitHub for Frosty updates on startup")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool UpdateCheck { get; set; } = true;
 
         //[Category("Update Checking")]
         //[DisplayName("Check for Prerelease Updates")]
-        //[Description("Check Github for Frosty Alpha and Beta updates on startup")]
+        //[Description("Check GitHub for Frosty Alpha and Beta updates on startup")]
         //[EbxFieldMeta(EbxFieldType.Boolean)]
         //public bool UpdateCheckPrerelease { get; set; } = false;
 
@@ -77,7 +77,7 @@ namespace Frosty.Core.Windows
 
         [Category("General")]
         [DisplayName("Disable Shader Compilation At Launch")]
-        [Description("Disables the shader compilation or verification done by the game at launch")]
+        [Description("Disables the shader compilation/verification done by the game at launch")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool DisableShaderCacheSymLink { get; set; } = false;
 
@@ -89,7 +89,7 @@ namespace Frosty.Core.Windows
 
         [Category("General")]
         [DisplayName("Print Log")]
-        [Description("Prints a 'log.txt' file to your Frosty Editor/Mod Manager directory showing all added and modified assets when creating ModData.\n\nModData must be re-created for the log file to be generated.")]
+        [Description("Prints a 'log.txt' file to your Frosty directory when creating ModData that shows all added and modified assets.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool PrintLog { get; set; } = false;
 
