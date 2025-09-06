@@ -1,4 +1,33 @@
-﻿v1.0.7 - 2025.6.22.0
+﻿v1.0.7 - 2025.9.6.0
+--------
+NOTE: Projects created or saved with this update will not be compatible with previous versions of Frosty. It is recommended that you back up your projects.
+
+Improvements:
+- Added validation when creating 'Separators' for the Applied Mods list
+- Added support for DAVExtender(Dex) Mods
+- Added 'Flags' column that indicates if a mod has a 'DAVExtender(Dex) Archive' or 'Root Description File'
+
+Bug Fixes:
+- Fixed issue where 'UseDefaultProfile' would attempt to load if a profile was present in a config file
+- Fixed issue where some assets would fail to duplicate if they had more than one 'TypeInfoGuid' attribute
+- Fixed issue where ModData would not be regenerated when updating mods if it was in the same position within the Applied Mods list
+- Fixed issue where Editor could crash when copying text to clipboard
+- Fixed issue where Mod Manager would crash when checking resource conflicts if a missing mod was enabled in the Applied Mods list
+- Fixed issue where Editor/Mod Manager would crash when retrieving an empty string from a config file
+
+Misc:
+- Added MessageBox to alert user if game exe has 'Disable full-screen optimisations' enabled
+- Minor changes to descriptions within Options window
+- Added styling to Mod hyperlinks
+- Increased size of 'Check for Updates' window
+
+Technical Changes:
+- Added additional invalid characters to validation
+- Removed restriction where only 'Dragon Age: The Veilguard' could be loaded
+- Changes to Default profile loading functionality
+- Changes to Mod patch warning functionality
+
+v1.0.7 - 2025.6.22.0
 --------
 Improvements:
 - Added the option to create 'Separators' for the Applied Mods list
@@ -15,6 +44,8 @@ Technical Changes:
 
 v1.0.7 - 2025.6.12.0
 --------
+NOTE: Projects created or saved with this update will not be compatible with previous versions of Frosty. It is recommended that you back up your projects.
+
 Improvements:
 - Added option to choose a custom mods directory for the Mod Manager
 - Added sorting options for Applied Mods list in Mod Manager
