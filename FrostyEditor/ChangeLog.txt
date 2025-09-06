@@ -1,4 +1,9 @@
-﻿v1.0.7 - 2025.9.6.0
+﻿v1.0.7 - 2025.9.7.0
+--------
+Bug Fixes:
+- Fixed issue where Editor/Mod Manager would crash if registry key could not be found
+
+v1.0.7 - 2025.9.6.0
 --------
 NOTE: Projects created or saved with this update will not be compatible with previous versions of Frosty. It is recommended that you back up your projects.
 
