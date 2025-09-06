@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Frosty.Core.Windows"
         xmlns:ext="clr-namespace:Frosty.Core"
         mc:Ignorable="d"
-        Title="Check for Updates" Height="305" Width="350"
+        Title="Check for Updates" Height="395" Width="440"
         ResizeMode="NoResize" Icon="/FrostyCore;component/AppIcon.ico"
         WindowStartupLocation="CenterScreen">
     
@@ -30,7 +30,7 @@
                     <TextBlock x:Name="infoTextBox" Foreground="{StaticResource FontColor}"  HorizontalAlignment="Center" Margin="2,2,2,8" FontFamily="Global User Interface" FontSize="12"/>
 
                     <Border Background="{StaticResource ControlBackground}" Margin="0,5,0,0">
-                        <TextBox x:Name="changelogTextBox" Height="158" IsReadOnly="True" Padding="4" Margin="2" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas"/>
+                        <TextBox x:Name="changelogTextBox" Height="248" IsReadOnly="True" Padding="4" Margin="2" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas"/>
                     </Border>
                 </StackPanel>
             </Grid>
