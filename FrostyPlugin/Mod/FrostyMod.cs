@@ -101,15 +101,6 @@ namespace Frosty.Core.Mod
                         if (buf != null)
                             ModDetails.AddScreenshot(buf);
                     }
-
-                    foreach (BaseModResource resource in resources)
-                    {
-                        if (resource.Type == ModResourceType.Ebx && resource.Name.Equals("levels/root/rootlevel/rootlevel/description"))
-                        {
-                            ModDetails.HasRootResource = true;
-                            break;
-                        }
-                    }
                 }
             }
         }

@@ -68,7 +68,7 @@ namespace FrostyModManager
 
             string desc = "";
             foreach (string warning in mod.Warnings)
-                desc += "(WARNING: " + warning + ")\n";
+                desc += $"(WARNING: {warning})\n";
             desc += "\n";
             desc += mod.ModDetails.Description;
             return desc;
@@ -980,43 +980,43 @@ namespace FrostyModManager
                 mod = new FrostyMod(modFilename, modObj);
             }
 
-            bool equalGameVersion = mod.GameVersion != fs.Head;
+            bool equalGameVersion = mod.GameVersion == fs.Head;
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
             {
-                const string forPatch = "Mod was designed for Patch ";
+                const string forPatch = "Mod was designed for Patch";
 
-                switch (equalGameVersion)
+                switch (!equalGameVersion)
                 {
-                    case true when mod.GameVersion == 2373991:
-                        mod.AddWarning(forPatch + "5 (Steam)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardSteam[4]:
+                        mod.AddWarning($"{forPatch} 5 (Steam)");
                         break;
-                    case true when mod.GameVersion == 3377309:
-                        mod.AddWarning(forPatch + "5 (EA)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardEA[4]:
+                        mod.AddWarning($"{forPatch} 5 (EA)");
                         break;
-                    case true when mod.GameVersion == 2373347:
-                        mod.AddWarning(forPatch + "4 (Steam)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardSteam[3]:
+                        mod.AddWarning($"{forPatch} 4 (Steam)");
                         break;
-                    case true when mod.GameVersion == 3376665:
-                        mod.AddWarning(forPatch + "4 (EA)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardEA[3]:
+                        mod.AddWarning($"{forPatch} 4 (EA)");
                         break;
-                    case true when mod.GameVersion == 2370459:
-                        mod.AddWarning(forPatch + "3 (Steam)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardSteam[2]:
+                        mod.AddWarning($"{forPatch} 3 (Steam)");
                         break;
-                    case true when mod.GameVersion == 3373777:
-                        mod.AddWarning(forPatch + "3 (EA)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardEA[2]:
+                        mod.AddWarning($"{forPatch} 3 (EA)");
                         break;
-                    case true when mod.GameVersion == 2355883:
-                        mod.AddWarning(forPatch + "2 (Steam)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardSteam[1]:
+                        mod.AddWarning($"{forPatch} 2 (Steam)");
                         break;
-                    case true when mod.GameVersion == 3359200:
-                        mod.AddWarning(forPatch + "2 (EA)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardEA[1]:
+                        mod.AddWarning($"{forPatch} 2 (EA)");
                         break;
-                    case true when mod.GameVersion == 2306651:
-                        mod.AddWarning(forPatch + "1 (Steam)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardSteam[0]:
+                        mod.AddWarning($"{forPatch} 1 (Steam)");
                         break;
-                    case true when mod.GameVersion == 2355866:
-                        mod.AddWarning(forPatch + "1 (EA)");
+                    case true when mod.GameVersion == GameVersions.DragonAgeTheVeilguardEA[0]:
+                        mod.AddWarning($"{forPatch} 1 (EA)");
                         break;
                     case true:
 #if FROSTY_DEVELOPER
@@ -1027,7 +1027,7 @@ namespace FrostyModManager
                         break;
                 }
             }
-            else if (equalGameVersion)
+            else if (!equalGameVersion)
             {
 #if FROSTY_DEVELOPER
                 mod.AddWarning($"Mod was designed for a different game version ({mod.GameVersion})");
@@ -1036,6 +1036,15 @@ namespace FrostyModManager
 #endif
             }
 
+            foreach (BaseModResource resource in mod.Resources)
+            {
+                if (resource.Type == ModResourceType.Ebx && resource.Name.Equals("levels/root/rootlevel/rootlevel/description"))
+                {
+                    mod.ModDetails.HasRootResource = true;
+                    break;
+                }
+            }
+            
             lock (availableMods)
             {
                 availableMods.Add(mod);
@@ -2354,11 +2363,7 @@ namespace FrostyModManager
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
-            try
-            {
-                System.Diagnostics.Process.Start(e.Uri.AbsoluteUri);
-            }
-            catch { }
+            Process.Start(e.Uri.AbsoluteUri);
         }
 
         private void separatorButton_Click(object sender, RoutedEventArgs e)

@@ -53,6 +53,12 @@ namespace FrostySdk
         DragonAgeTheVeilguard = 20241031
     }
 
+    public static class GameVersions
+    {
+        public static readonly int[] DragonAgeTheVeilguardEA = {2355866, 3359200, 3373777, 3376665, 3377309};
+        public static readonly int[] DragonAgeTheVeilguardSteam = {2306651, 2355883, 2370459, 2373347, 2373991};
+    }
+    
     public struct Profile
     {
         public string Name;

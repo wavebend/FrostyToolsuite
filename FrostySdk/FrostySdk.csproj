@@ -115,8 +115,6 @@
     <Compile Include="IO\EbxSharedTypeDescriptors.cs" />
     <Compile Include="IO\EbxWriterRiff.cs" />
     <Compile Include="IO\EbxWriter.cs" />
-    <None Include="IO\EbxYamlWriter - Copy.cs" />
-    <None Include="IO\EbxXmlWriter - Copy.cs" />
     <Compile Include="IO\EbxYamlWriter.cs" />
     <Compile Include="IO\EbxXmlWriter.cs" />
     <Compile Include="IO\LegacyBinarySbReader.cs" />

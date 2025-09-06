@@ -1431,11 +1431,11 @@ namespace Frosty.ModSupport
 
                             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
                             {
-                                if (m_fs.Head > 3350000 && mod.GameVersion < 2380000)
+                                if (GameVersions.DragonAgeTheVeilguardEA.Contains((int)m_fs.Head) && GameVersions.DragonAgeTheVeilguardSteam.Contains(mod.GameVersion))
                                 {
                                     nullEntryText = nullEntryText.Replace("installed", "EA App");
                                 }
-                                else if (m_fs.Head < 2380000 && mod.GameVersion > 3350000)
+                                else if (GameVersions.DragonAgeTheVeilguardSteam.Contains((int)m_fs.Head) && GameVersions.DragonAgeTheVeilguardEA.Contains(mod.GameVersion))
                                 {
                                     nullEntryText = nullEntryText.Replace("installed", "Steam");
                                 }
