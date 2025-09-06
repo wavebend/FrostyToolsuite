@@ -565,7 +565,7 @@ namespace FrostyModManager
         {
             string processName = $"{ProfilesLibrary.ProfileName}.exe";
             string exePath = Path.Combine(Config.Get<string>("GamePath", "", ConfigScope.Game), processName);
-            string keyName = (string)Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers").GetValue(exePath);
+            string keyName = (string)Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers")?.GetValue(exePath);
 
             if (keyName != null && keyName.Contains("DISABLEDXMAXIMIZEDWINDOWEDMODE"))
             {

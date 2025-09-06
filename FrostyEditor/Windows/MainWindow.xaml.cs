@@ -546,7 +546,7 @@ namespace FrostyEditor.Windows
                 FrostyMessageBox.Show($"Your Frosty Editor installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Editor");
             }
 
-            appCompatFlagsLayer();
+            CheckGameFlags();
 
             if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/manager_config.json"))
             {
@@ -554,11 +554,11 @@ namespace FrostyEditor.Windows
             }
         }
 
-        public void appCompatFlagsLayer()
+        public void CheckGameFlags()
         {
             string processName = $"{ProfilesLibrary.ProfileName}.exe";
             string exePath = Path.Combine(Config.Get<string>("GamePath", "", ConfigScope.Game), processName);
-            string keyName = (string)Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers").GetValue(exePath);
+            string keyName = (string)Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers")?.GetValue(exePath);
 
             if (keyName != null && keyName.Contains("DISABLEDXMAXIMIZEDWINDOWEDMODE"))
             {
