@@ -629,7 +629,7 @@
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <Grid Height="32">
-                                                                    <TextBlock Margin="0,4,0,0">
+                                                                    <TextBlock Margin="0,4,0,0" Visibility="{Binding Path=ModDetails.HasLink, Converter={StaticResource booleanToVisibilityConverter}}">
                                                                         <Hyperlink NavigateUri="{Binding Path=ModDetails.Link}" RequestNavigate="Hyperlink_RequestNavigate" Style="{StaticResource ModHyperLink}">
                                                                             <TextBlock Text="{Binding Path=ModDetails.LinkID}" ToolTip="Opens in your browser"/>
                                                                         </Hyperlink>

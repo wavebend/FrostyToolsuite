@@ -2363,7 +2363,14 @@ namespace FrostyModManager
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
-            Process.Start(e.Uri.AbsoluteUri);
+            try
+            {
+                Process.Start(e.Uri.AbsoluteUri);
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         private void separatorButton_Click(object sender, RoutedEventArgs e)

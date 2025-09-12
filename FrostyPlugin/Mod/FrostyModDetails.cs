@@ -20,12 +20,13 @@ namespace Frosty.Core.Mod
         public bool HasDexResource => DexResourceName != "";
         public bool HasRootResource { get; set; }
         public int GridColumn => HasDexResource && HasRootResource ? 1 : 0;
+        public bool HasLink => Link != "";
 
         private string category;
 
         public string LinkID {
             get {
-                if (Link != null)
+                if (Link != "")
                 {
                     if (Link.Contains("nexusmods.com"))
                     {

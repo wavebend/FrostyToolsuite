@@ -39,7 +39,7 @@
                         </DockPanel>
                         <DockPanel LastChildFill="True">
                             <Label Content="Version " FontFamily="Global User Interface" Width="82"/>
-                            <TextBox Grid.Column="1" x:Name="modVersionTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
+                            <TextBox x:Name="modVersionTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
                             <Label Content="Category " FontFamily="Global User Interface" Width="82"/>
@@ -55,7 +55,7 @@
                         </DockPanel>
                         <DockPanel LastChildFill="True">
                             <Label Content="Link " FontFamily="Global User Interface" Width="82"/>
-                            <TextBox Grid.Column="1" x:Name="modPageLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
+                            <TextBox x:Name="modPageLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
                         </DockPanel>
                         <DockPanel x:Name="dockPanelDex" LastChildFill="True" Visibility="Collapsed">
                             <Label Content="DEX Archive " FontFamily="Global User Interface" Width="82"/>
