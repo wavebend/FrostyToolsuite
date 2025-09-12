@@ -1193,7 +1193,7 @@ namespace FrostyCmd
             string key = "Dragon Age The Veilguard";
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
             {
-                writer.WriteObfuscatedString("Dragon Age The Veilguard");
+                writer.WriteObfuscatedString("Dragon Age™: The Veilguard");
                 writer.Write((int)ProfileVersion.DragonAgeTheVeilguard);
                 writer.WriteObfuscatedString("DragonAgeTheVeilguard");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
