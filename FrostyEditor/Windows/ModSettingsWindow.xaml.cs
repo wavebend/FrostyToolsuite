@@ -9,7 +9,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using FrostySdk.Managers.Entries;
 
 namespace FrostyEditor.Windows
 {
@@ -21,6 +24,7 @@ namespace FrostyEditor.Windows
         private ModSettings ModSettings => project.GetModSettings();
         private FrostyProject project;
         private byte[] dexResource;
+        private string gameVersion = "Steam";
 
         private List<string> categories = new List<string>()
         {
@@ -86,6 +90,56 @@ namespace FrostyEditor.Windows
                 exportDEXButton.IsEnabled = false;
                 clearDEXButton.IsEnabled = false;
             }
+            
+            bool isUnifyLoaded = App.PluginManager.LoadedPlugins.ToList().Any(plugin => plugin.Name == "Unify Assets");
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard) && isUnifyLoaded)
+            {
+                string displayName = ProfilesLibrary.DisplayName.Replace("\u2122", "");
+                
+                checkChunksDockPanel.Visibility = System.Windows.Visibility.Visible;
+                checkChunksLabel.Content = $"Compatible with Steam and EA versions of {displayName}";
+                
+                bool isSteam = GameVersions.DragonAgeTheVeilguardSteam.Contains((int)Frosty.Core.App.FileSystemManager.Head);
+                
+                if (!CheckChunks(isSteam))
+                {
+                    checkChunksLabel.Content = $"Only compatible with the {gameVersion} version of {displayName}";
+                    checkChunksLabel.Foreground = new BrushConverter().ConvertFrom("#FF000D") as SolidColorBrush;
+                }
+            }
+        }
+
+        private bool CheckChunks(bool isSteam)
+        {
+            List<string> chunkDiffList = new List<string>();
+            
+            if (!isSteam)
+            {
+                gameVersion = "EA";
+            }
+            
+            string chunksPath = $"UnifyAssetsPlugin.Resources.{ProfilesLibrary.CacheName}-{gameVersion}-Chunks.txt";
+
+            using (StreamReader reader = new StreamReader(Assembly.LoadFrom("Plugins\\UnifyAssetsPlugin.dll").GetManifestResourceStream(chunksPath)))
+            {
+                string listLine;
+                
+                while ((listLine = reader.ReadLine()) != null)
+                {
+                    chunkDiffList.Add(listLine);
+                }
+            }
+            
+            foreach (ChunkAssetEntry entry in App.AssetManager.EnumerateChunks(modifiedOnly: true))
+            {
+                if (chunkDiffList.Contains(entry.Name))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void importDEXButton_Click(object sender, System.Windows.RoutedEventArgs e)

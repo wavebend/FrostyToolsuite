@@ -73,6 +73,9 @@
                                 <Button Grid.Column="3" x:Name="clearDEXButton" Content="Clear" Click="clearDEXButton_Click" Margin="1,1,1,1"/>
                             </Grid>
                         </DockPanel>
+                        <DockPanel x:Name="checkChunksDockPanel" LastChildFill="True" Visibility="Collapsed" Margin="0,5,0,0">
+                            <Label x:Name="checkChunksLabel" HorizontalAlignment="Left" Content="" FontFamily="Global User Interface" FontWeight="SemiBold" Foreground="#03FC35" Width="Auto"/>
+                        </DockPanel>
                     </StackPanel>
                 </Grid>
                 

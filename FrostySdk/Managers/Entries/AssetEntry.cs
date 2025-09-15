@@ -159,6 +159,33 @@ namespace FrostySdk.Managers.Entries
                 }
             }
         }
+        
+        /// <summary>
+        /// Replaces the current asset with another
+        /// </summary>
+        public void ReplaceAsset(AssetEntry assetToLink, AssetEntry assetToUnlink)
+        {
+            int index = LinkedAssets.IndexOf(assetToUnlink);
+            
+            if (!LinkedAssets.Contains(assetToLink))
+            {
+                LinkedAssets[index] = assetToLink;
+            }
+            
+            if (assetToLink is ChunkAssetEntry entry)
+            {
+                if (entry.HasModifiedData)
+                {
+                    // store the res/ebx name in the chunk
+                    entry.ModifiedEntry.H32 = Fnv1.HashString(Name.ToLower());
+                }
+                else
+                {
+                    // asset was added to bundle (so no ModifiedEntry)
+                    entry.H32 = Fnv1.HashString(Name.ToLower());
+                }
+            }
+        }
 
         /// <summary>
         /// Adds the current asset to the specified bundle

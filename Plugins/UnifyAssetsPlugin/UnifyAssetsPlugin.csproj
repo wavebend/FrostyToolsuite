@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	<PropertyGroup>
+		<Configurations>Developer - Debug;Release - Alpha;Release - Beta;Release - Final</Configurations>
+		<Platforms>x64</Platforms>
+		<TargetFramework>net48</TargetFramework>
+		<AssemblyTitle>UnifyAssetsPlugin</AssemblyTitle>
+		<Product>UnifyAssetsPlugin</Product>
+		<Copyright>Copyright ©  2020</Copyright>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<UseWPF>true</UseWPF>
+		<OutputType>Library</OutputType>
+		<PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=$(MSBuildProjectName)</PathMap>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Developer - Debug|x64' ">
+		<DebugSymbols>true</DebugSymbols>
+		<OutputPath>bin\Developer\Debug\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;FROSTY_DEVELOPER</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Alpha|x64' ">
+		<OutputPath>bin\Release\Alpha\</OutputPath>
+		<DefineConstants>TRACE;FROSTY_ALPHA</DefineConstants>
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Beta|x64'">
+		<OutputPath>bin\Release\Beta\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Final|x64'">
+		<OutputPath>bin\Release\Final\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command='xcopy /Y "$(TargetPath)" "$(SolutionDir)$(OutDir)Plugins\"' />
+	</Target>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj">
+			<Private>false</Private>
+		</ProjectReference>
+		<ProjectReference Include="..\..\FrostyPlugin\FrostyCore.csproj">
+			<Private>false</Private>
+		</ProjectReference>
+		<ProjectReference Include="..\..\FrostySDK\FrostySdk.csproj">
+			<Private>false</Private>
+		</ProjectReference>
+		<ProjectReference Include="..\MeshSetPlugin\MeshSetPlugin.csproj">
+			<Private>false</Private>
+		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\DragonAgeTheVeilguard-EA-Chunks.txt" />
+	  <EmbeddedResource Include="Resources\DragonAgeTheVeilguard-Steam-Chunks.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Icons\UnifyAssets.ico" />
+	  <Resource Include="Icons\UnifyAssets.ico" />
+	</ItemGroup>
+</Project>
