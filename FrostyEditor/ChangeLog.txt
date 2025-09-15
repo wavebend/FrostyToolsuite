@@ -1,4 +1,18 @@
-﻿v1.0.7 - 2025.9.7.0
+﻿v1.0.7 - 2025.9.15.0
+--------
+Improvements:
+- Added 'Unify Assets' plugin that detects and replaces incompatible chunks within assets. (Allows incompatible assets from the Steam or EA version of the game to be compatible with both.)
+
+Bug Fixes:
+- Fixed various issues with Mod hyperlinks
+
+Misc:
+- Corrected DisplayName for 'Dragon Age™: The Veilguard'
+
+Plugin Changes:
+- [UnifyAssetsPlugin] Added Plugin
+
+v1.0.7 - 2025.9.7.0
 --------
 Bug Fixes:
 - Fixed issue where Editor/Mod Manager would crash if registry key could not be found
@@ -55,7 +69,7 @@ Improvements:
 - Added option to choose a custom mods directory for the Mod Manager
 - Added sorting options for Applied Mods list in Mod Manager
 - Added a new 'Recent Projects' MenuItem under File, which can store up to 10 recently opened projects.
-- Added a 'Link' column to the Available Mods list that shows a hyperlink to a modpage
+- Added a 'Link' column to the Available Mods list that shows a hyperlink to a mod page
 
 Bug Fixes:
 - Fixed issue where 'DiscordRPCHideAsset', 'DiscordRPCHideProject' and 'PrintLog' would always be enabled if not found in config file
@@ -69,7 +83,7 @@ Misc:
 - Added tooltip to mods in the Applied Mods list when the .fbmod is missing
 
 Technical Changes:
-- Fixed an issue where the Config could not save values that are not a convertible or a JToken, i.e Lists, Arrays, classes, etc.
+- Fixed an issue where the Config could not save values that are not a convertible or a JToken, i.e. Lists, Arrays, classes, etc.
 - Mod export validation clean-up
 
 Plugin Changes:
@@ -99,7 +113,7 @@ Misc:
 - Changes to 'Actions' (now 'Resources') Tab within Frosty Mod Manager
 - Added MessageBox to alert user if Frosty installation is in OneDrive
 - Additional exception information will be added to the output (Type, HResult, message and source)
-- The end-users operating system information and which application the excpetion occurred on will be added to the exception
+- The end-users operating system information and which application the exception occurred on will be added to the exception
 - Added buttons 'Copy Exception', 'Copy Log' and 'Open Logs Folder' to the exception window
 
 Plugin Changes:
