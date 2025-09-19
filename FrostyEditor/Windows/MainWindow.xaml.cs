@@ -354,20 +354,14 @@ namespace FrostyEditor.Windows
             if (App.OpenProject)
             {
                 LoadProject(App.LaunchArgs, false);
+                
+                InitialUILoad();
             }
-            else
+            else if (ProfilesLibrary.HasLoadedProfile)
             {
-                if (ProfilesLibrary.HasLoadedProfile)
-                {
-                    if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
-                    {
-                        veilguardPanel.Visibility = Visibility.Visible;
-                    }
+                NewProject();
 
-                    NewProject();
-                    
-                    InitialUILoad();
-                }
+                InitialUILoad();
             }
         }
 
@@ -533,6 +527,11 @@ namespace FrostyEditor.Windows
             if(ProfilesLibrary.EnableExecution)
             {
                 LaunchButton.IsEnabled = true;
+            }
+            
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                veilguardPanel.Visibility = Visibility.Visible;
             }
 
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
