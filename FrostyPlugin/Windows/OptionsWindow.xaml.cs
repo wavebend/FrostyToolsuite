@@ -140,10 +140,11 @@ namespace Frosty.Core.Windows
         public CustomComboData<string, string> Language { get; set; }
 
         [Category("Autosave")]
-        [DisplayName("Enabled")]
-        [Description("Enables autosaving for projects.")]
-        [EbxFieldMeta(EbxFieldType.Boolean)]
-        public bool AutosaveEnabled { get; set; } = true;
+        [DisplayName("Custom Autosave Directory")]
+        [Description("Select directory where projects will be autosaved.")]
+        [Editor(typeof(FrostyCustomPathEditor))]
+        [DependsOn("AutosaveEnabled")]
+        public string CustomAutosaveDirectory { get; set; } = "";
 
         [Category("Autosave")]
         [DisplayName("Period")]
@@ -159,6 +160,12 @@ namespace Frosty.Core.Windows
         [DependsOn("AutosaveEnabled")]
         public int AutosaveMaxSaves { get; set; } = 10;
 
+        [Category("Autosave")]
+        [DisplayName("Enabled")]
+        [Description("Enables autosaving for projects.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool AutosaveEnabled { get; set; } = true;
+        
         [Category("Text Editor")]
         [DisplayName("Tab Size")]
         [Description("Size of opened tabs in the Editor.")]
@@ -243,6 +250,7 @@ namespace Frosty.Core.Windows
             AutosaveEnabled = Config.Get<bool>("AutosaveEnabled", true);
             AutosavePeriod = Config.Get<int>("AutosavePeriod", 5);
             AutosaveMaxSaves = Config.Get<int>("AutosaveMaxCount", 10);
+            CustomAutosaveDirectory = Config.Get<string>("CustomAutosaveDirectory", "");
 
             TextEditorTabSize = Config.Get<int>("TextEditorTabSize", 4);
             TextEditorIndentOnEnter = Config.Get<bool>("TextEditorIndentOnEnter", false);
@@ -275,6 +283,7 @@ namespace Frosty.Core.Windows
             Config.Add("AutosaveEnabled", AutosaveEnabled);
             Config.Add("AutosavePeriod", AutosavePeriod);
             Config.Add("AutosaveMaxCount", AutosaveMaxSaves);
+            Config.Add("CustomAutosaveDirectory", CustomAutosaveDirectory);
 
             Config.Add("TextEditorTabSize", TextEditorTabSize);
             Config.Add("TextEditorIndentOnEnter", TextEditorIndentOnEnter);

@@ -50,6 +50,7 @@ namespace FrostyEditor.Windows
         };
 
         private List<string> m_recentProjects = Config.Get("RecentProjects", new List<string>(), ConfigScope.Game);
+        private DirectoryInfo m_autoSaveDir = new DirectoryInfo("Autosave");
 
         public FrostyDataExplorer DataExplorer => dataExplorer;
         public FrostyDataExplorer LegacyExplorer => legacyExplorer;
@@ -350,6 +351,12 @@ namespace FrostyEditor.Windows
                 }
             }
 
+            if (enabled && Directory.Exists(Config.Get<string>("CustomAutosaveDirectory", "")))
+            {
+                m_autoSaveDir = new DirectoryInfo(Config.Get<string>("CustomAutosaveDirectory", ""));
+                App.Logger.Log($"Custom Autosave Directory: {m_autoSaveDir}");
+            }
+
             // load profile through the project if it's apart of the launch args, if not choose on startup
             if (App.OpenProject)
             {
@@ -378,11 +385,11 @@ namespace FrostyEditor.Windows
             if (m_project.IsDirty)
             {
                 ++lastSaveIndex;
-                if (lastSaveIndex > Config.Get<int>("AutosaveMaxCount", 10)) // Config.Get<int>("Autosave", "MaxCount", 10)
+                if (lastSaveIndex > Config.Get<int>("AutosaveMaxCount", 10))
                     lastSaveIndex = 1;
 
                 string projectName = m_project.DisplayName.Remove(m_project.DisplayName.Length - 10);
-                FileInfo fi = new FileInfo("Autosave/" + projectName + "_" + lastSaveIndex.ToString("D3") + ".fbproject");
+                FileInfo fi = new FileInfo(m_autoSaveDir.FullName + "\\" + projectName + "_" + lastSaveIndex.ToString("D3") + ".fbproject");
 
                 App.Logger.Log("Initiated autosave of project to " + fi.FullName);
 
