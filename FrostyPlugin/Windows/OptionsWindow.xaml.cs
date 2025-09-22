@@ -191,22 +191,24 @@ namespace Frosty.Core.Windows
         public bool ExportWithOffsets { get; set; } = false;
 
         [Category("Discord RPC")]
-        [DisplayName("Enabled")]
-        [Description("Turns on rich presence for Discord.")]
-        [EbxFieldMeta(EbxFieldType.Boolean)]
-        public bool DiscordEnabled { get; set; } = false;
-
-        [Category("Discord RPC")]
         [DisplayName("Hide Project Name")]
         [Description("Hides project name when rich presence for Discord is turned on.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
+        [DependsOn("DiscordEnabled")]
         public bool DiscordHideProject { get; set; } = false;
 
         [Category("Discord RPC")]
         [DisplayName("Hide Opened Asset")]
         [Description("Hides opened asset name when rich presence for Discord is turned on.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
+        [DependsOn("DiscordEnabled")]
         public bool DiscordHideAsset { get; set; } = false;
+
+        [Category("Discord RPC")]
+        [DisplayName("Enabled")]
+        [Description("Turns on rich presence for Discord.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool DiscordEnabled { get; set; } = false;
 
         [Category("Mod Settings")]
         [DisplayName("Default Author")]
