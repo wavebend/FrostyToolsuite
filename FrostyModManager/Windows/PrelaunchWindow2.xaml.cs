@@ -9,7 +9,6 @@ using FrostySdk;
 using Microsoft.Win32;
 using Frosty.Controls;
 using Frosty.Core;
-using System.Windows.Threading;
 using System.Linq;
 
 namespace FrostyModManager.Windows
@@ -17,7 +16,7 @@ namespace FrostyModManager.Windows
     /// <summary>
     /// Interaction logic for PrelaunchWindow2.xaml
     /// </summary>
-    public partial class PrelaunchWindow2 : FrostyDockableWindow
+    public partial class PrelaunchWindow2
     {
         private ObservableCollection<FrostyConfiguration> configurations = new ObservableCollection<FrostyConfiguration>();
         private FrostyConfiguration defaultConfiguration;
@@ -46,6 +45,7 @@ namespace FrostyModManager.Windows
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ModifyConfigurationButton.IsEnabled = false;
             RemoveConfigurationButton.IsEnabled = false;
             LaunchConfigurationButton.IsEnabled = false;
 
@@ -56,14 +56,13 @@ namespace FrostyModManager.Windows
                 try
                 {
                     await ScanGames();
+                    RefreshConfigurationList();
                 }
                 catch
                 {
                     // do nothing
                 }
             }
-
-            RefreshConfigurationList();
 
             if (Config.Get<bool>("UseDefaultProfile2", false))
             {
@@ -72,6 +71,12 @@ namespace FrostyModManager.Windows
                 if (!string.IsNullOrEmpty(defaultConfigurationName))
                 {
                     defaultConfiguration = configurations.FirstOrDefault(x => x.ProfileName == defaultConfigurationName);
+
+                    if (defaultConfiguration == null)
+                    {
+                        FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Mod Manager");
+                        return;
+                    }
 
                     await Task.Delay(1);
                     LaunchConfiguration(defaultConfiguration.ProfileName);
@@ -87,6 +92,7 @@ namespace FrostyModManager.Windows
 
         private void ConfigurationListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ModifyConfigurationButton.IsEnabled = true;
             RemoveConfigurationButton.IsEnabled = true;
             LaunchConfigurationButton.IsEnabled = true;
 
@@ -106,6 +112,7 @@ namespace FrostyModManager.Windows
                 ProfilePathTextBlock.Text = "";
                 SelectGameTextBlock.Visibility = Visibility.Visible;
 
+                ModifyConfigurationButton.IsEnabled = false;
                 RemoveConfigurationButton.IsEnabled = false;
                 LaunchConfigurationButton.IsEnabled = false;
             }
@@ -148,9 +155,6 @@ namespace FrostyModManager.Windows
                     return;
                 }
             }
-
-            if (ProfilesLibrary.ContainsEAC)
-                FrostyMessageBox.Show("This game contains EasyAntiCheat and cannot automatically generate an sdk. We will not support nor assist anyone who attempts to bypass it.", "Warning");
 
             // create
             Config.AddGame(fi.Name.Remove(fi.Name.Length - 4), fi.DirectoryName);
@@ -234,6 +238,16 @@ namespace FrostyModManager.Windows
                 Config.Save();
             }
         }
+        
+        private void ModifyConfigurationButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (FrostyMessageBox.Show("Are you sure you want to change the game path for this profile?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                FrostyConfiguration selectedItem = ConfigurationListView.SelectedItem as FrostyConfiguration;
+
+                ChangeGamePath(selectedItem.ProfileName, selectedItem.GameName);
+            }
+        }
 
         private void RefreshConfigurationList()
         {
@@ -247,15 +261,55 @@ namespace FrostyModManager.Windows
                     {
                         configurations.Add(new FrostyConfiguration(profile));
                     }
-                    catch (System.IO.FileNotFoundException)
+                    catch (FileNotFoundException)
                     {
-                        Config.RemoveGame(profile); // couldn't find the exe, so remove it from the profile list
-                        Config.Save();
+                        string displayName = ProfilesLibrary.GetProfileDisplayName(profile);
+                        
+                        MessageBoxResult result = FrostyMessageBox.Show($"{displayName} could not be found\n\nDo you want to remove this profile?\n\nSelecting 'No' will allow you to choose another location.", "Missing Profile", MessageBoxButton.YesNoCancel);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            Config.RemoveGame(profile);
+                            Config.Save();
+                        }
+                        else if (result == MessageBoxResult.No)
+                        {
+                            ChangeGamePath(profile, displayName);
+                        }
                     }
                 }
 
                 ConfigurationListView.ItemsSource = configurations;
             });
+        }
+        
+        private void ChangeGamePath(string profile, string displayName)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = $"*.exe (Game Executable)|{profile}.exe",
+                Title = $"Choose {displayName} Game Executable"
+            };
+
+            if (ofd.ShowDialog() == false)
+            {
+                FrostyMessageBox.Show("No game executable chosen.", "Frosty Mod Manager");
+                return;
+            }
+
+            FileInfo fi = new FileInfo(ofd.FileName);
+
+            // try to load game profile
+            if (!ProfilesLibrary.HasProfile(profile))
+            {
+                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Mod Manager");
+                return;
+            }
+            
+            Config.Add("GamePath", fi.DirectoryName, ConfigScope.Game, profile);
+            Config.Save();
+            
+            RefreshConfigurationList();
         }
 
         private void SelectConfiguration()

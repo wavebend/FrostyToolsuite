@@ -222,6 +222,14 @@ namespace FrostySdk
 
             return true;
         }
+        
+        public static string GetProfileDisplayName(string profileKey)
+        {
+            Profile? profile = m_profiles.Find((Profile a) => a.Name.Equals(profileKey, StringComparison.OrdinalIgnoreCase));
+            m_effectiveProfile = profile.Value;
+
+            return m_effectiveProfile.DisplayName;
+        }
 
         public static bool SelectProfile(ProfileVersion version)
         {
