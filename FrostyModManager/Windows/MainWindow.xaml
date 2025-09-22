@@ -259,7 +259,7 @@
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
 
-                        <ctrl:FrostyTabControl x:Name="availableModsTabControl" SelectionChanged="tabControl_SelectionChanged">
+                        <ctrl:FrostyTabControl x:Name="availableModsTabControl" SelectionChanged="tabControlPrimary_SelectionChanged">
                             <ctrl:FrostyTabControl.Style>
                                 <Style TargetType="{x:Type ctrl:FrostyTabControl}">
                                     <Setter Property="Template">
@@ -648,7 +648,7 @@
                                 </Grid>
                             </ctrl:FrostyTabItem>
                             <!-- DAVExtender(Dex) Mods -->
-                            <ctrl:FrostyTabItem x:Name="tabDEX" Header="DAVExtender(Dex) Mods" Visibility="Collapsed">
+                            <ctrl:FrostyTabItem x:Name="dexTabItem" Header="DAVExtender(Dex) Mods" Visibility="Collapsed">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -785,7 +785,7 @@
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
 
-                        <ctrl:FrostyTabControl x:Name="tabControl" SelectionChanged="tabControl_SelectionChanged">
+                        <ctrl:FrostyTabControl x:Name="tabControl" SelectionChanged="tabControlSecondary_SelectionChanged">
                             <ctrl:FrostyTabControl.Style>
                                 <Style TargetType="{x:Type ctrl:FrostyTabControl}">
                                     <Setter Property="Template">

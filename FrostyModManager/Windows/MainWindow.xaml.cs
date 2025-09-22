@@ -9,7 +9,6 @@ using Frosty.Controls;
 using System.IO;
 using System.Globalization;
 using FrostySdk;
-using FrostySdk.Interfaces;
 using Microsoft.Win32;
 using FrostySdk.IO;
 using Frosty.ModSupport;
@@ -22,21 +21,17 @@ using System.Threading;
 using Frosty.Core.Mod;
 using Frosty.Core;
 using Frosty.Core.Windows;
-using FrostySdk.Managers;
 using Frosty.Core.IO;
 using FrostyCore;
 using Frosty.Core.Controls;
 using System.IO.Compression;
 using FrostySdk.Managers.Entries;
 using Newtonsoft.Json;
-using System.Reflection;
 using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using DEXManifest;
-using Newtonsoft.Json.Linq;
-using SharpSevenZip;
 
 namespace FrostyModManager
 {
@@ -486,7 +481,7 @@ namespace FrostyModManager
             {
                 RefreshDexMods();
 
-                tabDEX.Visibility = Visibility.Visible;
+                dexTabItem.Visibility = Visibility.Visible;
                 dexHeader.Visibility = Visibility.Visible;
                 dexInstall.Header = "Installed";
                 dexInstall.IsEnabled = false;
@@ -1789,7 +1784,7 @@ namespace FrostyModManager
 
         private void SelectedProfile_AppliedModsUpdated(object sender, RoutedEventArgs e)
         {
-            if (tabControl.SelectedItem == conflictsTabItem)
+            if (tabControl.SelectedItem.Equals(conflictsTabItem))
                 UpdateConflicts();
 
             conflictsTabItem.Visibility = Visibility.Visible;
@@ -2018,7 +2013,15 @@ namespace FrostyModManager
             totalResourceList[index].AddMod(modName, modTitle, type, null);
         }
 
-        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void tabControlPrimary_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dexTabItem.IsSelected)
+            {
+                RefreshDexMods();
+            }
+        }
+        
+        private void tabControlSecondary_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (conflictsTabItem.IsSelected && showOnlyReplacementsCheckBox.IsChecked == false)
             {
