@@ -1,12 +1,10 @@
 ﻿using Frosty.Controls;
-using Frosty.Core;
 using Frosty.Core.Controls;
 using Frosty.Core.Controls.Editors;
 using Frosty.Core.Misc;
 using FrostySdk.Attributes;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,7 +15,6 @@ using FrostySdk;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using FrostySdk.Managers.Entries;
-using System.IO;
 
 namespace Frosty.Core.Windows
 {
@@ -39,6 +36,10 @@ namespace Frosty.Core.Windows
     }
 
     public class FrostyLocalizationLanguageDataEditor : FrostyCustomComboDataEditor<string, string>
+    {
+    }
+
+    public class FrostyCustomPathEditor : FrostyFolderPathEditor
     {
     }
 
@@ -398,9 +399,9 @@ namespace Frosty.Core.Windows
         [Category("Manager")]
         [DisplayName("Custom Mods Directory")]
         [Description("Select directory to load mods from upon startup.")]
-        [EbxFieldMeta(EbxFieldType.String)]
+        [Editor(typeof(FrostyCustomPathEditor))]
         [DependsOn("UseCustomModsDirectory")]
-        public string CustomModsDirectory { get; set; }
+        public string CustomModsDirectory { get; set; } = "";
 
         public override void Load()
         {
@@ -420,10 +421,7 @@ namespace Frosty.Core.Windows
             Config.Add("CommandLineArgs", CommandLineArgs, ConfigScope.Game);
             
             Config.Add("UseCustomModsDirectory", UseCustomModsDirectory);
-            if (Directory.Exists(CustomModsDirectory))
-            {
-                Config.Add("CustomModsDirectory", CustomModsDirectory);
-            }
+            Config.Add("CustomModsDirectory", CustomModsDirectory);
 
             if (RememberChoice)
                 Config.Add("DefaultProfile2", ProfilesLibrary.ProfileName);
@@ -435,6 +433,21 @@ namespace Frosty.Core.Windows
 
         public override bool Validate()
         {
+            // Custom Mods Directory
+            if (UseCustomModsDirectory)
+            {
+                string[] folders = CustomModsDirectory.Split('\\');
+
+                foreach (var folder in folders)
+                {
+                    if (ProfilesLibrary.HasProfile(folder))
+                    {
+                        FrostyMessageBox.Show($"Path cannot contain '{folder}'", "Custom Mods Directory");
+                        return false;
+                    }
+                }
+            }
+            
             return true;
         }
     }

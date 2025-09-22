@@ -103,6 +103,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <Reference Include="System.Data" />
@@ -233,6 +234,7 @@
     <Compile Include="Controls\Editors\FrostyCStringEditor.cs" />
     <Compile Include="Controls\Editors\FrostyCustomComboDataEditor.cs" />
     <Compile Include="Controls\Editors\FrostyEnumEditor.cs" />
+    <Compile Include="Controls\Editors\FrostyFolderPathEditor.cs" />
     <Compile Include="Controls\Editors\FrostyGuidEditor.cs" />
     <Compile Include="Controls\Editors\FrostyImagePathEditor.cs" />
     <Compile Include="Controls\Editors\FrostyLinearTransformEditor.cs" />
@@ -393,6 +395,7 @@
     <Resource Include="Images\Clear.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\More.png" />
     <Resource Include="Images\Rename.png" />
   </ItemGroup>
   <ItemGroup>
