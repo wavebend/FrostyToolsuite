@@ -77,7 +77,7 @@ namespace FrostyEditor.Windows
 
                     if (defaultConfiguration == null)
                     {
-                        FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Mod Manager");
+                        FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Editor");
                         return;
                     }
                     
@@ -244,7 +244,7 @@ namespace FrostyEditor.Windows
 
         private void ModifyConfigurationButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (FrostyMessageBox.Show("Are you sure you want to change the game path for this profile?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (FrostyMessageBox.Show("Are you sure you want to change the game path for this profile?", "Frosty Editor", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 FrostyConfiguration selectedItem = ConfigurationListView.SelectedItem as FrostyConfiguration;
 
@@ -296,7 +296,7 @@ namespace FrostyEditor.Windows
 
             if (ofd.ShowDialog() == false)
             {
-                FrostyMessageBox.Show("No game executable chosen.", "Frosty Mod Manager");
+                FrostyMessageBox.Show("No game executable chosen.", "Frosty Editor");
                 return;
             }
 
@@ -305,7 +305,7 @@ namespace FrostyEditor.Windows
             // try to load game profile
             if (!ProfilesLibrary.HasProfile(profile))
             {
-                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Mod Manager");
+                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Editor");
                 return;
             }
             
