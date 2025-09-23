@@ -1,4 +1,22 @@
-﻿v1.0.7 - 2025.9.15.0
+﻿v1.0.7 - 2025.9.23.0
+--------
+Improvements:
+- Improved directory selection for 'Custom Mods Directory' option
+- Added 'Custom Autosave Directory' option within the Editor
+- Added option to modify game path for selected profile
+
+Bug Fixes:
+- Fixed issue where Editor would not load correctly if launched via .fbproject
+- Fixed issue where ContextMenu for FrostyPropertyGrid had an inconsistent style
+- Fixed issue where 'Resources' tab would update regardless of which tab was selected
+- Fixed issue where Editor/Mod Manager would crash if selection without a 'EbxClassMetaAttribute' was copied
+
+Misc:
+- If game path can not be found for a profile, the user will now be prompted to either update the game path or remove the profile.
+- Modified order for 'Discord RPC' options
+- Selecting 'DAVExtender(Dex) Mods' tab will update contents
+
+v1.0.7 - 2025.9.15.0
 --------
 Improvements:
 - Added 'Unify Assets' plugin that detects and replaces incompatible chunks within assets. (Allows incompatible assets from the Steam or EA version of the game to be compatible with both.)
