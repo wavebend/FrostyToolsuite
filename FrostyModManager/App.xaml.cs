@@ -94,7 +94,7 @@ namespace FrostyModManager
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             string dllname = args.Name.Contains(",") ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name;
-            if (dllname.StartsWith("SharpDX") || dllname.StartsWith("Newtonsoft"))
+            if (dllname.StartsWith("SharpDX") || dllname.StartsWith("Newtonsoft") || dllname.StartsWith("Ookii"))
             {
                 FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
                 return Assembly.LoadFile(fi.DirectoryName + "/ThirdParty/" + dllname + ".dll");

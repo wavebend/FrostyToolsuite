@@ -74,13 +74,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\FrostyEditor\ThirdParty\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="System.Buffers">
       <Version>4.6.1</Version>
     </PackageReference>
@@ -357,10 +358,8 @@
     <Resource Include="Images\CircleCheck.png" />
     <Resource Include="Images\CircleX.png" />
     <Resource Include="Images\ModImportWarningApplied.png" />
+    <None Include="ILRepack.targets" />
     <Content Include="ThirdParty\7z.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ThirdParty\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ThirdParty\LZMA.dll">
@@ -379,4 +378,17 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <Target Name="MoveFiles" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToMove Include="$(OutputPath)\Newtonsoft.Json.dll"/>
+      <FilesToMove Include="$(OutputPath)\Ookii.Dialogs.Wpf.dll"/>
+    </ItemGroup>
+    <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(OutputPath)\ThirdParty" />
+  </Target>
+  <Target Name="DeletePDBs" AfterTargets="MoveFiles">
+    <ItemGroup>
+      <FilesToDelete Include="$(OutputPath)\Ookii.Dialogs.Wpf.pdb"/>
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
 </Project>

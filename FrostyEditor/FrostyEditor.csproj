@@ -95,10 +95,6 @@
     <AssemblyOriginatorKeyFile>FrostyEditor.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>ThirdParty\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -109,6 +105,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <Reference Include="System.Xaml" RequiredTargetFramework="4.0" />
@@ -386,7 +383,6 @@
     <Content Include="ThirdParty\libfbxsdk.dll" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="ThirdParty\luacmp.dll" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="ThirdParty\luacmp.dll" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="ThirdParty\Newtonsoft.Json.dll" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="ThirdParty\SharpDX.Desktop.dll" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="ThirdParty\SharpDX.Direct2D1.dll" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="ThirdParty\SharpDX.Direct3D11.dll" CopyToOutputDirectory="PreserveNewest" />
@@ -456,11 +452,17 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Target Name="MoveFiles" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToMove Include="$(OutputPath)\Newtonsoft.Json.dll"/>
+      <FilesToMove Include="$(OutputPath)\Ookii.Dialogs.Wpf.dll"/>
+    </ItemGroup>
+    <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(OutputPath)\ThirdParty" />
   </Target>
-  <Target Name="AfterBuild">
+  <Target Name="DeletePDBs" AfterTargets="MoveFiles">
+    <ItemGroup>
+      <FilesToDelete Include="$(OutputPath)\Ookii.Dialogs.Wpf.pdb"/>
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
   </Target>
-  -->
 </Project>
