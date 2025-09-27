@@ -213,18 +213,15 @@ namespace SharpSevenZip
         /// <returns>Zero if Ok</returns>
         public unsafe int Write(IntPtr data, uint size, IntPtr processedSize)
         {
-            using (var stream = new UnmanagedMemoryStream((byte*)data.ToPointer(), size))
+            DataHelper.Write(data, 0, BaseStream, (int)size);
+
+            if (processedSize != IntPtr.Zero)
             {
-                stream.CopyTo(BaseStream);
-
-                if (processedSize != IntPtr.Zero)
-                {
-                    Marshal.WriteInt32(processedSize, (int)size);
-                }
-
-                OnBytesWritten((int)size);
-                return 0;
+                Marshal.WriteInt32(processedSize, (int)size);
             }
+
+            OnBytesWritten((int)size);
+            return 0;
         }
 
         /// <summary>
@@ -500,21 +497,14 @@ namespace SharpSevenZip
             while (size > _volumeSize - Streams[CurrentStream].Position)
             {
                 var count = (int)(_volumeSize - Streams[CurrentStream].Position);
-                using (var stream0 = new UnmanagedMemoryStream((byte*)(data + offset).ToPointer(), count))
-                {
-                    stream0.CopyTo(Streams[CurrentStream]);
-                }
-
+                DataHelper.Write(data, offset, Streams[CurrentStream], count);
 
                 size -= (uint)count;
                 offset += count;
                 NewVolumeStream();
             }
 
-            using (var stream1 = new UnmanagedMemoryStream((byte*)(data + offset).ToPointer(), (int)size))
-            {
-                stream1.CopyTo(Streams[CurrentStream]);
-            }
+            DataHelper.Write(data, offset, Streams[CurrentStream], (int)size);
 
             if (processedSize != IntPtr.Zero)
             {
@@ -584,6 +574,31 @@ namespace SharpSevenZip
         private void OnBytesWritten(int e)
         {
             BytesWritten?.Invoke(this, new IntEventArgs(e));
+        }
+    }
+    
+    internal static class DataHelper
+    {
+        public static unsafe int Write(IntPtr data, int offset, Stream destination, int size)
+        {
+            using (var stream = new UnmanagedMemoryStream((byte*)(data + offset).ToPointer(), size))
+            {
+                byte[] buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(8192);
+                try
+                {
+                    int bytesRead;
+                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        destination.Write(buffer, 0, bytesRead);
+                    }
+                }
+                finally
+                {
+                    System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
+                }
+
+                return 0;
+            }
         }
     }
 }

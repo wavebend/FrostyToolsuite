@@ -42,7 +42,7 @@ namespace SharpSevenZip
         private ReadOnlyCollection<ArchiveFileInfo> _archiveFileInfoCollection;
         private ReadOnlyCollection<ArchiveProperty> _archiveProperties;
         private ReadOnlyCollection<string> _volumeFileNames;
-        private readonly bool _leaveOpen;
+        private bool _leaveOpen;
 
         /// <summary>
         /// This is used to lock possible Dispose() calls.
@@ -782,6 +782,7 @@ namespace SharpSevenZip
                     _archive?.Close();
                 }
                 catch (Exception) { }
+                _opened = false;
             }
 
             _archive = null;

@@ -7,6 +7,21 @@ namespace SharpSevenZip
     [SecurityCritical, SuppressUnmanagedCodeSecurity]
     internal static class NativeMethods
     {
+        public static ulong GetThreadCycles()
+        {
+            if (!QueryThreadCycleTime(PseudoHandle, out ulong cycles))
+            {
+                return ulong.MaxValue;
+            }
+
+            return cycles;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool QueryThreadCycleTime(IntPtr hThread, out ulong cycles);
+
+        private static readonly IntPtr PseudoHandle = (IntPtr)(-2);
+        
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate int CreateObjectDelegate(
             [In] ref Guid classID,

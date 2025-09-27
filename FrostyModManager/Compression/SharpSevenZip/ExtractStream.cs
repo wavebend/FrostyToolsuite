@@ -100,7 +100,7 @@ namespace SharpSevenZip
 
                 if (_position >= _currentDataLength)
                 {
-                    lock(_lock)
+                    lock (_lock)
                     {
                         _currentData.Dispose();
                         _currentData = null;
@@ -188,9 +188,27 @@ namespace SharpSevenZip
                 _unpackedSize = -1;
             }
 
-            Thread.Sleep(1);
+            SleepDelay();
 
             base.Dispose(disposing);
+        }
+        
+        private static void SleepDelay()
+        {
+            //Thread.Sleep(1);
+
+            ulong start = NativeMethods.GetThreadCycles();
+
+            while (true)
+            {
+                ulong end = NativeMethods.GetThreadCycles();
+                ulong cycles = end - start;
+
+                if (cycles > 400000u)
+                {
+                    return;
+                }
+            }
         }
     }
 }

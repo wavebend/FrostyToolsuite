@@ -43,10 +43,21 @@ namespace SharpSevenZip
     }
 
     /// <summary>
+    /// Sfx module target platform choice enumeration
+    /// </summary>
+    public enum SfxTarget
+    {
+        Auto, // use Environment.Is64BitProcess
+        X86,
+        X64
+    }
+
+    /// <summary>
     /// The class for making 7-zip based self-extracting archives.
     /// </summary>
     public class SharpSevenZipSfx
     {
+        public static SfxTarget TargetPlatform { get; set; } = SfxTarget.Auto;
         private static Dictionary<SfxModule, List<string>> SfxSupportedModuleNames
         {
             get
@@ -57,7 +68,9 @@ namespace SharpSevenZip
                         {SfxModule.Installer, new List<string>(2) {"7zS.sfx", "7zSD.sfx"}}
                     };
 
-                if (Environment.Is64BitProcess)
+                bool use64 = TargetPlatform == SfxTarget.X64 || (TargetPlatform == SfxTarget.Auto && Environment.Is64BitProcess);
+                
+                if (use64)
                 {
                     result.Add(SfxModule.Default, new List<string>(1) { "7zxSD_All_x64.sfx" });
                     result.Add(SfxModule.Extended, new List<string>(4) { "7zxSD_All_x64.sfx", "7zxSD_Deflate_x64", "7zxSD_LZMA_x64", "7zxSD_PPMd_x64" });
