@@ -2174,8 +2174,10 @@ namespace FrostyModManager
         {
             FrostyTaskWindow.Show("Exporting Pack", "", (task) =>
             {
+#if !FROSTY_DEVELOPER
                 try
                 {
+#endif
                     List<string> mods = new List<string>();
                     foreach (FrostyAppliedMod mod in selectedPack.AppliedMods)
                     {
@@ -2195,7 +2197,7 @@ namespace FrostyModManager
                     {
                         foreach (FrostyAppliedMod mod in selectedPack.AppliedMods)
                         {
-                            if (mod.Mod is FrostyModCollection)
+                            if (mod.Mod == null || mod.Mod is FrostyModCollection)
                                 continue;
                             archive.CreateEntryFromFile((mod.Mod as FrostyMod).Path, mod.Mod.Filename);
                         }
@@ -2210,11 +2212,14 @@ namespace FrostyModManager
 
                         archive.Dispose();
                     }
+#if !FROSTY_DEVELOPER 
                 }
                 catch
                 {
+                    FrostyMessageBox.Show("Failed to Export Pack", "Frosty Mod Manager");
                     File.Delete(filename);
                 }
+#endif
             });
         }
 
