@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using FrostySdk.IO;
-using System.Collections;
-using System.Runtime.InteropServices;
 using SharpSevenZip;
 using System.Linq;
 
 namespace FrostyModManager.Compression
 {
-    public class SevenZipDecompressor : IDecompressor
+    public class SharpSevenZipDecompressor : IDecompressor
     {
         private string archiveName;
 
@@ -26,11 +23,6 @@ namespace FrostyModManager.Compression
             {
                 return executor.Check();
             }
-        }
-
-        public void CloseArchive()
-        {
-
         }
 
         public void DecompressToFile(CompressedFileInfo fileInfo, string filename)
@@ -55,7 +47,8 @@ namespace FrostyModManager.Compression
 
                 if (fileData == null)
                 {
-                    throw new ArgumentException($"Compressed 7z file '{fileInfo.Filename}' could not be found in archive file '{archiveName}'.");
+                    string ext = Path.GetExtension(archiveName).Replace(".", "");
+                    throw new ArgumentException($"Compressed {ext} file '{fileInfo.Filename}' could not be found in archive file '{archiveName}'.");
                 }
 
                 executor.ExtractFile(fileData.FileName, ms);

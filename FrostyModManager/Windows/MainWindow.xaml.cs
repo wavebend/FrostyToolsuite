@@ -1162,10 +1162,7 @@ namespace FrostyModManager
                             int fbpacks = 0;
 
                             // create decompressor
-                            IDecompressor decompressor = null;
-                            if (fi.Extension == ".rar") decompressor = new RarDecompressor();
-                            else if (fi.Extension == ".zip" || fi.Extension == ".fbpack") decompressor = new ZipDecompressor();
-                            else if (fi.Extension == ".7z") decompressor = new SevenZipDecompressor();
+                            IDecompressor decompressor = new SharpSevenZipDecompressor();
 
                             try
                             {
@@ -1241,8 +1238,6 @@ namespace FrostyModManager
                                         }
                                     }
                                 }
-
-                                decompressor.CloseArchive();
                             }
                             catch
                             {
@@ -1306,7 +1301,6 @@ namespace FrostyModManager
                                         decompressor.DecompressToFile(compressedFi,Path.Combine(modsDir.FullName, compressedFi.Filename));
                                     }
                                 }
-                                decompressor.CloseArchive();
 
                                 // and add them to the mod manager
                                 for (int i = 0; i < mods.Count; i++)
@@ -1335,7 +1329,6 @@ namespace FrostyModManager
                                         }
                                     }
                                 }
-                                decompressor.CloseArchive();
 
                                 // and add them to the mod manager
                                 for (int i = 0; i < collections.Count; i++)

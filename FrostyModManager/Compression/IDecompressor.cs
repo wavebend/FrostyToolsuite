@@ -49,7 +49,6 @@ namespace FrostyModManager.Compression
     public interface IDecompressor
     {
         bool OpenArchive(string filename);
-        void CloseArchive();
 
         IEnumerable<CompressedFileInfo> EnumerateFiles();
         byte[] DecompressToMemory(CompressedFileInfo fileInfo);

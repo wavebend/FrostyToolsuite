@@ -237,8 +237,6 @@
     </Compile>
     <Compile Include="Compression\IDecompressor.cs" />
     <Compile Include="Compression\LZMA.cs" />
-    <Compile Include="Compression\UnRar.cs" />
-    <Compile Include="Compression\Zip.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Controls\FrostyModDescription.cs" />
     <Compile Include="Windows\InstallErrorsWindow.xaml.cs">
@@ -360,12 +358,6 @@
     <Resource Include="Images\ModImportWarningApplied.png" />
     <None Include="ILRepack.targets" />
     <Content Include="ThirdParty\7z.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ThirdParty\LZMA.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ThirdParty\UnRAR.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
