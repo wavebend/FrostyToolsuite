@@ -24,7 +24,8 @@ namespace Frosty.Core.Windows
         {
             InitializeComponent();
 
-            infoTextBox.Text = "You are using an outdated version of Frosty.\n\nWould you like to download the latest version?";
+            infoTextBox.Text = $"You are using an outdated version of {App.Title}\n\nWould you like to download the latest version?";
+            infoTextBox.TextAlignment = TextAlignment.Center;
 
             changeLog();
         }

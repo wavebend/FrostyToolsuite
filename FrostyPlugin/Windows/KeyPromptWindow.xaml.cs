@@ -31,7 +31,7 @@ namespace Frosty.Core.Windows
             }
             catch
             {
-                FrostyMessageBox.Show("Encryption key is invalid. Please try again.", "Frosty Core");
+                FrostyMessageBox.Show("Encryption key is invalid. Please try again.", App.Title);
                 return;
             }
 
@@ -42,8 +42,7 @@ namespace Frosty.Core.Windows
             }
             else
             {
-                FrostyMessageBox.Show("Encryption key is invalid. Please try again.", "Frosty Core");
-                return;
+                FrostyMessageBox.Show("Encryption key is invalid. Please try again.", App.Title);
             }
         }
 

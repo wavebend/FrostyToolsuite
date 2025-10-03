@@ -92,17 +92,9 @@ namespace Frosty.Core.Windows
         {
             ModDataListItem selectedPack = ((Button)sender).DataContext as ModDataListItem;
 
-            string appTitle = "Frosty Mod Manager";
-
-            if (App.IsEditor)
-            {
-                appTitle = "Frosty Editor";
-            }
-
             DateTime lastModifed = System.IO.File.GetLastWriteTime(selectedPack.Path);
 
-            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to delete this folder?" + "\n\n" + selectedPack.Name + "\n" + lastModifed, appTitle, MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
+            if (FrostyMessageBox.Show($"Are you sure you want to delete this folder?\n\n{selectedPack.Name}\n{lastModified}", App.Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 try
                 {
@@ -112,7 +104,7 @@ namespace Frosty.Core.Windows
                 catch (IOException)
                 {
                     System.Threading.Tasks.Task.Run(() => {
-                        FrostyMessageBox.Show("Folder could not be deleted.\nTry running Frosty as Administrator.", appTitle, MessageBoxButton.OK);
+                        FrostyMessageBox.Show("Folder could not be deleted.\n\nTry running Frosty as Administrator.", App.Title, MessageBoxButton.OK);
                     });
                 }
             }

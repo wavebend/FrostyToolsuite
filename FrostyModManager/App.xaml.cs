@@ -58,6 +58,7 @@ namespace FrostyModManager
             Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + " - " + Frosty.Core.App.BuildVersion;
 
             Frosty.Core.App.IsEditor = false;
+            Frosty.Core.App.Title = "Frosty Mod Manager";
 
             Logger = new FrostyLogger();
             Logger.Log("Frosty Mod Manager v{0}", Frosty.Core.App.Version);

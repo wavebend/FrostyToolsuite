@@ -29,6 +29,7 @@ namespace Frosty.Core
         public static ILogger Logger;
 
         public static bool IsEditor = true;
+        public static string Title = "Frosty Editor";
 
         public static string Version = "";
         public static readonly int MinorVersion = 1;
@@ -57,7 +58,7 @@ namespace Frosty.Core
             // load profiles
             if (!ProfilesLibrary.SelectProfile(profile))
             {
-                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Core");
+                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", Title);
                 return false;
             }
 
