@@ -1,11 +1,7 @@
-﻿using Frosty.Controls;
-using FrostySdk;
-using Microsoft.Win32;
-using SharpDX.Direct2D1;
-using System.ComponentModel;
+﻿using FrostySdk;
 using System.IO;
 using System.Reflection;
-using System.Windows.Media;
+using System.Windows;
 using System.Windows.Navigation;
 
 namespace Frosty.Core.Windows
@@ -13,12 +9,18 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for AboutWindow.xaml
     /// </summary>
-    public partial class AboutWindow : FrostyDockableWindow
+    public partial class AboutWindow
     {
         public AboutWindow()
         {
             InitializeComponent();
 
+            Window mainWin = Application.Current.MainWindow;
+            if (mainWin != null)
+            {
+                Icon = mainWin.Icon;
+            }
+            
             if (!App.IsEditor)
             {
                 using (StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Frosty.Core.CreditsFMM.txt")))
@@ -31,10 +33,10 @@ namespace Frosty.Core.Windows
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
             {
-                veilguardPanel.Visibility = System.Windows.Visibility.Visible;
+                veilguardPanel.Visibility = Visibility.Visible;
             }
 
-            versionTextBox.Text = "Version " + Frosty.Core.App.Version;
+            versionTextBox.Text = "Version " + App.Version;
         }
 
         private void hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

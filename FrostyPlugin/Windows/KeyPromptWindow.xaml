@@ -3,24 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Frosty.Core.Windows"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Enter Key" Height="200" Width="325"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Enter Key" Height="244" Width="305"
+        ResizeMode="NoResize" Icon="/FrostyCore;component/AppIcon.ico"
+        WindowStartupLocation="CenterScreen">
     
-    <Grid Background="{StaticResource ListBackground}">
+    <Grid Background="{StaticResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,7,4,4">
-            <TextBlock Grid.Column="0" Text="The developers cannot provide the encryption key." Foreground="{StaticResource FontColor}"  VerticalAlignment="Center" Margin="2,1" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Text="This game requires an encryption key before you can" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,15,2,0"/>
-            <TextBlock Grid.Column="0" Text="access the game files." Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,1"/>
-            <TextBlock Grid.Column="0" Text="Please enter the encryption key:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,18,2,6"/>
-            <TextBox Grid.Column="1" x:Name="keyTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22" />
+        <StackPanel Grid.Row="0" Orientation="Vertical" Background="{StaticResource ListBackground}">
+            <TextBlock Text="The developers cannot provide the encryption key." Foreground="{StaticResource FontColor}"  VerticalAlignment="Center" Margin="6,7,6,1" FontWeight="Bold"/>
+            <TextBlock Text="This game requires an encryption key before you can access the game files." Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="6,15,4,0" TextWrapping="Wrap"/>
+            <TextBlock Text="Please enter the encryption key:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="6,18,6,6"/>
+            <TextBox x:Name="keyTextBox" Margin="4,0,4,4" BorderThickness="1" VerticalContentAlignment="Top" Height="66" TextWrapping="Wrap" TextAlignment="Justify" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
         </StackPanel>
 
         <Grid Grid.Row="1" Margin="4">

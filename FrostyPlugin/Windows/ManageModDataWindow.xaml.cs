@@ -20,7 +20,7 @@ namespace Frosty.Core.Windows
     /// Author: Stoichiom, Dyvinia
     /// Class <c>ManageModDataWindow</c> handles the logic for deleting specified ModData folders. 
     /// </summary>
-    public partial class ManageModDataWindow : FrostyDockableWindow
+    public partial class ManageModDataWindow
     {
         public ManageModDataWindow()
         {
@@ -35,23 +35,25 @@ namespace Frosty.Core.Windows
 
                 Left = x - (Width / 2.0);
                 Top = y - (MaxHeight / 2.0);
+                
+                Icon = mainWin.Icon;
             }
 
             // Draws the user's ModData directory on modDataNameTextBox
-            string modDataPath = getModDataPath();
+            string modDataPath = GetModDataPath();
             modDataNameTextBox.Text = modDataPath;
 
             // Done to avoid potential IO error on init
             if (!Directory.Exists(modDataPath))
                 Directory.CreateDirectory(modDataPath);
 
-            listPacks();
+            ListPacks();
         }
 
         /// <summary>
         /// Method <c>getModDataPath</c> Returns the path to the ModData folder.
         /// </summary>
-        private string getModDataPath()
+        private string GetModDataPath()
         {
             return Config.Get<string>("GamePath", "", ConfigScope.Game, ProfilesLibrary.ProfileName) + "\\ModData";
         }
@@ -59,12 +61,12 @@ namespace Frosty.Core.Windows
         /// <summary>
         /// Method <c>listPacks</c> lists the available packs in the ModData folder
         /// </summary>
-        private void listPacks()
+        private void ListPacks()
         {
             // Cleans out old items
             modDataList.Items.Clear();
 
-            string modDataPath = getModDataPath();
+            string modDataPath = GetModDataPath();
 
             // Grabs the packs currently in the ModData folder.
             string[] modDataPacks = Directory.GetDirectories(modDataPath, "*", SearchOption.TopDirectoryOnly);
@@ -77,29 +79,20 @@ namespace Frosty.Core.Windows
         }
 
         /// <summary>
-        /// Method <c>closeButton_Click</c> closes the window
-        /// </summary>
-        private void closeButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
-
-        /// <summary>
         /// Method <c>deleteModData_Click</c> Delete operation for the selected ModData pack folder
         /// </summary>
         private void deleteModData_Click(object sender, RoutedEventArgs e)
         {
             ModDataListItem selectedPack = ((Button)sender).DataContext as ModDataListItem;
 
-            DateTime lastModifed = System.IO.File.GetLastWriteTime(selectedPack.Path);
+            DateTime lastModified = File.GetLastWriteTime(selectedPack.Path);
 
             if (FrostyMessageBox.Show($"Are you sure you want to delete this folder?\n\n{selectedPack.Name}\n{lastModified}", App.Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 try
                 {
                     Directory.Delete(selectedPack.Path, true);
-                    listPacks();
+                    ListPacks();
                 }
                 catch (IOException)
                 {

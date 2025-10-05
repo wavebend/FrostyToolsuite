@@ -4,12 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-        xmlns:local="clr-namespace:Frosty.Core.Windows"
         xmlns:ext="clr-namespace:Frosty.Core"
         mc:Ignorable="d"
         Title="About Frosty Editor" Height="450" Width="350"
-        ResizeMode="NoResize" Icon="/FrostyCore;component/AppIcon.ico"
-        WindowStartupLocation="CenterScreen">
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     
     <ctrl:FrostyWindow.Resources>
         <ctrl:WindowCloseCommand x:Key="CloseCommand"></ctrl:WindowCloseCommand>
@@ -82,7 +80,7 @@
         </Border>
 
         <Border Grid.Row="1">
-            <Button x:Name="messageBoxOk" Content="OK" Margin="8" HorizontalAlignment="Right" Grid.Row="1" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Button Content="OK" Margin="8" HorizontalAlignment="Right" Grid.Row="1" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
         </Border>
     </Grid>
 </ctrl:FrostyDockableWindow>

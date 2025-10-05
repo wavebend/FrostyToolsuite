@@ -1,5 +1,4 @@
 ﻿using Frosty.Controls;
-using FrostySdk;
 using System.Windows;
 
 namespace Frosty.Core.Windows
@@ -7,7 +6,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for KeyPromptWindow.xaml
     /// </summary>
-    public partial class KeyPromptWindow : FrostyDockableWindow
+    public partial class KeyPromptWindow
     {
         public byte[] EncryptionKey;
 
