@@ -1,32 +1,4 @@
-﻿[Credits]
-
-Project: Json.NET
-Copyright (c) 2007 James Newton-King
-License (MIT): https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md
-
-Project: LZMA SDK
-License: Public domain
-
-Project: SharpSevenZip
-License (LGPL-3.0): https://github.com/JeremyAnsel/SharpSevenZip/blob/main/LICENSE
-
-Project: UnRAR
-Alexander L. Roshal
-The source code of UnRAR utility is freeware. This means:
-
-1. All copyrights to RAR and the utility UnRAR are exclusively owned by the author - Alexander Roshal.
-
-2. UnRAR source code may be used in any software to handle RAR archives without limitations free of charge, but cannot be used to develop RAR (WinRAR) compatible archiver and to re-create RAR compression algorithm, which is proprietary. Distribution of modified UnRAR source code in separate form or as a part of other software is permitted, provided that full text of this paragraph, starting from "UnRAR source code" words, is included in license, or in documentation if license is not available, and in source code comments of resulting package.
-
-3. The UnRAR utility may be freely distributed. It is allowed to distribute UnRAR inside of other software packages.
-
-4. THE RAR ARCHIVER AND THE UnRAR UTILITY ARE DISTRIBUTED "AS IS". NO WARRANTY OF ANY KIND IS EXPRESSED OR IMPLIED. YOU USE AT YOUR OWN RISK. THE AUTHOR WILL NOT BE LIABLE FOR DATA LOSS, DAMAGES, LOSS OF PROFITS OR ANY OTHER KIND OF LOSS WHILE USING OR MISUSING THIS SOFTWARE.
-
-5. Installing and using the UnRAR utility signifies acceptance of these terms and conditions of the license.
-
-6. If you don't agree with terms of the license you must remove UnRAR files from your storage devices and cease to use the utility.
-
-[Contributors]
+﻿[Contributors]
 Mophead
 Wannkunstbeikor
 Brawltendo
@@ -40,3 +12,32 @@ MrJTGaming
 Special thanks to GalaxyMan2015: without his years of work and dedication, Frosty would not exist and Frostbite modding would very well still be in the dark ages. Thanks GMan!
 
 Special thanks to munchyfly for providing endless support to our users.
+
+[Credits]
+
+Project: 7-Zip
+Copyright (c) 1999-2025 Igor Pavlov
+License: https://www.7-zip.org/license.txt
+
+Project: GongSolutions.WPF.DragDrop
+Copyright (c) Jan Karger, Steven Kirk and Contributors. All rights reserved.
+License (BSD 3-Clause License): https://github.com/punker76/gong-wpf-dragdrop/blob/develop/LICENSE
+
+Project: ILRepack.Lib.MSBuild.Task
+Copyright (c) 2016-2025 Ravi Patel. All rights reserved.
+Copyright (c) 2013 Peter Sunde. All rights reserved.
+Copyright (c) 2007 Marcus Griep. All rights reserved.
+Copyright (c) 2004 Evain Jb. All rights reserved.
+License: https://github.com/ravibpatel/ILRepack.Lib.MSBuild.Task/blob/master/LICENSE.md
+
+Project: Json.NET
+Copyright (c) 2007 James Newton-King
+License (MIT): https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md
+
+Project: Ookii.Dialogs.Wpf
+Copyright (c) 2018-2021 Augusto Proiete. All rights reserved.
+Copyright (c) 2009-2018, Sven Groot. All rights reserved.
+License (BSD 3-Clause License): https://github.com/ookii-dialogs/ookii-dialogs-wpf/blob/master/LICENSE
+
+Project: SharpSevenZip
+License (LGPL-3.0): https://github.com/JeremyAnsel/SharpSevenZip/blob/main/LICENSE
