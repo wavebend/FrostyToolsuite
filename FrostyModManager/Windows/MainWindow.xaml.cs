@@ -2187,6 +2187,9 @@ namespace FrostyModManager
 
         private void ZipPack(string filename)
         {
+            bool zipped = false;
+            string filepath = Path.GetDirectoryName(filename);
+            
             FrostyTaskWindow.Show("Exporting Pack", "", (task) =>
             {
 #if !FROSTY_DEVELOPER
@@ -2210,11 +2213,16 @@ namespace FrostyModManager
 
                     using (ZipArchive archive = ZipFile.Open(filename, ZipArchiveMode.Create))
                     {
+                        int progress = 0;
                         foreach (FrostyAppliedMod mod in selectedPack.AppliedMods)
                         {
                             if (mod.Mod == null || mod.Mod is FrostyModCollection)
                                 continue;
-                            archive.CreateEntryFromFile((mod.Mod as FrostyMod).Path, mod.Mod.Filename);
+                            
+                            task.Update(mod.Mod.Filename, (progress / (double)selectedPack.AppliedMods.Count) * 100);
+                            progress++;
+                            
+                            archive.CreateEntryFromFile(((FrostyMod)mod.Mod).Path, mod.Mod.Filename);
                         }
 
                         ZipArchiveEntry manifestEntry = archive.CreateEntry("manifest.json");
@@ -2224,10 +2232,10 @@ namespace FrostyModManager
 
                             stream.Write(buffer, 0, buffer.Length);
                         }
-
-                        archive.Dispose();
                     }
-#if !FROSTY_DEVELOPER 
+
+                    zipped = true;
+#if !FROSTY_DEVELOPER
                 }
                 catch
                 {
@@ -2236,6 +2244,11 @@ namespace FrostyModManager
                 }
 #endif
             });
+
+            if (zipped && FrostyMessageBox.Show($"{Path.GetFileName(filename)} has been exported successfully.\n\nDo you wish to open the export folder?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Process.Start(filepath);
+            }
         }
 
         private void packImport_Click(object sender, RoutedEventArgs e)
