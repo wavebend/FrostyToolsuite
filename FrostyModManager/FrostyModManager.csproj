@@ -77,6 +77,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
     <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -374,6 +375,7 @@
     <ItemGroup>
       <FilesToMove Include="$(OutputPath)\Newtonsoft.Json.dll"/>
       <FilesToMove Include="$(OutputPath)\Ookii.Dialogs.Wpf.dll"/>
+      <FilesToMove Include="$(OutputPath)\GongSolutions.WPF.DragDrop.dll"/>
     </ItemGroup>
     <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(OutputPath)\ThirdParty" />
   </Target>

@@ -95,7 +95,7 @@ namespace FrostyModManager
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             string dllname = args.Name.Contains(",") ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name;
-            if (dllname.StartsWith("SharpDX") || dllname.StartsWith("Newtonsoft") || dllname.StartsWith("Ookii"))
+            if (dllname.StartsWith("SharpDX") || dllname.StartsWith("Newtonsoft") || dllname.StartsWith("Ookii") || dllname.StartsWith("GongSolutions") && !dllname.EndsWith(".resources"))
             {
                 FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
                 return Assembly.LoadFile(fi.DirectoryName + "/ThirdParty/" + dllname + ".dll");
@@ -107,6 +107,12 @@ namespace FrostyModManager
             }
             else if (PluginManager != null)
             {
+                if (dllname.StartsWith("GongSolutions"))
+                {
+                    FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
+                    return PluginManager.GetPluginAssembly(fi.DirectoryName + "/ThirdParty/" + dllname);
+                }
+                
                 return PluginManager.GetPluginAssembly(dllname);
             }
 

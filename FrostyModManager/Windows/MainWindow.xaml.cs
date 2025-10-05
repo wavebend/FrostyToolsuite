@@ -32,6 +32,7 @@ using System.Media;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using DEXManifest;
+using GongSolutions.Wpf.DragDrop;
 
 namespace FrostyModManager
 {
@@ -50,6 +51,18 @@ namespace FrostyModManager
             }
 
             return null;
+        }
+    }
+    
+    public class AppliedModsDropHandler : DefaultDropHandler
+    {
+        public override void Drop(IDropInfo dropInfo)
+        {
+            base.Drop(dropInfo);
+            
+            Window mainWindow = Application.Current.MainWindow;
+            (mainWindow as MainWindow)?.selectedPack.Refresh();
+            (mainWindow as MainWindow)?.appliedModsList.Items.Refresh();
         }
     }
 
