@@ -345,7 +345,7 @@ namespace FrostyModManager
             if (Config.Get<bool>("UseCustomModsDirectory", false) && Directory.Exists(Config.Get<string>("CustomModsDirectory", "")))
             {
                 modsDir = new DirectoryInfo(Path.Combine(Config.Get<string>("CustomModsDirectory", ""), ProfilesLibrary.ProfileName));
-                App.Logger.Log($"Custom Mods Directory: {modsDir.ToString()}");
+                App.Logger.Log($"Custom Mods Directory: {modsDir}");
             }
             else if (Config.Get<bool>("UseCustomModsDirectory", false) && !Directory.Exists(Config.Get<string>("CustomModsDirectory", "")))
             {
@@ -528,7 +528,7 @@ namespace FrostyModManager
             if (Environment.CurrentDirectory.Contains("OneDrive"))
             {
                 SystemSounds.Exclamation.Play();
-                FrostyMessageBox.Show($"Your Frosty Mod Manager installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Mod Manager");
+                FrostyMessageBox.Show($"Your Frosty Mod Manager installation is located within OneDrive.\n\n{Environment.CurrentDirectory}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Mod Manager");
             }
 
             CheckGameFlags();
@@ -550,6 +550,8 @@ namespace FrostyModManager
 
             if (Directory.Exists(modPath))
             {
+                dexMods.IsEnabled = true;
+                
                 string[] modDir = Directory.GetDirectories(modPath);
 
                 foreach (var mod in modDir)
@@ -564,6 +566,10 @@ namespace FrostyModManager
                         activeMods.Add(modJSON);
                     }
                 }
+            }
+            else
+            {
+                dexMods.IsEnabled = false;
             }
 
             LoadedDEXMods.ItemsSource = activeMods;
@@ -1689,7 +1695,10 @@ namespace FrostyModManager
             {
                 Process.Start("https://www.nexusmods.com/dragonagetheveilguard/mods/2315");
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
 
         private void dexMods_Click(object sender, RoutedEventArgs e)
@@ -2058,7 +2067,7 @@ namespace FrostyModManager
             // J-Lyt | RefreshFilter() is no longer applied on focus loss. If the textbox contains text when focus is lost, the textbox is cleared.
             if (availableModsFilterTextBox.Text != "")
             {
-                availableModsFilterTextBox.Text = string.Format("");
+                availableModsFilterTextBox.Text = "";
             }
         }
 
@@ -2389,7 +2398,7 @@ namespace FrostyModManager
 
         private void separatorButton_Click(object sender, RoutedEventArgs e)
         {
-            string separator = "";
+            string separator;
 
             SeparatorWindow win = new SeparatorWindow();
             if (win.ShowDialog() == true)

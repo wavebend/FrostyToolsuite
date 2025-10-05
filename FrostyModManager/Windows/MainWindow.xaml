@@ -174,13 +174,14 @@
                         <MenuItem x:Name="packImport" Header="Import" Click="packImport_Click"/>
                     </MenuItem>
                     <MenuItem x:Name="collectionExport" Header="Create Collection" Click="collectionExport_Click"/>
+                    <Separator/>
                     <MenuItem x:Name="exitMenuItem" Header="Exit" Click="exitMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem x:Name="toolsMenuItem" Header="Tools" Height="22">
                     <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
                     <MenuItem x:Name="dexHeader" Header="DAVExtender(Dex)" Visibility="Collapsed">
                         <MenuItem x:Name="dexInstall" Header="Install" Click="dexInstall_Click"/>
-                        <MenuItem x:Name="dexMods" Header="Open Mods Folder" Click="dexMods_Click"/>
+                        <MenuItem x:Name="dexMods" Header="Open Mods Folder" IsEnabled="False" Click="dexMods_Click"/>
                     </MenuItem>
                     <MenuItem Header="Open Config">
                         <MenuItem x:Name="openSettingsModManager" Header="Mod Manager" Click="openSettingsModManager_Click"/>
