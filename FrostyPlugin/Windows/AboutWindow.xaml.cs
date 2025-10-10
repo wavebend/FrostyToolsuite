@@ -23,6 +23,8 @@ namespace Frosty.Core.Windows
             
             if (!App.IsEditor)
             {
+                Title = "About Frosty Mod Manager";
+                
                 using (StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Frosty.Core.CreditsFMM.txt")))
                 {
                     creditsTextBox.Text = reader.ReadToEnd();
