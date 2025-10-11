@@ -31,7 +31,6 @@ using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using DEXManifest;
 using GongSolutions.Wpf.DragDrop;
 
 namespace FrostyModManager
@@ -556,14 +555,14 @@ namespace FrostyModManager
 
                 foreach (var mod in modDir)
                 {
-                    string modJSONPath = $"{mod}\\dex.json";
+                    string modJsonPath = $"{mod}\\dex.json";
 
-                    if (File.Exists(modJSONPath))
+                    if (File.Exists(modJsonPath))
                     {
-                        string modJSONString = File.ReadAllText(modJSONPath);
-                        ActiveMod modJSON = ManifestActiveMod.FromJson(modJSONString);
+                        string modJsonString = File.ReadAllText(modJsonPath);
+                        ActiveMod modJson = Manifest.FromJson(modJsonString);
 
-                        activeMods.Add(modJSON);
+                        activeMods.Add(modJson);
                     }
                 }
             }

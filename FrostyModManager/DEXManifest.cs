@@ -1,18 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Windows;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-namespace DEXManifest
+namespace FrostyModManager
 {
-    public partial class Manifest
-    {
-        [JsonProperty("active_mods")]
-        public List<ActiveMod> ActiveMods { get; set; }
-    }
-
-    public partial class ActiveMod
+    public class ActiveMod
     {
         [JsonProperty("slug")]
         public string Slug { get; set; }
@@ -30,27 +23,12 @@ namespace DEXManifest
         public List<string> StartupScripts { get; set; }
 
         [JsonIgnore]
-        public string StartupScriptsJoin {
-            get {
-                return string.Join(", ", StartupScripts);
-            }
-        }
+        public string StartupScriptsJoin => string.Join(", ", StartupScripts); //Used by MainWindow.xaml
     }
 
-    public partial class Manifest
+    public abstract class Manifest
     {
-        public static Manifest FromJson(string json) => JsonConvert.DeserializeObject<Manifest>(json, DEXManifest.Converter.Settings);
-    }
-
-    public partial class ManifestActiveMod
-    {
-        public static ActiveMod FromJson(string json) => JsonConvert.DeserializeObject<ActiveMod>(json, DEXManifest.Converter.Settings);
-    }
-
-
-    public static class Serialize
-    {
-        public static string ToJson(this Manifest self) => JsonConvert.SerializeObject(self, DEXManifest.Converter.Settings);
+        public static ActiveMod FromJson(string json) => JsonConvert.DeserializeObject<ActiveMod>(json, Converter.Settings);
     }
 
     internal static class Converter
