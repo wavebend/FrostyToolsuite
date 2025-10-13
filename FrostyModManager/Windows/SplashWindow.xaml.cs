@@ -2,7 +2,6 @@
 using Frosty.Core;
 using Frosty.Core.Legacy;
 using Frosty.Core.Windows;
-using FrostyModManager;
 using FrostySdk;
 using FrostySdk.Converters;
 using FrostySdk.Interfaces;
@@ -26,7 +25,7 @@ namespace FrostyModManager.Windows
     /// <summary>
     /// Interaction logic for SplashWindow.xaml
     /// </summary>
-    public partial class SplashWindow : Window
+    public partial class SplashWindow
     {
         private class SplashWindowLogger : ILogger, INotifyPropertyChanged
         {

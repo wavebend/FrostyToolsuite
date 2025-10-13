@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Frosty.Controls;
 using FrostySdk;
 using Microsoft.Win32;
-using SharpDX;
 
 namespace Frosty.Core.Windows
 {
@@ -69,7 +67,7 @@ namespace Frosty.Core.Windows
                     {
                         configurations.Add(new FrostyConfiguration(profile));
                     }
-                    catch (System.IO.FileNotFoundException)
+                    catch (FileNotFoundException)
                     {
                         Config.RemoveGame(profile); // couldn't find the exe, so remove it from the profile list
                         Config.Save();

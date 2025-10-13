@@ -80,7 +80,7 @@
         </Border>
 
         <Border Grid.Row="1">
-            <Button Content="OK" Margin="8" HorizontalAlignment="Right" Grid.Row="1" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Button Content="OK" Margin="8" HorizontalAlignment="Right" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
         </Border>
     </Grid>
 </ctrl:FrostyDockableWindow>

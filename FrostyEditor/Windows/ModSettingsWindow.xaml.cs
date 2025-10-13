@@ -19,7 +19,7 @@ namespace FrostyEditor.Windows
     /// <summary>
     /// Interaction logic for ModSettingsWindow.xaml
     /// </summary>
-    public partial class ModSettingsWindow : FrostyDockableWindow
+    public partial class ModSettingsWindow
     {
         private ModSettings ModSettings => project.GetModSettings();
         private FrostyProject project;
@@ -159,21 +159,21 @@ namespace FrostyEditor.Windows
                 if (buffer.Length > (32 * 1024 * 1024))
                 {
                     FrostyMessageBox.Show("DEX Archive cannot be larger than 32 MB", "Frosty Editor");
-                    dexButtonEnabled();
+                    DexButtonEnabled();
                     return;
                 }
 
-                if (parseZip(buffer, "dex.json", ofd.SafeFileName))
+                if (ParseZip(buffer, "dex.json", ofd.SafeFileName))
                 {
                     modDEXResourceNameTextBox.Text = ofd.SafeFileName;
                     dexResource = buffer;
 
-                    dexButtonEnabled();
+                    DexButtonEnabled();
                 }
             }
         }
 
-        private void dexButtonEnabled()
+        private void DexButtonEnabled()
         {
             if (dexResource != null)
             {
@@ -187,7 +187,7 @@ namespace FrostyEditor.Windows
             }
         }
 
-        private bool parseZip(byte[] buffer, string filename, string archiveName)
+        private static bool ParseZip(byte[] buffer, string filename, string archiveName)
         {
             Stream data = new MemoryStream(buffer);
 

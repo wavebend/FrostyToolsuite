@@ -359,7 +359,6 @@ namespace FrostyModManager
                 int currentMod = 0;
                 int totalMods = modsDir.EnumerateFiles().Count();
 
-
                 // load mods
                 Parallel.ForEach(modsDir.EnumerateFiles(), fi =>
                 {
@@ -519,11 +518,6 @@ namespace FrostyModManager
                 orderComboBox.SelectedIndex = 1;
             }
 
-            if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
-            {
-                App.CheckVersion();
-            }
-
             if (Environment.CurrentDirectory.Contains("OneDrive"))
             {
                 SystemSounds.Exclamation.Play();
@@ -535,6 +529,11 @@ namespace FrostyModManager
             if (!File.Exists($"{Frosty.Core.App.GlobalSettingsPath}/editor_config.json"))
             {
                 openSettingsEditor.IsEnabled = false;
+            }
+            
+            if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
+            {
+                App.CheckVersion();
             }
 
             GC.Collect();
@@ -574,7 +573,7 @@ namespace FrostyModManager
             LoadedDEXMods.ItemsSource = activeMods;
         }
 
-        public void CheckGameFlags()
+        private static void CheckGameFlags()
         {
             string processName = $"{ProfilesLibrary.ProfileName}.exe";
             string exePath = Path.Combine(Config.Get<string>("GamePath", "", ConfigScope.Game), processName);
@@ -2412,7 +2411,7 @@ namespace FrostyModManager
         {
             string separator;
 
-            SeparatorWindow win = new SeparatorWindow();
+            var win = new Windows.SeparatorWindow();
             if (win.ShowDialog() == true)
             {
                 separator = win.NameSeparator;

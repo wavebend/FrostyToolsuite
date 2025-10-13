@@ -36,7 +36,7 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="22">
-                                            <Image x:Name="imageRect"  Grid.Column="0" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
+                                            <Image x:Name="imageRect" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
                                             <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
                                             <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
                                                 <TextBlock.Text>
@@ -57,7 +57,7 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="22">
-                                            <Image x:Name="imageRect"  Grid.Column="0" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
+                                            <Image x:Name="imageRect" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
                                             <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
                                             <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
                                                 <TextBlock.Text>
@@ -78,7 +78,7 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="22">
-                                            <Image x:Name="imageRect"  Grid.Column="0" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
+                                            <Image x:Name="imageRect" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
                                             <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
                                             <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
                                                 <TextBlock.Text>

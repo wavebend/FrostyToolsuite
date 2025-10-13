@@ -1,18 +1,17 @@
-﻿using Frosty.Controls;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace FrostyModManager
+namespace FrostyModManager.Windows
 {
     /// <summary>
     /// Interaction logic for SeparatorWindow.xaml
     /// </summary>
-    public partial class SeparatorWindow : FrostyDockableWindow
+    public partial class SeparatorWindow
     {
         public string NameSeparator { get; private set; } = "";
-        public string[] invalidChars = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|", "{", "}" };
+        private readonly string[] invalidChars = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|", "{", "}" };
 
         public SeparatorWindow()
         {
@@ -38,10 +37,9 @@ namespace FrostyModManager
 
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
-
             NameSeparator = nameSeparatorTextBox.Text;
             
+            DialogResult = true;
             Close();
         }
 
