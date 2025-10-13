@@ -587,7 +587,7 @@ namespace FrostyModManager
 
         private void addProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            AddProfileWindow win = new AddProfileWindow();
+            var win = new Windows.AddProfileWindow();
             win.ShowDialog();
 
             if (win.DialogResult == true)
@@ -636,7 +636,7 @@ namespace FrostyModManager
         private void packRename_Click(object sender, RoutedEventArgs e)
         {
 
-            AddProfileWindow win = new AddProfileWindow("Rename Pack");
+            var win = new Windows.AddProfileWindow("Rename Pack", "Rename");
             win.ShowDialog();
 
             if (win.DialogResult == true)
@@ -671,7 +671,7 @@ namespace FrostyModManager
         private void packDuplicate_Click(object sender, RoutedEventArgs e)
         {
 
-            AddProfileWindow win = new AddProfileWindow("Duplicate Pack");
+            var win = new Windows.AddProfileWindow("Duplicate Pack", "Duplicate");
             win.ShowDialog();
 
             if (win.DialogResult == true)

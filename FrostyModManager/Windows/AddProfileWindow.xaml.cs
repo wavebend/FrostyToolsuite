@@ -1,20 +1,21 @@
 ﻿using System.Windows;
 using Frosty.Controls;
 
-namespace FrostyModManager
+namespace FrostyModManager.Windows
 {
     /// <summary>
     /// Interaction logic for AddProfileWindow.xaml
     /// </summary>
-    public partial class AddProfileWindow : FrostyDockableWindow
+    public partial class AddProfileWindow
     {
         public string ProfileName { get; set; }
 
-        public AddProfileWindow(string title = "Add Profile")
+        public AddProfileWindow(string title = "Add Pack", string button = "Add")
         {
             InitializeComponent();
 
-            this.Title = title;
+            Title = title;
+            addButton.Content = button;
 
             Window mainWin = Application.Current.MainWindow;
             if (mainWin != null)
@@ -39,7 +40,7 @@ namespace FrostyModManager
         {
             if (profileNameTextBox.Text == "")
             {
-                FrostyMessageBox.Show("Profile name must not be empty", "Frosty Mod Manager");
+                FrostyMessageBox.Show("Pack name must not be empty", "Frosty Mod Manager");
                 return;
             }
 
