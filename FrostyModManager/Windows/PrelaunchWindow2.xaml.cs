@@ -35,10 +35,17 @@ namespace FrostyModManager.Windows
                 Close();
                 return;
             }
+            
+            if (RememberProfileCheckBox.IsChecked == true)
+            {
+                Config.Add("UseDefaultProfile2", true);
+                Config.Add("DefaultProfile2", profile);
+                Config.Save();
+            }
 
             // launch splash
             SplashWindow splash = new SplashWindow();
-            App.Current.MainWindow = splash;
+            Application.Current.MainWindow = splash;
             splash.Show();
             Close();
         }

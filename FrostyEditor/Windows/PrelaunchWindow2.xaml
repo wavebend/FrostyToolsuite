@@ -14,6 +14,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="2"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="2"/>
             <RowDefinition Height="38"/>
         </Grid.RowDefinitions>
 
@@ -54,7 +57,15 @@
             </ListBox>
         </Grid>
 
-        <Grid Grid.Row="3" Background="{StaticResource ListBackground}" >
+        <Border Grid.Row="3" Background="{StaticResource ControlBackground}"/>
+        <Grid Grid.Row="4" Background="{StaticResource ListBackground}" >
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <CheckBox x:Name="RememberProfileCheckBox" VerticalAlignment="Center" IsChecked="False" Content="Remember Profile" ToolTip="Automatically load profile when starting the Mod Manager." Padding="4, 0, 0, 1" Margin="6,0,0,0" Foreground="White"/>
+            </StackPanel>
+        </Grid>
+        <Border Grid.Row="5" Background="{StaticResource ControlBackground}"/>
+
+        <Grid Grid.Row="6" Background="{StaticResource ListBackground}" >
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button x:Name="AddConfigurationButton" Content="Add" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
                 <Button x:Name="ModifyConfigurationButton" Content="Modify" Padding="12,0" Margin="6,6,0,6" Click="ModifyConfigurationButton_OnClick"/>
