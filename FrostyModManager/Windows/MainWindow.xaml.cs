@@ -2186,7 +2186,13 @@ namespace FrostyModManager
         private void ZipPack(string filename)
         {
             bool zipped = false;
+            string file = Path.GetFileName(filename);
             string filepath = Path.GetDirectoryName(filename);
+            
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+            }
             
             FrostyTaskWindow.Show("Exporting Pack", "", (task) =>
             {
@@ -2233,17 +2239,19 @@ namespace FrostyModManager
                     }
 
                     zipped = true;
+                    App.Logger.Log($"{file} has been exported successfully.");
 #if !FROSTY_DEVELOPER
                 }
                 catch
                 {
+                    App.Logger.LogError($"{file} has failed to export.");
                     FrostyMessageBox.Show("Failed to Export Pack", "Frosty Mod Manager");
                     File.Delete(filename);
                 }
 #endif
             });
 
-            if (zipped && FrostyMessageBox.Show($"{Path.GetFileName(filename)} has been exported successfully.\n\nDo you wish to open the export folder?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (zipped && FrostyMessageBox.Show($"{file} has been exported successfully.\n\nDo you wish to open the export folder?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 Process.Start(filepath);
             }
@@ -2266,13 +2274,10 @@ namespace FrostyModManager
 
         private void packExport_Click(object sender, RoutedEventArgs e)
         {
-            FrostySaveFileDialog sfd = new FrostySaveFileDialog("Save Pack As", "*.fbpack (FBPack)|*.fbpack", "FBPack");
+            FrostySaveFileDialog sfd = new FrostySaveFileDialog("Export Pack", "*.fbpack (FBPack)|*.fbpack", "FBPack", selectedPack.Name);
             if (sfd.ShowDialog())
             {
-                if (File.Exists(sfd.FileName))
-                    FrostyMessageBox.Show("A file with the same name already exists", "Frosty Mod Manager");
-                else
-                    ZipPack(sfd.FileName);
+                ZipPack(sfd.FileName);
             }
         }
 

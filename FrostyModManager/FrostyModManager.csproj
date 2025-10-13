@@ -358,6 +358,7 @@
     <Resource Include="Images\CircleX.png" />
     <Resource Include="Images\ModImportWarningApplied.png" />
     <None Include="ILRepack.targets" />
+    <Resource Include="Images\Export.png" />
     <Content Include="ThirdParty\7z.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -227,6 +227,10 @@
                                 <Button x:Name="importPackButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="Import Pack" Click="packImport_Click">
                                     <Image Source="/FrostyModManager;component/Images/Import.png"/>
                                 </Button>
+                                <!-- Export Button -->
+                                <Button x:Name="exportPackButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="Export Pack" Click="packExport_Click">
+                                    <Image Source="/FrostyModManager;component/Images/Export.png"/>
+                                </Button>
                             </StackPanel>
                         </Border>
                         <!-- Launch -->
