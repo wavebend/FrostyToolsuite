@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,10 +35,6 @@ namespace Frosty.Core.Windows
         private SdkUpdateTaskState state;
         private string statusMessage;
         private string failMessage;
-
-        public SdkUpdateTask()
-        {
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -100,11 +97,20 @@ namespace Frosty.Core.Windows
 
             successMessage.Visibility = (failedTask == null) ? Visibility.Visible : Visibility.Collapsed;
             failMessage.Text = (failedTask != null) ? failedTask.FailMessage : "";
+            quitButton.IsEnabled = true;
             finishButton.IsEnabled = true;
         }
 
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+            DialogResult = true;
+            Close();
+        }
+        
         private void FinishButton_Click(object sender, RoutedEventArgs e)
         {
+            Process.Start(Assembly.GetEntryAssembly().Location);
             Application.Current.Shutdown();
             DialogResult = true;
             Close();

@@ -84,10 +84,7 @@
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
-
-
                 </ListBox>
-                
             </StackPanel>
 
             <TextBlock x:Name="failMessage" Text="" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 40"/>
@@ -99,8 +96,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <!--<Button Grid.Column="0" x:Name="quitButton" Content="Quit" Width="50" Height="22" HorizontalAlignment="Left" />-->
-                <Button Grid.Column="1" x:Name="finishButton" Content="Finish" Width="50" Height="22" HorizontalAlignment="Right" Click="FinishButton_Click" IsEnabled="False" />
+                <Button Grid.Column="0" x:Name="quitButton" Content="Quit" Width="50" Height="22" HorizontalAlignment="Left" Click="QuitButton_Click" IsEnabled="False"/>
+                <Button Grid.Column="1" x:Name="finishButton" Content="Finish" Width="50" Height="22" HorizontalAlignment="Right" Click="FinishButton_Click" IsEnabled="False"/>
             </Grid>
         </Grid>
     </Grid>
