@@ -31,6 +31,7 @@ using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Reflection;
 using GongSolutions.Wpf.DragDrop;
 
 namespace FrostyModManager
@@ -2046,6 +2047,16 @@ namespace FrostyModManager
             }
         }
 
+        private void launchConfigurationWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Config.Add("UseDefaultProfile2", false);
+            Config.Remove("DefaultProfile2");
+            Config.Save();
+
+            Process.Start(Assembly.GetExecutingAssembly().Location);
+            Close();
+        }
+        
         private void logTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (tb.IsFocused)

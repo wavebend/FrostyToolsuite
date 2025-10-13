@@ -6,7 +6,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FrostyModManager"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-        xmlns:localctrl="clr-namespace:FrostyModManager.Controls"
         xmlns:conv="clr-namespace:Frosty.Core.Converters;assembly=FrostyCore"
         mc:Ignorable="d"
         Title="Frosty Mod Manager" Height="750" Width="1000"
@@ -175,7 +174,16 @@
                     </MenuItem>
                     <MenuItem x:Name="collectionExport" Header="Create Collection" Click="collectionExport_Click"/>
                     <Separator/>
-                    <MenuItem x:Name="exitMenuItem" Header="Exit" Click="exitMenuItem_Click"/>
+                    <MenuItem x:Name="launchConfigurationWindow" Header="Select Game" Click="launchConfigurationWindow_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/FrostyModManager;component/Images/Change.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="exitMenuItem" Header="Exit" Click="exitMenuItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/FrostyModManager;component/Images/Exit.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="toolsMenuItem" Header="Tools" Height="22">
                     <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>

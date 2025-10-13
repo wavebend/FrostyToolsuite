@@ -280,6 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Recent.png" />
+    <Resource Include="Images\Change.png" />
     <Content Include="Resources\Meshes\Flag.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

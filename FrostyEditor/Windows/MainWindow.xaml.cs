@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +26,6 @@ using Frosty.ModSupport;
 using FrostyCore;
 using FrostySdk;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
 using Microsoft.Win32;
 using Bookmarks = Frosty.Core.Bookmarks;
@@ -372,6 +372,16 @@ namespace FrostyEditor.Windows
             }
         }
 
+        private void launchConfigurationWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Config.Add("UseDefaultProfile2", false);
+            Config.Remove("DefaultProfile2");
+            Config.Save();
+
+            Process.Start(Assembly.GetExecutingAssembly().Location);
+            Close();
+        }
+        
         private void logTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (tb.IsFocused)

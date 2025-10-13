@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FrostyEditor"
         xmlns:ctrl2="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
         xmlns:conv="clr-namespace:Frosty.Core.Converters;assembly=FrostyCore"
@@ -78,6 +77,11 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
+                    <MenuItem x:Name="launchConfigurationWindow" Header="Select Game" Click="launchConfigurationWindow_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/FrostyEditor;component/Images/Change.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem x:Name="ExitMenuItem" Header="Exit" InputGestureText="Alt+F4" Height="22" Click="exitMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Exit.png" RenderOptions.BitmapScalingMode="Fant"/>

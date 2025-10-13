@@ -359,6 +359,8 @@
     <Resource Include="Images\ModImportWarningApplied.png" />
     <None Include="ILRepack.targets" />
     <Resource Include="Images\Export.png" />
+    <Resource Include="Images\Change.png" />
+    <Resource Include="Images\Exit.png" />
     <Content Include="ThirdParty\7z.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
