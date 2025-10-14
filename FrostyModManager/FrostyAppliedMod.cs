@@ -12,52 +12,45 @@ namespace FrostyModManager
     {
         public string ModName
         {
-            get
-            {
+            get {
                 if (Mod != null)
                 {
                     return Mod.ModDetails.Title;
                 }
-                else if (BackupFileName.EndsWith("_Separator"))
+
+                if (BackupFileName.EndsWith("_Separator"))
                 {
                     return BackupFileName.Replace("_Separator", "");
                 }
-                else
-                {
-                    return BackupFileName;
-                }
+
+                return BackupFileName;
             }
         }
         public ImageSource ModIcon
         {
-            get
-            {
+            get {
                 if (Mod != null)
                 {
                     if (Mod.ModDetails.Icon != null)
                     {
                         return Mod.ModDetails.Icon;
                     }
-                    else
-                    {
-                        return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/DefaultModIcon.png") as ImageSource;
-                    }
+
+                    return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/DefaultModIcon.png") as ImageSource;
                 }
-                else if (BackupFileName.EndsWith("_Separator"))
+
+                if (BackupFileName.EndsWith("_Separator"))
                 {
                     return null;
                 }
-                else
-                {
-                    return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/ModImportWarningApplied.png") as ImageSource;
-                }
+
+                return new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/ModImportWarningApplied.png") as ImageSource;
             }
         }
 
         public string ModTooltip
         {
-            get 
-            {
+            get {
                 if (Mod == null)
                 {
                     DirectoryInfo modsDir = new DirectoryInfo(Path.Combine("Mods", ProfilesLibrary.ProfileName));
@@ -69,14 +62,12 @@ namespace FrostyModManager
                         
                     return $"Missing from: {modsDir}";
                 }
-                else
-                {
-                    return null;
-                } 
+
+                return null;
             }
         }
 
-        public List<string> packList;
+        private List<string> packList;
 
         public int ModIndex
         {
@@ -101,50 +92,42 @@ namespace FrostyModManager
 
         public string ModPriority
         {
-            get 
-            {
+            get {
                 if (ModIndex == 0)
                 {
                     return "Low Priority";
                 }
-                else if (ModIndex == packList.Count - 1)
+
+                if (ModIndex == packList.Count - 1)
                 {
                     return "High Priority";
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
         }
 
         public string ModVisibility
         {
-            get 
-            {
+            get {
                 if (Mod == null && BackupFileName.EndsWith("_Separator"))
                 {
                     return "Collapsed";
                 }
-                else
-                {
-                    return "Visible";
-                }
+
+                return "Visible";
             }
         }
 
         public string ModHorizontalAlignment
         {
-            get 
-            {
+            get {
                 if (Mod == null && BackupFileName.EndsWith("_Separator"))
                 {
                     return "Center";
                 }
-                else
-                {
-                    return "Stretch";
-                }
+
+                return "Stretch";
             }
         }
 
@@ -154,10 +137,8 @@ namespace FrostyModManager
                 {
                     return "Bold";
                 }
-                else
-                {
-                    return "Normal";
-                }
+
+                return "Normal";
             }
         }
 

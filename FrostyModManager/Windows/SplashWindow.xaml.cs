@@ -249,7 +249,7 @@ namespace FrostyModManager.Windows
 
             // show the main editor window
             MainWindow win = new MainWindow();
-            App.Current.MainWindow = win;
+            Application.Current.MainWindow = win;
             win.Show();
 
             App.Logger.Log("Initialization complete");
@@ -258,7 +258,7 @@ namespace FrostyModManager.Windows
             Close();
         }
 
-        private BitmapImage LoadBanner(byte[] banner)
+        private static BitmapImage LoadBanner(byte[] banner)
         {
             if (banner == null || banner.Length == 0)
                 return null;
@@ -276,7 +276,7 @@ namespace FrostyModManager.Windows
             return bmp;
         }
 
-        private async Task<int> LoadData(ILogger logger, byte[] key, AssetManagerImportResult result)
+        private static async Task<int> LoadData(ILogger logger, byte[] key, AssetManagerImportResult result)
         {
             await Task.Run(() =>
             {
@@ -341,7 +341,7 @@ namespace FrostyModManager.Windows
 
         private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            DragMove();
         }
 
         private bool UpdateSdk()
@@ -351,7 +351,8 @@ namespace FrostyModManager.Windows
             {
                 return true;
             }
-            else if (TypeLibrary.GetSdkVersion() == 0)
+
+            if (TypeLibrary.GetSdkVersion() == 0)
             {
                 MessageBoxResult result = FrostyMessageBox.Show("Missing SDK.\nPlease generate a SDK for this game.", "Frosty", MessageBoxButton.OK);
                 if (result == MessageBoxResult.OK)
@@ -363,7 +364,7 @@ namespace FrostyModManager.Windows
             return false;
         }
 
-        private async Task<int> FinishLoadingData(ILogger logger, AssetManagerImportResult result)
+        private static async Task<int> FinishLoadingData(ILogger logger, AssetManagerImportResult result)
         {
             await Task.Run(() =>
             {
