@@ -1,4 +1,33 @@
-﻿v1.0.7 - 2025.9.23.0
+﻿v1.0.7 - 2025.10.14.0
+--------
+Improvements:
+- Added 'Drag and Drop' functionality to Applied Mods list
+- Added progress bar to 'Exporting Pack' TaskWindow
+- Added "Remember Profile" CheckBox to game selection window
+
+Bug Fixes:
+- Fixed issue where packs would fail to export if a mod was null i.e. Separator
+
+Misc:
+- DAVExtender(Dex) 'Open Mods Folder' MenuItem is now disabled by default
+- Updated Credits
+- Added 'App.Title' and replaced instances of "Frosty" and "Frosty Core"
+- Icon for Core Windows now change based on MainWindow Icon
+- Added Icon and minor style changes for KeyPromptWindow
+- Title for 'About' window is now "About Frosty Mod Manager" instead of "About Frosty Editor" when opened within Mod Manager
+- Title, Text and other changes for AddProfileWindow
+- Added 'Export Pack' button to Toolbar
+- When generating the SDK, the 'Finish' button will now restart the Editor/Mod Manager instead of closing it
+- Restored 'Select Game' option in 'File' MenuItem
+
+Technical Changes:
+- Updated SharpSevenZip to 2.0.32 (7z.dll to 25.01)
+- Added ILRepack to merge System Dll files for SharpSevenZip
+- Changed Newtonsoft.Json to NuGet Package
+- SharpSevenZip is now used to decompress .rar, .zip, and .fbpack archives (Removed LZMA.dll and UnRAR.dll)
+- Cleanup
+
+v1.0.7 - 2025.9.23.0
 --------
 Improvements:
 - Improved directory selection for 'Custom Mods Directory' option
