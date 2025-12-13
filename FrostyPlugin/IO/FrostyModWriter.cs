@@ -120,7 +120,7 @@ namespace Frosty.Core.IO
                     {
                         flags |= EbxWriteFlags.DoNotSort;
                     }
-                    
+
                     using (EbxBaseWriter ebxWriter = EbxBaseWriter.CreateWriter(new MemoryStream(), flags))
                     {
                         // Prioritize imported bin data over everything for ebx
