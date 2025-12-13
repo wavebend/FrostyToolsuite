@@ -1,4 +1,9 @@
-﻿v1.0.7 - 2025.10.14.0
+﻿v1.0.7 - 2025.12.13.0
+--------
+Improvements:
+- Added Read and Write Support for Reflection IDs
+
+v1.0.7 - 2025.10.14.0
 --------
 Improvements:
 - Added 'Drag and Drop' functionality to Applied Mods list

@@ -33,7 +33,7 @@ namespace Frosty.Core
 
         public static string Version = "";
         public static readonly int MinorVersion = 1;
-        public static readonly string BuildVersion = "2025.10.14.0";
+        public static readonly string BuildVersion = "2025.12.13.0";
 
         public static string ProfileSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty/" + ProfilesLibrary.ProfileName;
         public static string GlobalSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty";
