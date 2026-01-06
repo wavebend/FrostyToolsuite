@@ -1003,6 +1003,28 @@ namespace FrostySdk.Managers
                 yield return bentry;
             }
         }
+        
+        public IEnumerable<BundleEntry> EnumerateMarkedBundles(List<BundleEntry> bundles = null)
+        {
+            if (bundles != null)
+            {
+                foreach (BundleEntry bentry in bundles)
+                {
+                    yield return bentry;
+                }
+            }
+        }
+        
+        public IEnumerable<EbxAssetEntry> EnumerateMarkedEbx(List<EbxAssetEntry> entries = null)
+        {
+            if (entries != null)
+            {
+                foreach (EbxAssetEntry entry in entries)
+                {
+                    yield return entry;
+                }
+            }
+        }
 
         public IEnumerable<EbxAssetEntry> EnumerateEbx(BundleEntry bentry)
         {
