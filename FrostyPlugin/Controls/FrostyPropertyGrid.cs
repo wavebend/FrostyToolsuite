@@ -1117,6 +1117,8 @@ namespace Frosty.Core.Controls
     [TemplatePart(Name = "PART_ArrayRemoveButton", Type = typeof(Button))]
     public class FrostyPropertyGridItem : TreeViewItem
     {
+        private bool isReadOnly;
+        
         private static readonly IReadOnlyDictionary<string, Type> StaticEditors = new Dictionary<string, Type>
         {
             //{ "String", typeof(FrostyStringEditor) },
@@ -1145,8 +1147,14 @@ namespace Frosty.Core.Controls
 
             FrostyPropertyGridItemData item = (FrostyPropertyGridItemData)DataContext;
 
+            if (GetAssetEditor() != null)
+            {
+                isReadOnly = GetAssetEditor().IsReadOnly;
+            }
+            
             Button btn = GetTemplateChild("PART_ArrayRemoveButton") as Button;
             btn.Click += ArrayRemoveButton_Click;
+            btn.IsEnabled = !isReadOnly;
 
             if (!item.IsCategory)
             {
@@ -1194,6 +1202,7 @@ namespace Frosty.Core.Controls
                     elem = (UIElement)editorType.GetMethod("CreateEditor").Invoke(editor, new object[] { item });
                 }
 
+                value.IsEnabled = !isReadOnly;
                 value.Content = elem;
             }
 
@@ -1215,10 +1224,11 @@ namespace Frosty.Core.Controls
                 Icon = new Image
                 {
                     Source = StringToBitmapSourceConverter.PasteSource
-                }
+                },
+                IsEnabled = false
             };
+            if (!isReadOnly) { BindingOperations.SetBinding(mi, IsEnabledProperty, new Binding("HasData") { Source = FrostyClipboard.Current }); }
             mi.Click += PasteMenuItem_Click;
-            BindingOperations.SetBinding(mi, IsEnabledProperty, new Binding("HasData") { Source = FrostyClipboard.Current });
             cm.Items.Add(mi);
 
             if (item.IsPointerRef)
@@ -1241,11 +1251,11 @@ namespace Frosty.Core.Controls
             {
                 cm.Items.Add(new Separator());
 
-                mi = new MenuItem {Header = "Insert Before"};
+                mi = new MenuItem { Header = "Insert Before", IsEnabled = !isReadOnly };
                 mi.Click += ArrayInsertBeforeMenuItem_Click;
                 cm.Items.Add(mi);
 
-                mi = new MenuItem {Header = "Insert After"};
+                mi = new MenuItem { Header = "Insert After", IsEnabled = !isReadOnly };
                 mi.Click += ArrayInsertAfterMenuItem_Click;
                 cm.Items.Add(mi);
             }
@@ -1320,6 +1330,14 @@ namespace Frosty.Core.Controls
             while (!(parent.GetType().IsSubclassOf(typeof(FrostyPropertyGrid)) || parent is FrostyPropertyGrid))
                 parent = VisualTreeHelper.GetParent(parent);
             return (parent as FrostyPropertyGrid);
+        }
+
+        private FrostyAssetEditor GetAssetEditor()
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(this);
+            while (parent != null && !(parent.GetType().IsSubclassOf(typeof(FrostyAssetEditor)) || parent is FrostyAssetEditor))
+                parent = VisualTreeHelper.GetParent(parent);
+            return (parent as FrostyAssetEditor);
         }
 
         /// <summary>

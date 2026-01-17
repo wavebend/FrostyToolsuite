@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using FrostySdk;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using FrostySdk.Resources;
 using D3D11 = SharpDX.Direct3D11;
 using Frosty.Controls;
@@ -154,7 +153,7 @@ namespace TexturePlugin
         {
             List<ToolbarItem> toolbarItems = base.RegisterToolbarItems();
             toolbarItems.Add(new ToolbarItem("Export", "Export Texture", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs()); })));
-            toolbarItems.Add(new ToolbarItem("Import", "Import Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); })));
+            toolbarItems.Add(new ToolbarItem("Import", "Import Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); }), IsNotReadOnly));
             
             return toolbarItems;
         }

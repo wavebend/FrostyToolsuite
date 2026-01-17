@@ -9,7 +9,6 @@ using System.Windows.Media;
 using System.IO;
 using System.Reflection;
 using Path = System.Windows.Shapes.Path;
-using FrostySdk.Managers;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Frosty.Core.Controls;
@@ -60,7 +59,7 @@ namespace SvgImagePlugin
         {
             List<ToolbarItem> toolbarItems = base.RegisterToolbarItems();
             toolbarItems.Add(new ToolbarItem("Export", "Export SVG", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs()); })));
-            toolbarItems.Add(new ToolbarItem("Import", "Import SVG", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); })));
+            toolbarItems.Add(new ToolbarItem("Import", "Import SVG", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); }), IsNotReadOnly));
             
             return toolbarItems;
         }

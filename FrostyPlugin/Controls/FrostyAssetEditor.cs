@@ -2,7 +2,6 @@
 using FrostySdk;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FrostySdk.Managers.Entries;
-using Frosty.Controls;
 
 namespace Frosty.Core.Controls
 {
@@ -20,16 +18,18 @@ namespace Frosty.Core.Controls
         public string ToolTip { get; private set; }
         public ImageSource Icon { get; private set; }
         public RelayCommand Command { get; private set; }
+        public bool IsEnabled { get; private set; }
 
         public bool IsAddedByPlugin { get; private set; }
         
-        public ToolbarItem(string text, string tooltip, string icon, RelayCommand inCommand, bool isAddedByPlugin = false)
+        public ToolbarItem(string text, string tooltip, string icon, RelayCommand inCommand, bool isEnabled = true, bool isAddedByPlugin = false)
         {
             Text = text;
             ToolTip = tooltip;
             if (!string.IsNullOrEmpty(icon))
                 Icon = new ImageSourceConverter().ConvertFromString("pack://application:,,,/" + icon) as ImageSource;
             Command = inCommand;
+            IsEnabled = isEnabled;
             IsAddedByPlugin = isAddedByPlugin;
         }
     }
@@ -47,6 +47,7 @@ namespace Frosty.Core.Controls
 
         #region -- AssetEntry --
         public static readonly DependencyProperty AssetEntryProperty = DependencyProperty.Register("AssetEntry", typeof(AssetEntry), typeof(FrostyAssetEditor), new FrameworkPropertyMetadata(null));
+        public static readonly DependencyProperty IsReadOnlyProperty;
         public AssetEntry AssetEntry
         {
             get => (AssetEntry)GetValue(AssetEntryProperty);
@@ -91,6 +92,14 @@ namespace Frosty.Core.Controls
             add => onAssetModified += value;
             remove => onAssetModified -= value;
         }
+        
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
+
+        public bool IsNotReadOnly => !IsReadOnly;
 
         protected ILogger logger;
         protected List<object> objects;
@@ -100,6 +109,8 @@ namespace Frosty.Core.Controls
 
         static FrostyAssetEditor()
         {
+            IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(FrostyAssetEditor), new FrameworkPropertyMetadata(false));
+            
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FrostyAssetEditor), new FrameworkPropertyMetadata(typeof(FrostyAssetEditor)));
         }
 
@@ -148,9 +159,9 @@ namespace Frosty.Core.Controls
             public AssetNullException() : base() { }
         }
 
-        public int SetAsset(AssetEntry entry)
+        public int SetAsset(AssetEntry entry, bool openUnmodifiedData = false)
         {
-            if (entry.IsAdded == true && entry.HasModifiedData == false)
+            if (entry.IsAdded && !entry.HasModifiedData)
             {
                 throw new AssetNullException();
             }
@@ -160,6 +171,16 @@ namespace Frosty.Core.Controls
                 FrostyTaskWindow.Show("Opening Asset", "", (task) =>
                 {
                     asset = LoadAsset(entry as EbxAssetEntry);
+
+                    if (openUnmodifiedData)
+                    {
+                        asset = App.AssetManager.GetEbx((EbxAssetEntry)entry, true);
+                        
+                        Dispatcher.Invoke(delegate
+                        {
+                            IsReadOnly = true;
+                        });
+                    }
 
                     int totalCount = asset.Dependencies.Count();
                     int index = 0;
@@ -208,7 +229,7 @@ namespace Frosty.Core.Controls
                 return;
             }
 
-            AssetInstancesWindow win = new AssetInstancesWindow(asset.RootObjects, pg.SelectedClass, Asset, (EbxAssetEntry)AssetEntry);
+            AssetInstancesWindow win = new AssetInstancesWindow(asset.RootObjects, pg.SelectedClass, Asset, (EbxAssetEntry)AssetEntry, IsReadOnly);
             bool result = win.ShowDialog() == true;
 
             // regardless of result, process any newly created objects, and any delete requests

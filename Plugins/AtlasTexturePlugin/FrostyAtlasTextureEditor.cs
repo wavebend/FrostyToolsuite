@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using SharpDX.D3DCompiler;
 using FrostySdk.IO;
 using System.IO;
-using FrostySdk.Managers;
 using System.Windows.Shapes;
 using Frosty.Core.Controls;
 using Frosty.Core;
@@ -329,7 +328,7 @@ namespace AtlasTexturePlugin
         {
             List<ToolbarItem> toolbarItems = base.RegisterToolbarItems();
             toolbarItems.Add(new ToolbarItem("Export", "Export Atlas Texture", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs()); })));
-            toolbarItems.Add(new ToolbarItem("Import", "Import Atlas Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); })));
+            toolbarItems.Add(new ToolbarItem("Import", "Import Atlas Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); }), IsNotReadOnly));
             
             return toolbarItems;
         }

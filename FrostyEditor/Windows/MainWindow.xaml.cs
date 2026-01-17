@@ -154,7 +154,7 @@ namespace FrostyEditor.Windows
         
         private void LoadToolbarExtensions()
         {
-            IEnumerable<ToolbarItem> toolbarItems = App.PluginManager.ToolbarExtensions.Select(toolbarExtension => new ToolbarItem(toolbarExtension.Name, toolbarExtension.Tooltip, toolbarExtension.Icon, toolbarExtension.ToolbarItemClicked, true));
+            IEnumerable<ToolbarItem> toolbarItems = App.PluginManager.ToolbarExtensions.Select(toolbarExtension => new ToolbarItem(toolbarExtension.Name, toolbarExtension.Tooltip, toolbarExtension.Icon, toolbarExtension.ToolbarItemClicked, true, true));
             EditorToolbarItems.ItemsSource = toolbarItems;
         }
         private void LoadMenuExtensions()
@@ -830,21 +830,16 @@ namespace FrostyEditor.Windows
             return null;
         }
 
-        public void OpenAsset(AssetEntry asset, bool shouldCreateDefaultEditor = true)
+        public void OpenAsset(AssetEntry asset, bool shouldCreateDefaultEditor = true, bool openUnmodifiedData = false)
         {
-            if (asset == null)
-            {
-                return;
-            }
-
-            if (asset.Type == "EncryptedAsset")
+            if (asset == null || asset.Type == "EncryptedAsset" || (openUnmodifiedData && asset.IsAdded))
             {
                 return;
             }
 
             foreach (FrostyTabItem currentTi in TabControl.Items)
             {
-                if (currentTi.TabId == asset.Name)
+                if (!openUnmodifiedData && (string)currentTi.Header == asset.DisplayName || openUnmodifiedData && (string)currentTi.Header == $"{asset.DisplayName} (Read-only)")
                 {
                     currentTi.IsSelected = true;
                     return;
@@ -872,7 +867,7 @@ namespace FrostyEditor.Windows
 
             try
             {
-                editor.SetAsset(asset);
+                editor.SetAsset(asset, openUnmodifiedData);
             }
             catch (Exception)
             {
@@ -896,7 +891,7 @@ namespace FrostyEditor.Windows
 
             ti.Icon = (new AssetEntryToBitmapSourceConverter().Convert(asset, typeof(ImageSource), null, null) as ImageSource);
             ti.Content = editor;
-            ti.Header = asset.DisplayName;
+            ti.Header = openUnmodifiedData ? $"{asset.DisplayName} (Read-only)" : asset.DisplayName;
             ti.TabId = asset.Name;
             ti.IsSelected = true;
             ti.CloseButtonVisible = true;
@@ -910,6 +905,8 @@ namespace FrostyEditor.Windows
             };
             editor.CommandBindings.Add(new CommandBinding(closeCmd, (o, e) => { ShutdownEditorAndRemoveTab(editor, ti); }));
 
+            editor.IsReadOnly = openUnmodifiedData;
+            
             AddTab(ti);
         }
 
@@ -1095,6 +1092,13 @@ namespace FrostyEditor.Windows
             if (m_currentExplorer.SelectedAsset == null)
                 return;
             OpenAsset(m_currentExplorer.SelectedAsset, m_currentExplorer == dataExplorer);
+        }
+        
+        private void contextMenuOpenUnmodified_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_currentExplorer.SelectedAsset == null)
+                return;
+            OpenAsset(m_currentExplorer.SelectedAsset, m_currentExplorer == dataExplorer, true);
         }
 
         private void contextMenuRevert_Click(object sender, RoutedEventArgs e)
