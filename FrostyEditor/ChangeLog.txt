@@ -1,4 +1,10 @@
-﻿v1.0.7 - 2025.12.13.0
+﻿v1.0.7 - 2026.01.30.0
+--------
+Improvements:
+- Added 'Marked Assets/Bundles' Feature to Bundle Editor
+- Added 'Open Unmodified' option to assets
+
+v1.0.7 - 2025.12.13.0
 --------
 Improvements:
 - Added Read and Write Support for Reflection IDs
@@ -319,7 +325,7 @@ Options:
 - Added an option in Tools -> Options to disable shader compilation at launch, for faster launching
 
 Misc:
-- When importing a ebx as .bin file, bypass the ebx writer entirely as a workaround to ebxwriter limitations
+- When importing an ebx as .bin file, bypass the ebx writer entirely as a workaround to ebxwriter limitations
 
 Old Changelogs:
 
@@ -391,7 +397,7 @@ v1.0.6 (Beta 1)
 - Added styling for ComboBox (#9)
 - Added more functionality for moving mods under the Applied Mods list (#3)
 - Added cancel functionality to actions tab in the Mod Manager (#37)
-- Added source code link to convient links section in Editor (#18)
+- Added source code link to convenient links section in Editor (#18)
 - Revamped styling for cancel functionality during loading process (#37)
 - Modified DisplayModuleInId option to be false by default
 - Fixed InitFs loading for Need for Speed: Rivals, Need for Speed: Online, and Battlefield 4 (#10)
@@ -729,14 +735,14 @@ v1.0.3alpha3
 v1.0.3alpha2
 ------------
 - Fixed out of date SDK used in MEA
-- Disabled non working import button from sounds
+- Disabled non-working import button from sounds
 - Packaged fifaconfig workaround with editor
 
 v1.0.3alpha
 -----------
 - Fixed an issue with compressing certain files (Compression Failed error)
 - LZ4 compression now used to compress data for games that use it (MEC, SWBF)
-- Drastically reduced time and storage capacity it take to apply mods for all games
+- Drastically reduced time and storage capacity it takes to apply mods for all games
 - Implemented new texture formats for preview and export
 - Added Searching/Filtering of assets in the data explorer
 - Added the ability to save bookmarks
@@ -773,7 +779,7 @@ v1.0.1
 - Ascii FBX, OBJ, and DAE options added to exporting meshes
 - Previewing and exporting 2d array, cubemap, 3d textures now work correctly
 - Disabled importing of 2d array, cubemap and 3d textures for now (original implementation would import them incorrectly)
-- Can view individual slices of multi dimensional textures using the slices combobox
+- Can view individual slices of multidimensional textures using the slices combobox
 - Added an exception window for all unhandled global exceptions
 
 v1.0.0 (Public Release)
