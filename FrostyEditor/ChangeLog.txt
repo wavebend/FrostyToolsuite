@@ -1,4 +1,15 @@
-﻿v1.0.7 - 2026.01.30.0
+﻿v1.0.7 - 2026.01.30.1
+--------
+Improvements:
+- Added Tooltips to 'Add' and 'Remove' buttons for the Marked Assets/Bundles feature
+
+Bug Fixes:
+- Fixed issue where 'Remove' buttons for the Marked Assets/Bundles feature were missing their commands
+
+Misc:
+Changed order of buttons for the Marked Assets/Bundles feature
+
+v1.0.7 - 2026.01.30.0
 --------
 Improvements:
 - Added 'Marked Assets/Bundles' Feature to Bundle Editor
