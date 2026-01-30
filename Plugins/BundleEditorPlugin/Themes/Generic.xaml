@@ -92,7 +92,7 @@
                                         <Button Margin="4,0,0,0" Command="{Binding Path=MarkBundleFromAssetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="/FrostyCore;component/Images/Tick.png" Width="16"/>
-                                                <TextBlock Text="Mark Bundle(s) from Asset" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Mark Bundles from Asset" Margin="2,0,0,2" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </Button>
                                     </StackPanel>
@@ -101,38 +101,38 @@
                                 <Grid Grid.Row="4" Background="{StaticResource ControlBackground}">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,1,1,1">
                                         <!-- Add -->
-                                        <Button Command="{Binding Path=AddMarkedToBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
-                                                <TextBlock Text="Add Marked to Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Button>
-                                        <Button Command="{Binding Path=AddToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                        <Button ToolTip="Add Selected Asset to Marked Bundles" Command="{Binding Path=AddToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
                                                 <TextBlock Text="Add to Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </Button>
-                                        <Button Command="{Binding Path=AddMarkedToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                        <Button ToolTip="Add Marked Assets to Selected Bundle" Command="{Binding Path=AddMarkedToBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
+                                                <TextBlock Text="Add Marked to Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button ToolTip="Added Marked Assets to Marked Bundles" Command="{Binding Path=AddMarkedToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
                                                 <TextBlock Text="Add Marked to Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </Button>
                                         <!-- Remove -->
-                                        <Button Command="{Binding Path=AddMarkedToBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
-                                                <TextBlock Text="Remove Marked from Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Button>
-                                        <Button Command="{Binding Path=AddToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                        <Button ToolTip="Remove Selected Asset from Marked Bundles" Command="{Binding Path=RemoveFromMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
                                                 <TextBlock Text="Remove from Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </Button>
-                                        <Button Command="{Binding Path=AddMarkedToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                        <Button ToolTip="Remove Marked Assets from Selected Bundle" Command="{Binding Path=RemoveMarkedFromBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
+                                                <TextBlock Text="Remove Marked from Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button ToolTip="Remove Marked Assets from Marked Bundles" Command="{Binding Path=RemoveMarkedFromMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
                                                 <TextBlock Text="Remove Marked from Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
