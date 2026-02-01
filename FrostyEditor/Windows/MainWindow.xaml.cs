@@ -839,7 +839,7 @@ namespace FrostyEditor.Windows
 
             foreach (FrostyTabItem currentTi in TabControl.Items)
             {
-                if (!openUnmodifiedData && (string)currentTi.Header == asset.DisplayName || openUnmodifiedData && (string)currentTi.Header == $"{asset.DisplayName} (Read-only)")
+                if (!openUnmodifiedData && (string)currentTi.Header == asset.DisplayName && currentTi.TabId == asset.Name || openUnmodifiedData && (string)currentTi.Header == $"{asset.DisplayName} (Read-only)" && currentTi.TabId == asset.Name)
                 {
                     currentTi.IsSelected = true;
                     return;
