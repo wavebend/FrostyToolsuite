@@ -2,3 +2,7 @@
 	path = Plugins/DatapathFixPlugin
 	url = https://github.com/J-Lyt/DatapathFixPlugin
 	branch = submodule
+[submodule "Plugins/MeshVariationDbPlugin"]
+	path = Plugins/MeshVariationDbPlugin
+	url = https://github.com/J-Lyt/MeshVariationDbPlugin
+	branch = submodule
