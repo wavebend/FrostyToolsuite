@@ -38,6 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyEditor", "FrostyEdito
 		{E02E0D3F-A73F-4875-B85D-2FC9144553EA} = {E02E0D3F-A73F-4875-B85D-2FC9144553EA}
 		{FE2D780C-8FBC-4797-9ACD-05DE2507F1AA} = {FE2D780C-8FBC-4797-9ACD-05DE2507F1AA}
 		{645F9DF3-7AC8-4305-B83C-B35D17CB2955} = {645F9DF3-7AC8-4305-B83C-B35D17CB2955}
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434} = {9A78916B-F20B-46E5-9E11-F3AD393B1434}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostySdk", "..\FrostySdk\FrostySdk.csproj", "{93FB4A0C-DF89-4169-80B5-C4E2277FF7A0}"
@@ -145,6 +146,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatapathFix(DEBUG)", "..\Plugins\DatapathFixPlugin\DatapathFix\DatapathFix(DEBUG).csproj", "{E01353AE-0A20-4E8D-863F-D140F7759E35}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnifyAssetsPlugin", "..\Plugins\UnifyAssetsPlugin\UnifyAssetsPlugin.csproj", "{645F9DF3-7AC8-4305-B83C-B35D17CB2955}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshVariationDbPlugin", "..\Plugins\MeshVariationDbPlugin\MeshVariationDbPlugin.csproj", "{9A78916B-F20B-46E5-9E11-F3AD393B1434}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -625,6 +628,16 @@ Global
 		{645F9DF3-7AC8-4305-B83C-B35D17CB2955}.Release - Final|x64.Build.0 = Release - Final|x64
 		{645F9DF3-7AC8-4305-B83C-B35D17CB2955}.Release|x64.ActiveCfg = Developer - Debug|x64
 		{645F9DF3-7AC8-4305-B83C-B35D17CB2955}.Release|x64.Build.0 = Developer - Debug|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release - Final|x64.Build.0 = Release - Final|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release|x64.ActiveCfg = Developer - Debug|x64
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434}.Release|x64.Build.0 = Developer - Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -668,6 +681,7 @@ Global
 		{E20FEA8D-7006-4C13-B453-5BA2BAC60CBC} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{E01353AE-0A20-4E8D-863F-D140F7759E35} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{645F9DF3-7AC8-4305-B83C-B35D17CB2955} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{9A78916B-F20B-46E5-9E11-F3AD393B1434} = {492048B6-848D-4675-A9BF-34A4751303F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0B22EF1-4C3F-45B9-9F08-9793ED912199}
