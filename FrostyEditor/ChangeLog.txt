@@ -1,4 +1,12 @@
-﻿v1.0.7 - 2026.01.30.1
+﻿v1.0.7 - 2026.02.01.0
+--------
+Bug Fixes:
+- Fixed issue where an asset with the same name but differing in location would fail to open if another asset with the same name was already open
+
+Plugin Changes:
+- Added 'MeshVariationDbPlugin' to Frosty Editor
+
+v1.0.7 - 2026.01.30.1
 --------
 Improvements:
 - Added Tooltips to 'Add' and 'Remove' buttons for the Marked Assets/Bundles feature
