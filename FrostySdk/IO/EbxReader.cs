@@ -564,9 +564,9 @@ namespace FrostySdk.IO
 
     public class EbxReader : NativeReader
     {
-        public static EbxReader CreateProjectReader(Stream inStream)
+        public static EbxReader CreateProjectReader(Stream inStream, FileSystemManager fs)
         {
-            return new EbxReader(inStream);
+            return ProfilesLibrary.EbxVersion >= 4 ? new EbxReaderV2(inStream, fs, true) : new EbxReader(inStream, true);
         }
 
         public static EbxReader CreateReader(Stream inStream, FileSystemManager fs = null, bool patched = false)
