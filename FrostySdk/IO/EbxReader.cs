@@ -566,7 +566,7 @@ namespace FrostySdk.IO
     {
         public static EbxReader CreateProjectReader(Stream inStream, FileSystemManager fs)
         {
-            return ProfilesLibrary.EbxVersion >= 4 ? new EbxReaderV2(inStream, fs, true) : new EbxReader(inStream, true);
+            return ProfilesLibrary.EbxVersion == 6 ? new EbxReaderRiff(inStream, fs, true) : ProfilesLibrary.EbxVersion == 4 ? new EbxReaderV2(inStream, fs, true) : new EbxReader(inStream, true);
         }
 
         public static EbxReader CreateReader(Stream inStream, FileSystemManager fs = null, bool patched = false)
