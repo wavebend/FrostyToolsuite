@@ -1121,6 +1121,11 @@ namespace FrostyEditor.Windows
             
             if (entry.IsAdded)
             {
+                if (!dataExplorer.ShowOnlyModified)
+                {
+                    dataExplorer.ShowOnlyModified = true;
+                }
+                
                 ResetItemsSources();
             }
             else
