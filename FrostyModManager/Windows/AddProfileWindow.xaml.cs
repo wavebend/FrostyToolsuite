@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using Frosty.Controls;
 
 namespace FrostyModManager.Windows
@@ -9,13 +12,21 @@ namespace FrostyModManager.Windows
     public partial class AddProfileWindow
     {
         public string ProfileName { get; set; }
+        private List<FrostyPack> packs;
+        private bool isRename;
 
-        public AddProfileWindow(string title = "Add Pack", string button = "Add")
+        public AddProfileWindow(string title, string button, List<FrostyPack> frostyPacks)
         {
             InitializeComponent();
 
             Title = title;
             addButton.Content = button;
+            packs = frostyPacks;
+
+            if (title.Contains("Rename"))
+            {
+                isRename = true;
+            }
 
             Window mainWin = Application.Current.MainWindow;
             if (mainWin != null)
@@ -26,8 +37,6 @@ namespace FrostyModManager.Windows
                 Left = x - (Width / 2.0);
                 Top = y - (Height / 2.0);
             }
-
-            profileNameTextBox.Focus();
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
@@ -38,13 +47,21 @@ namespace FrostyModManager.Windows
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            if (profileNameTextBox.Text == "")
+            string profileName = profileNameTextBox.Text;
+            
+            if (string.IsNullOrWhiteSpace(profileName))
             {
-                FrostyMessageBox.Show("Pack name must not be empty", "Frosty Mod Manager");
+                FrostyMessageBox.Show("Pack name cannot be empty", "Frosty Mod Manager");
                 return;
             }
 
-            ProfileName = profileNameTextBox.Text;
+            if (!isRename && packs.Any(s => string.Equals(s.Name, profileName, StringComparison.OrdinalIgnoreCase)))
+            {
+                FrostyMessageBox.Show("A pack with this name already exists", "Frosty Mod Manager");
+                return;
+            }
+
+            ProfileName = profileName.Trim();
             DialogResult = true;
             Close();
         }

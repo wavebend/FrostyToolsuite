@@ -181,6 +181,7 @@
     <Compile Include="Compression\SharpSevenZip\ZipEncryptionMethod.cs" />
     <Compile Include="DEXManifest.cs" />
     <Compile Include="FrostyAppliedMod.cs" />
+    <Compile Include="PackHelper.cs" />
     <Compile Include="Windows\CollectionSettingsWindow.xaml.cs">
       <DependentUpon>CollectionSettingsWindow.xaml</DependentUpon>
     </Compile>
