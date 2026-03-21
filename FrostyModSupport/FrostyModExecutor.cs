@@ -216,6 +216,8 @@ namespace Frosty.ModSupport
         private string m_modDirName = "ModData";
         private string m_patchPath = "Patch";
         private bool m_hasPatchFolder = true;
+        private bool m_hasUpdateFolder = true;
+        private bool m_useAltSymLink = Config.Get<bool>("UseAltSymLink", false);
 
         public ILogger Logger { get => m_logger; set => m_logger = value; }
 
@@ -1295,6 +1297,11 @@ namespace Frosty.ModSupport
                 m_hasPatchFolder = false;
             }
 
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17, ProfileVersion.DragonAgeTheVeilguard))
+            {
+                m_hasUpdateFolder = false;
+            }
+
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden20))
             {
                 string lcuPath = Environment.ExpandEnvironmentVariables(@"%ProgramData%\Frostbite\Madden NFL 20");
@@ -1527,7 +1534,15 @@ namespace Frosty.ModSupport
                         {
                             if (!Directory.Exists(modDataPath + "Data"))
                                 Directory.CreateDirectory(modDataPath + "Data");
-                            cmdArgs.Add(new SymLinkStruct(modDataPath + "Data/Win32", m_fs.BasePath + "Data/Win32", true));
+
+                            if (m_useAltSymLink)
+                            {
+                                Utils.Directory.CreateSymbolicLink(modDataPath + "Data/Win32", m_fs.BasePath + "Data/Win32");
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(modDataPath + "Data/Win32", m_fs.BasePath + "Data/Win32", true));
+                            }
                         }
                         else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DragonAgeTheVeilguard))
                         {
@@ -1544,13 +1559,27 @@ namespace Frosty.ModSupport
                                 if (!Directory.Exists(destPath))
                                     Directory.CreateDirectory(destPath);
 
-                                cmdArgs.Add(new SymLinkStruct(tempPath, casFi.FullName, false));
+                                if (m_useAltSymLink)
+                                {
+                                    Utils.File.CreateSymbolicLink(tempPath, casFi.FullName);
+                                }
+                                else
+                                {
+                                    cmdArgs.Add(new SymLinkStruct(tempPath, casFi.FullName, false));
+                                }
                             }
                         }
                         else
                         {
                             // data path
-                            cmdArgs.Add(new SymLinkStruct(modDataPath + "Data", m_fs.BasePath + "Data", true));
+                            if (m_useAltSymLink)
+                            {
+                                Utils.Directory.CreateSymbolicLink(modDataPath + "Data", m_fs.BasePath + "Data");
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(modDataPath + "Data", m_fs.BasePath + "Data", true));
+                            }
                         }
 
                         if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeInquisition,
@@ -1570,13 +1599,29 @@ namespace Frosty.ModSupport
 
                                 // ignore the patch directory
                                 if (di.Name.ToLower() != "patch")
-                                    cmdArgs.Add(new SymLinkStruct(modDataPath + "Update/" + di.Name, di.FullName, true));
+                                {
+                                    if (m_useAltSymLink)
+                                    {
+                                        Utils.Directory.CreateSymbolicLink(modDataPath + "Update/" + di.Name, di.FullName);
+                                    }
+                                    else
+                                    {
+                                        cmdArgs.Add(new SymLinkStruct(modDataPath + "Update/" + di.Name, di.FullName, true));
+                                    }
+                                }
                             }
                         }
-                        else if (!ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17))
+                        else if (m_hasUpdateFolder)
                         {
                             // update path
-                            cmdArgs.Add(new SymLinkStruct(modDataPath + "Update", m_fs.BasePath + "Update", true));
+                            if (m_useAltSymLink)
+                            {
+                                Utils.Directory.CreateSymbolicLink(modDataPath + "Update", m_fs.BasePath + "Update");
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(modDataPath + "Update", m_fs.BasePath + "Update", true));
+                            }
                         }
 
                         if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19, ProfileVersion.Anthem,
@@ -1594,7 +1639,14 @@ namespace Frosty.ModSupport
                                 if (!Directory.Exists(destPath))
                                     Directory.CreateDirectory(destPath);
 
-                                cmdArgs.Add(new SymLinkStruct(tempPath, casFi.FullName, false));
+                                if (m_useAltSymLink)
+                                {
+                                    Utils.File.CreateSymbolicLink(tempPath, casFi.FullName);
+                                }
+                                else
+                                {
+                                    cmdArgs.Add(new SymLinkStruct(tempPath, casFi.FullName, false));
+                                }
                             }
                         }
                     }
@@ -1622,7 +1674,14 @@ namespace Frosty.ModSupport
                     }
                     else if (!shaderCacheLink.Exists)
                     {
-                        cmdArgs.Add(new SymLinkStruct(shaderCacheLinkPath, baseShaderCachePath, true));
+                        if (m_useAltSymLink)
+                        {
+                            Utils.Directory.CreateSymbolicLink(shaderCacheLinkPath, baseShaderCachePath);
+                        }
+                        else
+                        {
+                            cmdArgs.Add(new SymLinkStruct(shaderCacheLinkPath, baseShaderCachePath, true));
+                        }
                     }
                 }
 
@@ -1630,7 +1689,7 @@ namespace Frosty.ModSupport
                 foreach (string catalog in m_fs.Catalogs)
                 {
                     string path = m_fs.ResolvePath("native_patch/" + catalog + "/cas.cat");
-                    if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5)) //again, no patch directory. fun.
+                    if (!m_hasPatchFolder) //again, no patch directory. fun.
                     {
                         path = m_fs.ResolvePath("native_data/" + catalog + "/cas.cat");
                     }
@@ -1650,7 +1709,15 @@ namespace Frosty.ModSupport
                         {
                             if (File.Exists(tempPath))
                                 continue;
-                            cmdArgs.Add(new SymLinkStruct(tempPath, fi.FullName, false));
+
+                            if (m_useAltSymLink)
+                            {
+                                Utils.File.CreateSymbolicLink(tempPath, fi.FullName);
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(tempPath, fi.FullName, false));
+                            }
                         }
                         else if (fi.Extension == ".cat")
                             fi.CopyTo(tempPath, false);
@@ -1752,7 +1819,15 @@ namespace Frosty.ModSupport
                         if (!sbFi.Exists && srcPath != string.Empty)
                         {
                             Directory.CreateDirectory(sbFi.DirectoryName);
-                            cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+
+                            if (m_useAltSymLink)
+                            {
+                                Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                            }
                         }
 
                         foreach (string catalog in completedAction.SuperBundleInfo.SplitSuperBundles)
@@ -1767,7 +1842,15 @@ namespace Frosty.ModSupport
                             if (!sbFi.Exists && srcPath != string.Empty)
                             {
                                 Directory.CreateDirectory(sbFi.DirectoryName);
-                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+
+                                if (m_useAltSymLink)
+                                {
+                                    Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                                }
+                                else
+                                {
+                                    cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                                }
                             }
                         }
 
@@ -1782,7 +1865,15 @@ namespace Frosty.ModSupport
                             if (!sbFi.Exists && srcPath != string.Empty)
                             {
                                 Directory.CreateDirectory(sbFi.DirectoryName);
-                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+
+                                if (m_useAltSymLink)
+                                {
+                                    Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                                }
+                                else
+                                {
+                                    cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                                }
                             }
 
                             foreach (string catalog in completedAction.SuperBundleInfo.SplitSuperBundles)
@@ -1797,7 +1888,15 @@ namespace Frosty.ModSupport
                                 if (!sbFi.Exists && srcPath != string.Empty)
                                 {
                                     Directory.CreateDirectory(sbFi.DirectoryName);
-                                    cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+
+                                    if (m_useAltSymLink)
+                                    {
+                                        Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                                    }
+                                    else
+                                    {
+                                        cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                                    }
                                 }
                             }
                         }
@@ -2017,7 +2116,14 @@ namespace Frosty.ModSupport
                             if (!Directory.Exists(sbFi.DirectoryName))
                                 Directory.CreateDirectory(sbFi.DirectoryName);
 
-                            cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                            if (m_useAltSymLink)
+                            {
+                                Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                            }
                         }
 
                         if (!completedAction.SbModified)
@@ -2028,7 +2134,14 @@ namespace Frosty.ModSupport
                             if (!Directory.Exists(sbFi.DirectoryName))
                                 Directory.CreateDirectory(sbFi.DirectoryName);
 
-                            cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                            if (m_useAltSymLink)
+                            {
+                                Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                            }
+                            else
+                            {
+                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                            }
                         }
 
                         if (completedAction.CasRefs.Count != 0)

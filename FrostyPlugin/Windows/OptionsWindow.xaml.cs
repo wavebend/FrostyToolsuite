@@ -93,6 +93,12 @@ namespace Frosty.Core.Windows
         [Description("Prints a 'log.txt' file to your Frosty directory when creating ModData that shows all added and modified assets.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool PrintLog { get; set; } = false;
+        
+        [Category("General")]
+        [DisplayName("Alternate SymLink Method")]
+        [Description("An alternate method of creating Symbolic Links for ModData")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool UseAltSymLink { get; set; } = false;
 
         public override void Load()
         {
@@ -111,6 +117,7 @@ namespace Frosty.Core.Windows
             DisableShaderCacheSymLink = Config.Get<bool>("DisableShaderCacheSymLink", false);
             UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", false);
             PrintLog = Config.Get<bool>("PrintLog", false);
+            UseAltSymLink = Config.Get<bool>("UseAltSymLink", false);
         }
 
         public override void Save()
@@ -127,6 +134,7 @@ namespace Frosty.Core.Windows
             Config.Add("DisableShaderCacheSymLink", DisableShaderCacheSymLink);
             Config.Add("UseSteamProtocol", UseSteamProtocol);
             Config.Add("PrintLog", PrintLog);
+            Config.Add("UseAltSymLink", UseAltSymLink);
         }
     }
     
