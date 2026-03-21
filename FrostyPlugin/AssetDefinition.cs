@@ -264,7 +264,7 @@ namespace Frosty.Core
                     newAsset.SetFileGuid(origAsset.FileGuid);
                     rootObj.SetInstanceGuid(new AssetClassGuid(origAsset.RootInstanceGuid, -1));
                 }
-                App.AssetManager.ModifyEbx(entry.Name, newAsset);
+                App.AssetManager.ModifyEbx(entry.Name, newAsset, binaryData);
             }
         }
     }
