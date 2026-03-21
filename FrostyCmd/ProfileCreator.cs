@@ -1198,7 +1198,7 @@ namespace FrostyCmd
                 writer.WriteObfuscatedString("DragonAgeTheVeilguard");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
-                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.Write(CreateSources("Data;false"));
                 writer.WriteObfuscatedString("DragonAgeTheVeilguardSDK");
                 writer.Write(CreateBanner("dragonagetheveilguard"));
                 writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c");
