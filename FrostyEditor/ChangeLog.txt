@@ -1,4 +1,23 @@
-﻿v1.0.7 - 2026.02.01.0
+﻿v1.0.7 - 2026.03.25.1
+--------
+Improvements:
+- Added an alternate method of creating symbolic links for ModData (Tools > Options)
+- Added additional mesh export and import options
+
+Bug Fixes:
+- Fixed issue where the Editor would hang when reverting an added asset
+- Fixed issue where binary data was not used when importing .bin file
+- Fixed issue where depth sections for certain meshes would be created incorrectly (Exploding Shadows)
+- Fixed issue where width for 'FrostyImportExportBox' would initially cut off text
+
+Misc:
+- Added additional validation when creating a profile within the Mod Manager
+
+Technical Changes:
+- Removed 'Patch' source from 'DragonAgeTheVeilguard' Profile
+- Updated FBX SDK to version '2020.3.9'
+
+v1.0.7 - 2026.02.01.0
 --------
 Bug Fixes:
 - Fixed issue where an asset with the same name but differing in location would fail to open if another asset with the same name was already open
@@ -15,7 +34,7 @@ Bug Fixes:
 - Fixed issue where 'Remove' buttons for the Marked Assets/Bundles feature were missing their commands
 
 Misc:
-Changed order of buttons for the Marked Assets/Bundles feature
+- Changed order of buttons for the Marked Assets/Bundles feature
 
 v1.0.7 - 2026.01.30.0
 --------
