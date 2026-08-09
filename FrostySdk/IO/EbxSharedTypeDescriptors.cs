@@ -11,13 +11,23 @@ namespace FrostySdk.IO
     public class EbxSharedTypeDescriptors
     {
         public int ClassCount => classes.Count;
-        public bool HasReflectionIds => reflectionIds.Count != 0;
+        public bool HasReflectionIds => reflectionIdRoot.Children.Count != 0;
 
         private List<EbxClass?> classes = new List<EbxClass?>();
         private Dictionary<Guid, int> mapping = new Dictionary<Guid, int>();
         private List<EbxField?> fields = new List<EbxField?>();
         private List<Guid?> typeInfoGuids = new List<Guid?>();
-        private Dictionary<ulong, ReflectionIdEntry> reflectionIds = new Dictionary<ulong, ReflectionIdEntry>();
+        private ReflectionIdNode reflectionIdRoot = new ReflectionIdNode();
+        private Dictionary<ulong, uint> uniqueTerminalReflectionIds = new Dictionary<ulong, uint>();
+        private HashSet<ulong> ambiguousTerminalReflectionIds = new HashSet<ulong>();
+
+        private sealed class ReflectionIdNode
+        {
+            public Dictionary<ulong, ReflectionIdNode> Children = new Dictionary<ulong, ReflectionIdNode>();
+            public uint Id;
+            public bool HasId;
+            public bool IsAmbiguous;
+        }
 
         private struct ReflectionIdEntry
         {
@@ -233,25 +243,61 @@ namespace FrostySdk.IO
                     continue;
                 }
 
-                ReflectionField terminal = reflectionFields[entry.PathIndex + entry.PathLength - 1];
-                if (terminal.ClassIndex < 0 || terminal.ClassIndex >= classes.Count)
+                ReflectionIdNode node = reflectionIdRoot;
+                bool validPath = true;
+                for (int i = 0; i < entry.PathLength; i++)
+                {
+                    ReflectionField field = reflectionFields[entry.PathIndex + i];
+                    if (field.ClassIndex < 0
+                        || field.ClassIndex >= classes.Count
+                        || !classes[field.ClassIndex].HasValue)
+                    {
+                        validPath = false;
+                        break;
+                    }
+
+                    ulong fieldKey = GetReflectionFieldKey(field.ClassIndex, field.NameHash);
+                    if (!node.Children.TryGetValue(fieldKey, out ReflectionIdNode child))
+                    {
+                        child = new ReflectionIdNode();
+                        node.Children.Add(fieldKey, child);
+                    }
+                    node = child;
+                }
+
+                if (!validPath)
                 {
                     continue;
                 }
 
-                ulong key = GetReflectionFieldKey(terminal.ClassIndex, terminal.NameHash);
-                if (!reflectionIds.TryGetValue(key, out ReflectionIdEntry current)
-                    || IsPreferredReflectionId(entry, current))
+                if (!node.HasId)
                 {
-                    reflectionIds[key] = entry;
+                    node.Id = entry.Id;
+                    node.HasId = true;
+                }
+                else if (node.Id != entry.Id)
+                {
+                    node.IsAmbiguous = true;
+                }
+
+                ReflectionField terminal = reflectionFields[entry.PathIndex + entry.PathLength - 1];
+                ulong terminalKey = GetReflectionFieldKey(terminal.ClassIndex, terminal.NameHash);
+                if (ambiguousTerminalReflectionIds.Contains(terminalKey))
+                {
+                    continue;
+                }
+
+                if (uniqueTerminalReflectionIds.TryGetValue(terminalKey, out uint terminalId)
+                    && terminalId != entry.Id)
+                {
+                    uniqueTerminalReflectionIds.Remove(terminalKey);
+                    ambiguousTerminalReflectionIds.Add(terminalKey);
+                }
+                else
+                {
+                    uniqueTerminalReflectionIds[terminalKey] = entry.Id;
                 }
             }
-        }
-
-        private static bool IsPreferredReflectionId(ReflectionIdEntry candidate, ReflectionIdEntry current)
-        {
-            return candidate.PathLength < current.PathLength
-                || (candidate.PathLength == current.PathLength && candidate.Id < current.Id);
         }
 
         private static ulong GetReflectionFieldKey(int classIndex, uint nameHash)
@@ -271,16 +317,54 @@ namespace FrostySdk.IO
 
         public EbxField? GetField(int index) => index >= 0 && index < fields.Count ? fields[index] : null;
 
-        public bool TryGetReflectionId(EbxClass classType, uint fieldNameHash, out uint reflectionId)
+        internal bool TryGetReflectionFieldKey(EbxClass classType, uint fieldNameHash, out ulong fieldKey)
         {
             EbxClass? descriptorClass = GetClass(classType.Index);
             if (descriptorClass.HasValue
-                && descriptorClass.Value.NameHash == classType.NameHash
-                && reflectionIds.TryGetValue(
-                    GetReflectionFieldKey(classType.Index, fieldNameHash),
-                    out ReflectionIdEntry entry))
+                && descriptorClass.Value.NameHash == classType.NameHash)
             {
-                reflectionId = entry.Id;
+                fieldKey = GetReflectionFieldKey(classType.Index, fieldNameHash);
+                return true;
+            }
+
+            fieldKey = 0;
+            return false;
+        }
+
+        public bool TryGetReflectionId(EbxClass classType, uint fieldNameHash, out uint reflectionId)
+        {
+            if (TryGetReflectionFieldKey(classType, fieldNameHash, out ulong fieldKey)
+                && uniqueTerminalReflectionIds.TryGetValue(fieldKey, out reflectionId))
+            {
+                return true;
+            }
+
+            reflectionId = 0;
+            return false;
+        }
+
+        internal bool TryGetReflectionId(IReadOnlyList<ulong> fieldPath, out uint reflectionId)
+        {
+            ReflectionIdNode node = reflectionIdRoot;
+            for (int i = 0; i < fieldPath.Count; i++)
+            {
+                if (!node.Children.TryGetValue(fieldPath[i], out node))
+                {
+                    node = null;
+                    break;
+                }
+            }
+
+            if (node != null && node.HasId && !node.IsAmbiguous)
+            {
+                reflectionId = node.Id;
+                return true;
+            }
+
+            // Terminal-field fallback when the descriptor contains exactly one ID for the field
+            if (fieldPath.Count != 0
+                && uniqueTerminalReflectionIds.TryGetValue(fieldPath[fieldPath.Count - 1], out reflectionId))
+            {
                 return true;
             }
 

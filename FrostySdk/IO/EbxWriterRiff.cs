@@ -52,6 +52,52 @@ namespace FrostySdk.IO
         private uint m_stringsOffset = 0;
         private RiffEbxSection m_ebxSection = RiffEbxSection.EBX;
 
+        private sealed class ReflectionContext
+        {
+            private readonly EbxSharedTypeDescriptors descriptors;
+            private readonly ulong[] fieldPath;
+
+            public ReflectionContext(EbxSharedTypeDescriptors inDescriptors)
+            {
+                descriptors = inDescriptors;
+                fieldPath = inDescriptors != null ? new ulong[0] : null;
+            }
+
+            private ReflectionContext(EbxSharedTypeDescriptors inDescriptors, ulong[] inFieldPath)
+            {
+                descriptors = inDescriptors;
+                fieldPath = inFieldPath;
+            }
+
+            public ReflectionContext Append(EbxClass classType, uint fieldNameHash)
+            {
+                if (descriptors == null
+                    || fieldPath == null
+                    || !descriptors.TryGetReflectionFieldKey(classType, fieldNameHash, out ulong fieldKey))
+                {
+                    return new ReflectionContext(descriptors, null);
+                }
+
+                ulong[] newFieldPath = new ulong[fieldPath.Length + 1];
+                Array.Copy(fieldPath, newFieldPath, fieldPath.Length);
+                newFieldPath[fieldPath.Length] = fieldKey;
+                return new ReflectionContext(descriptors, newFieldPath);
+            }
+
+            public ReflectionContext Invalidate()
+            {
+                return new ReflectionContext(descriptors, null);
+            }
+
+            public uint GetReflectionId()
+            {
+                return fieldPath != null
+                    && descriptors.TryGetReflectionId(fieldPath, out uint reflectionId)
+                    ? reflectionId
+                    : 0;
+            }
+        }
+
         internal EbxWriterRiff(Stream inStream, EbxWriteFlags inFlags = EbxWriteFlags.None, bool leaveOpen = false)
             : base(inStream, inFlags, leaveOpen)
         {
@@ -985,12 +1031,17 @@ namespace FrostySdk.IO
             long startOffset,
             NativeWriter writer,
             bool writeClassBytes = true,
-            EbxClass? reflectionClass = null)
+            EbxClass? reflectionClass = null,
+            ReflectionContext reflectionContext = null)
         {
             EbxClass classType = GetClass(objType);
             if (!reflectionClass.HasValue)
             {
                 reflectionClass = classType;
+            }
+            if (reflectionContext == null)
+            {
+                reflectionContext = new ReflectionContext(GetSharedTypeDescriptors(classType));
             }
             //EbxClassMetaAttribute cta = objType.GetCustomAttribute<EbxClassMetaAttribute>();
 
@@ -1002,7 +1053,7 @@ namespace FrostySdk.IO
 
             if (objType.BaseType.Namespace == "FrostySdk.Ebx")
             {
-                WriteClass(obj, objType.BaseType, startOffset, writer, false, reflectionClass);
+                WriteClass(obj, objType.BaseType, startOffset, writer, false, reflectionClass, reflectionContext);
             }
 
             PropertyInfo[] pis = objType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
@@ -1074,10 +1125,18 @@ namespace FrostySdk.IO
 
                 writer.Position = startOffset + fta.Offset;
                 HashAttribute hashAttribute = pi.GetCustomAttribute<HashAttribute>();
-                uint reflectionId = hashAttribute != null
-                    ? GetReflectionId(reflectionClass.Value, (uint)hashAttribute.Hash)
-                    : 0;
-                WriteField(pi.GetValue(obj), fta.Type, fta, writer, isReference, reflectionId);
+                ReflectionContext fieldReflectionContext = hashAttribute != null
+                    ? reflectionContext.Append(reflectionClass.Value, (uint)hashAttribute.Hash)
+                    : reflectionContext.Invalidate();
+                uint reflectionId = fieldReflectionContext.GetReflectionId();
+                WriteField(
+                    pi.GetValue(obj),
+                    fta.Type,
+                    fta,
+                    writer,
+                    isReference,
+                    reflectionId,
+                    fieldReflectionContext);
             }
 
             if (writeClassBytes && EbxUnknownFieldStore.TryGetFields(obj, out List<EbxUnknownFieldValue> unknownFields))
@@ -1092,13 +1151,17 @@ namespace FrostySdk.IO
                         typeof(object),
                         false,
                         0);
+                    ReflectionContext fieldReflectionContext = reflectionContext.Append(
+                        reflectionClass.Value,
+                        field.NameHash);
                     WriteField(
                         unknownField.Value,
                         field.DebugType,
                         fieldMeta,
                         writer,
                         false,
-                        GetReflectionId(reflectionClass.Value, field.NameHash));
+                        fieldReflectionContext.GetReflectionId(),
+                        fieldReflectionContext);
                 }
             }
 
@@ -1112,7 +1175,8 @@ namespace FrostySdk.IO
             EbxFieldMetaAttribute fieldMeta,
             NativeWriter writer,
             bool isReference,
-            uint reflectionId = 0)
+            uint reflectionId = 0,
+            ReflectionContext reflectionContext = null)
         {
             switch (ebxType)
             {
@@ -1151,13 +1215,18 @@ namespace FrostySdk.IO
                         EbxClassMetaAttribute cta = structType.GetCustomAttribute<EbxClassMetaAttribute>();
 
                         writer.WritePadding(cta.Alignment);
-                        WriteClass(structValue, structType, writer.Position, writer);
+                        WriteClass(
+                            structValue,
+                            structType,
+                            writer.Position,
+                            writer,
+                            reflectionContext: reflectionContext);
                     }
                     break;
 
                 case EbxFieldType.Array:
                     {
-                        WriteArray(obj, fieldMeta, isReference, writer, reflectionId);
+                        WriteArray(obj, fieldMeta, isReference, writer, reflectionId, reflectionContext);
                     }
                     break;
 
@@ -1196,7 +1265,7 @@ namespace FrostySdk.IO
                         m_boxedValues.Add(boxedValue);
                         if (value.Value != null)
                         {
-                            m_boxedValueData.Add(WriteBoxedValueRef(value));
+                            m_boxedValueData.Add(WriteBoxedValueRef(value, reflectionContext));
                         }
                         else
                         {
@@ -1363,7 +1432,8 @@ namespace FrostySdk.IO
             EbxFieldMetaAttribute fieldMeta,
             bool isReference,
             NativeWriter writer,
-            uint reflectionId)
+            uint reflectionId,
+            ReflectionContext reflectionContext)
         {
             int arrayClassIdx = FindExistingClass(obj.GetType().GenericTypeArguments[0]);
             int arrayIdx = 0;
@@ -1380,7 +1450,13 @@ namespace FrostySdk.IO
                     for (int i = 0; i < count; i++)
                     {
                         object subValue = arrayObj[i];
-                        WriteField(subValue, fieldMeta.ArrayType, fieldMeta, arrayWriter, isReference);
+                        WriteField(
+                            subValue,
+                            fieldMeta.ArrayType,
+                            fieldMeta,
+                            arrayWriter,
+                            isReference,
+                            reflectionContext: reflectionContext);
                     }
                 }
 
@@ -1406,6 +1482,11 @@ namespace FrostySdk.IO
         }
 
         protected override byte[] WriteBoxedValueRef(BoxedValueRef value)
+        {
+            return WriteBoxedValueRef(value, null);
+        }
+
+        private byte[] WriteBoxedValueRef(BoxedValueRef value, ReflectionContext reflectionContext)
         {
             // @todo: Does not at all handle boxed value arrays
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
@@ -1448,7 +1529,12 @@ namespace FrostySdk.IO
                             EbxClassMetaAttribute cta = structType.GetCustomAttribute<EbxClassMetaAttribute>();
 
                             writer.WritePadding(cta.Alignment);
-                            WriteClass(structValue, structType, writer.Position, writer);
+                            WriteClass(
+                                structValue,
+                                structType,
+                                writer.Position,
+                                writer,
+                                reflectionContext: reflectionContext);
                         }
                         break;
 
@@ -1868,18 +1954,11 @@ namespace FrostySdk.IO
             return hashes.Count == expectedCount ? hashes[index] : 0;
         }
 
-        private static uint GetReflectionId(EbxClass classType, uint fieldNameHash)
+        private static EbxSharedTypeDescriptors GetSharedTypeDescriptors(EbxClass classType)
         {
-            EbxSharedTypeDescriptors descriptors = classType.SecondSize == 1
+            return classType.SecondSize == 1
                 ? EbxReaderV2.patchStd
                 : EbxReaderV2.std;
-            if (descriptors != null
-                && descriptors.TryGetReflectionId(classType, fieldNameHash, out uint reflectionId))
-            {
-                return reflectionId;
-            }
-
-            return 0;
         }
 
         private int AddUnresolvedTypeRefClass(Guid guid)
