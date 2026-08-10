@@ -844,6 +844,18 @@ namespace MeshSetPlugin.Resources
                 m_boneList.Add(boneId);
             }
         }
+        
+        /// <summary>
+        /// Sets Veilguard's per-section start index for the padding needed to keep each
+        /// section's 16-bit index range aligned to four bytes.
+        /// </summary>
+        public void SetPaddedStartIndex(uint startIndex)
+        {
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
+            {
+                m_unknownHash1 = startIndex;
+            }
+        }
 
         //public void SetVertexElements(List<GeometryDeclarationDesc.Element> inVertexElements)
         //{

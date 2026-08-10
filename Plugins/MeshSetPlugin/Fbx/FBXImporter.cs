@@ -395,6 +395,7 @@ namespace MeshSetPlugin
 
             List<byte[]> sectionsVertices = new List<byte[]>();
             List<List<uint>> sectionsIndices = new List<List<uint>>();
+            List<MeshSetSection> processedSections = new List<MeshSetSection>();
             uint vertexBufferSize = 0;
             uint totalIndices = 0;
 
@@ -421,6 +422,7 @@ namespace MeshSetPlugin
                         meshSections[i].PrimitiveCount = 0;
                         meshSections[i].VertexOffset = 0;
                         meshSections[i].StartIndex = 0;
+                        meshSections[i].SetPaddedStartIndex(0);
                         continue;
                     }
                 }
@@ -432,6 +434,7 @@ namespace MeshSetPlugin
 
                 sectionsVertices.Add(vertices.ToArray());
                 sectionsIndices.Add(indices);
+                processedSections.Add(meshSections[i]);
 
                 vertexBufferSize += (uint)vertices.Length;
                 vertices.Dispose();
@@ -453,6 +456,7 @@ namespace MeshSetPlugin
 
                     sectionsVertices.Add(vertices.ToArray());
                     sectionsIndices.Add(indices);
+                    processedSections.Add(depthSections[i]);
 
                     vertexBufferSize += (uint)vertices.Length;
                     vertices.Dispose();
@@ -464,6 +468,7 @@ namespace MeshSetPlugin
                     depthSections[i].PrimitiveCount = 0;
                     depthSections[i].VertexOffset = 0;
                     depthSections[i].StartIndex = 0;
+                    depthSections[i].SetPaddedStartIndex(0);
                 }
             }
 
@@ -481,6 +486,7 @@ namespace MeshSetPlugin
 
                     sectionsVertices.Add(vertices.ToArray());
                     sectionsIndices.Add(indices);
+                    processedSections.Add(shadowSections[i]);
 
                     vertexBufferSize += (uint)vertices.Length;
                     vertices.Dispose();
@@ -492,6 +498,7 @@ namespace MeshSetPlugin
                     shadowSections[i].PrimitiveCount = 0;
                     shadowSections[i].VertexOffset = 0;
                     shadowSections[i].StartIndex = 0;
+                    shadowSections[i].SetPaddedStartIndex(0);
                 }
             }
 
@@ -525,6 +532,19 @@ namespace MeshSetPlugin
                 {
                     largeIndexBuffer = true;
                     break;
+                }
+            }
+            
+            // Keep Veilguard's padded section start index consistent with regenerated topology
+            uint paddedStartIndex = 0;
+            for (int i = 0; i < processedSections.Count; i++)
+            {
+                processedSections[i].SetPaddedStartIndex(paddedStartIndex);
+                paddedStartIndex += (uint)sectionsIndices[i].Count;
+
+                if (!largeIndexBuffer && (paddedStartIndex & 1) != 0)
+                {
+                    paddedStartIndex++;
                 }
             }
 
