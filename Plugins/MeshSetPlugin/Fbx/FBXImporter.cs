@@ -535,16 +535,21 @@ namespace MeshSetPlugin
                 }
             }
             
-            // Keep Veilguard's padded section start index consistent with regenerated topology
-            uint paddedStartIndex = 0;
-            for (int i = 0; i < processedSections.Count; i++)
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeTheVeilguard))
             {
-                processedSections[i].SetPaddedStartIndex(paddedStartIndex);
-                paddedStartIndex += (uint)sectionsIndices[i].Count;
-
-                if (!largeIndexBuffer && (paddedStartIndex & 1) != 0)
+                // Veilguard stores the aligned start in both fields and expects the padding to exist in the chunk
+                uint paddedStartIndex = 0;
+                for (int i = 0; i < processedSections.Count; i++)
                 {
-                    paddedStartIndex++;
+                    processedSections[i].StartIndex = paddedStartIndex;
+                    processedSections[i].SetPaddedStartIndex(paddedStartIndex);
+                    paddedStartIndex += (uint)sectionsIndices[i].Count;
+
+                    if (!largeIndexBuffer && (paddedStartIndex & 1) != 0 && i < processedSections.Count - 1)
+                    {
+                        sectionsIndices[i].Add(0);
+                        paddedStartIndex++;
+                    }
                 }
             }
 

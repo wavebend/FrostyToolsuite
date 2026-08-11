@@ -479,13 +479,34 @@ namespace MeshSetPlugin.Resources
         private byte[] m_unknownBytesSection = new byte[0x10];
         public byte BonesPerVertex
         {
-            get => m_bonesPerVertex;
+            get
+            {
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
+                    ProfileVersion.Madden23, ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound,
+                    ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    return (byte)(m_bonesPerVertex & 0x0F);
+                }
+
+                return m_bonesPerVertex;
+            }
             set
             {
-                m_bonesPerVertex = value;
-                if (m_bonesPerVertex > 8)
+                byte bonesPerVertex = value;
+                if (bonesPerVertex > 8)
                 {
-                    m_bonesPerVertex = 8;
+                    bonesPerVertex = 8;
+                }
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
+                    ProfileVersion.Madden23, ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound,
+                    ProfileVersion.DeadSpace, ProfileVersion.DragonAgeTheVeilguard))
+                {
+                    m_bonesPerVertex = (byte)((m_bonesPerVertex & 0xF0) | bonesPerVertex);
+                }
+                else
+                {
+                    m_bonesPerVertex = bonesPerVertex;
                 }
             }
         }
