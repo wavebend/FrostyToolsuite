@@ -1,4 +1,18 @@
-﻿v1.0.7 - 2026.03.25.1
+﻿v1.0.7 - 2026.08.21.0
+--------
+Bug Fixes:
+- Fixed issue where ProjectReader/Writer did not use RIFF
+- Fixed issues with RIFF EBX assets
+- Fixed issue where duplicated meshes could cause the game to crash
+- Fixed exploding shadows on some meshes
+- Fixed issue where LODs would be imported with incorrect weights
+- Fixed issue where LODs would be imported with broken skinning
+
+Technical Changes:
+- SharedTypeDescriptors is no longer written to 'SharedTypeDescriptors.ebx'
+- Use reflection ids from 'SharedTypeDescriptors' when writing RIFF EBX assets
+
+v1.0.7 - 2026.03.25.1
 --------
 Improvements:
 - Added an alternate method of creating symbolic links for ModData (Tools > Options)
